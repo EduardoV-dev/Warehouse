@@ -18,132 +18,136 @@
         <VBox fx:id="panelMenu" layoutX="-4.0" prefHeight="700.0" prefWidth="200.0" spacing="11.0" style="-fx-background-color: linear-gradient(to right, #2b5876, #4e4376); -fx-background-radius: 0 0 25px 0;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
                 <HBox alignment="CENTER" prefHeight="127.0" prefWidth="200.0" />
-                <Button fx:id="btnInicio" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleMenuButton" prefHeight="34.0" prefWidth="250.0" style="-fx-background-color: rgba(0,0,0,.15);" stylesheets="@../css/styles.css" text="Inicio" textFill="WHITE" VBox.vgrow="ALWAYS">
-                    <font>
-                        <Font name="Nunito Black" size="16.0" />
-                    </font>
-                    <graphic>
-                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../img/home.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                    <padding>
-                        <Insets left="30.0" top="5.0" />
-                    </padding>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                </Button>
-                <Button fx:id="btnVenta" alignment="TOP_LEFT" graphicTextGap="10.0" layoutX="10.0" layoutY="180.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleMenuButton" prefHeight="34.0" prefWidth="257.0" style="-fx-background-color: transparent;" stylesheets="@../css/styles.css" text="Venta" textFill="WHITE" VBox.vgrow="ALWAYS">
-                    <font>
-                        <Font name="Nunito Black" size="16.0" />
-                    </font>
-                    <graphic>
-                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../img/bill.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                    <padding>
-                        <Insets left="30.0" top="5.0" />
-                    </padding>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                </Button>
-                <Button fx:id="btnProductos" alignment="TOP_LEFT" graphicTextGap="10.0" layoutX="10.0" layoutY="137.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleMenuButton" prefHeight="34.0" prefWidth="251.0" style="-fx-background-color: transparent;" stylesheets="@../css/styles.css" text="Productos" textFill="WHITE" VBox.vgrow="ALWAYS">
-                    <font>
-                        <Font name="Nunito Black" size="16.0" />
-                    </font>
-                    <graphic>
-                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../img/product.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                    <padding>
-                        <Insets left="30.0" top="5.0" />
-                    </padding>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                </Button>
-                <Button fx:id="btnProveedores" alignment="TOP_LEFT" graphicTextGap="10.0" layoutX="10.0" layoutY="266.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleMenuButton" prefHeight="34.0" prefWidth="255.0" style="-fx-background-color: transparent;" stylesheets="@../css/styles.css" text="Proveedores" textFill="WHITE" VBox.vgrow="ALWAYS">
-                    <font>
-                        <Font name="Nunito Black" size="16.0" />
-                    </font>
-                    <graphic>
-                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../img/sells.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                    <padding>
-                        <Insets left="30.0" top="5.0" />
-                    </padding>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                </Button>
-                <Button fx:id="btnUsuarios" alignment="TOP_LEFT" graphicTextGap="10.0" layoutX="10.0" layoutY="223.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleMenuButton" prefHeight="34.0" prefWidth="247.0" style="-fx-background-color: transparent;" stylesheets="@../css/styles.css" text="Usuarios" textFill="WHITE" VBox.vgrow="ALWAYS">
-                    <font>
-                        <Font name="Nunito Black" size="16.0" />
-                    </font>
-                    <graphic>
-                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../img/user.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                    <padding>
-                        <Insets left="30.0" top="5.0" />
-                    </padding>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                </Button>
-                <Button fx:id="btnAnalisis" alignment="TOP_LEFT" graphicTextGap="10.0" layoutX="10.0" layoutY="309.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleMenuButton" prefHeight="34.0" prefWidth="259.0" style="-fx-background-color: transparent;" stylesheets="@../css/styles.css" text="Análisis" textFill="WHITE" VBox.vgrow="ALWAYS">
-                    <font>
-                        <Font name="Nunito Black" size="16.0" />
-                    </font>
-                    <graphic>
-                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../img/stats.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                    <padding>
-                        <Insets left="30.0" top="5.0" />
-                    </padding>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                </Button>
-                <Button fx:id="btnAjustes" alignment="TOP_LEFT" graphicTextGap="10.0" layoutX="10.0" layoutY="352.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleMenuButton" prefHeight="34.0" prefWidth="265.0" style="-fx-background-color: transparent;" stylesheets="@../css/styles.css" text="Ajustes" textFill="WHITE" VBox.vgrow="ALWAYS">
-                    <font>
-                        <Font name="Nunito Black" size="16.0" />
-                    </font>
-                    <graphic>
-                        <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                            <image>
-                                <Image url="@../img/settings.png" />
-                            </image>
-                        </ImageView>
-                    </graphic>
-                    <padding>
-                        <Insets left="30.0" top="5.0" />
-                    </padding>
-                    <VBox.margin>
-                        <Insets />
-                    </VBox.margin>
-                </Button>
+            <VBox prefHeight="200.0" prefWidth="100.0" spacing="15.0">
+               <children>
+                      <Button fx:id="btnInicio" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleMenuButton" prefHeight="34.0" prefWidth="250.0" style="-fx-background-color: rgba(0,0,0,.15);" stylesheets="@../css/styles.css" text="Inicio" textFill="WHITE" VBox.vgrow="ALWAYS">
+                          <font>
+                              <Font name="Nunito Black" size="16.0" />
+                          </font>
+                          <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                  <image>
+                                      <Image url="@../img/home.png" />
+                                  </image>
+                              </ImageView>
+                          </graphic>
+                          <padding>
+                              <Insets left="30.0" top="5.0" />
+                          </padding>
+                          <VBox.margin>
+                              <Insets />
+                          </VBox.margin>
+                      </Button>
+                      <Button fx:id="btnVenta" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleMenuButton" prefHeight="34.0" prefWidth="257.0" style="-fx-background-color: transparent;" stylesheets="@../css/styles.css" text="Venta" textFill="WHITE" VBox.vgrow="ALWAYS">
+                          <font>
+                              <Font name="Nunito Black" size="16.0" />
+                          </font>
+                          <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                  <image>
+                                      <Image url="@../img/bill.png" />
+                                  </image>
+                              </ImageView>
+                          </graphic>
+                          <padding>
+                              <Insets left="30.0" top="5.0" />
+                          </padding>
+                          <VBox.margin>
+                              <Insets />
+                          </VBox.margin>
+                      </Button>
+                      <Button fx:id="btnProductos" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleMenuButton" prefHeight="34.0" prefWidth="251.0" style="-fx-background-color: transparent;" stylesheets="@../css/styles.css" text="Productos" textFill="WHITE" VBox.vgrow="ALWAYS">
+                          <font>
+                              <Font name="Nunito Black" size="16.0" />
+                          </font>
+                          <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                  <image>
+                                      <Image url="@../img/product.png" />
+                                  </image>
+                              </ImageView>
+                          </graphic>
+                          <padding>
+                              <Insets left="30.0" top="5.0" />
+                          </padding>
+                          <VBox.margin>
+                              <Insets />
+                          </VBox.margin>
+                      </Button>
+                      <Button fx:id="btnProveedores" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleMenuButton" prefHeight="34.0" prefWidth="255.0" style="-fx-background-color: transparent;" stylesheets="@../css/styles.css" text="Proveedores" textFill="WHITE" VBox.vgrow="ALWAYS">
+                          <font>
+                              <Font name="Nunito Black" size="16.0" />
+                          </font>
+                          <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                  <image>
+                                      <Image url="@../img/sells.png" />
+                                  </image>
+                              </ImageView>
+                          </graphic>
+                          <padding>
+                              <Insets left="30.0" top="5.0" />
+                          </padding>
+                          <VBox.margin>
+                              <Insets />
+                          </VBox.margin>
+                      </Button>
+                      <Button fx:id="btnUsuarios" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleMenuButton" prefHeight="34.0" prefWidth="247.0" style="-fx-background-color: transparent;" stylesheets="@../css/styles.css" text="Usuarios" textFill="WHITE" VBox.vgrow="ALWAYS">
+                          <font>
+                              <Font name="Nunito Black" size="16.0" />
+                          </font>
+                          <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                  <image>
+                                      <Image url="@../img/user.png" />
+                                  </image>
+                              </ImageView>
+                          </graphic>
+                          <padding>
+                              <Insets left="30.0" top="5.0" />
+                          </padding>
+                          <VBox.margin>
+                              <Insets />
+                          </VBox.margin>
+                      </Button>
+                      <Button fx:id="btnAnalisis" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleMenuButton" prefHeight="34.0" prefWidth="259.0" style="-fx-background-color: transparent;" stylesheets="@../css/styles.css" text="Análisis" textFill="WHITE" VBox.vgrow="ALWAYS">
+                          <font>
+                              <Font name="Nunito Black" size="16.0" />
+                          </font>
+                          <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                  <image>
+                                      <Image url="@../img/stats.png" />
+                                  </image>
+                              </ImageView>
+                          </graphic>
+                          <padding>
+                              <Insets left="30.0" top="5.0" />
+                          </padding>
+                          <VBox.margin>
+                              <Insets />
+                          </VBox.margin>
+                      </Button>
+                      <Button fx:id="btnAjustes" alignment="TOP_LEFT" graphicTextGap="10.0" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#handleMenuButton" prefHeight="34.0" prefWidth="265.0" style="-fx-background-color: transparent;" stylesheets="@../css/styles.css" text="Ajustes" textFill="WHITE" VBox.vgrow="ALWAYS">
+                          <font>
+                              <Font name="Nunito Black" size="16.0" />
+                          </font>
+                          <graphic>
+                              <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                                  <image>
+                                      <Image url="@../img/settings.png" />
+                                  </image>
+                              </ImageView>
+                          </graphic>
+                          <padding>
+                              <Insets left="30.0" top="5.0" />
+                          </padding>
+                          <VBox.margin>
+                              <Insets />
+                          </VBox.margin>
+                      </Button>
+               </children>
+            </VBox>
                 <HBox alignment="CENTER_LEFT" prefHeight="35.0" prefWidth="180.0">
                     <children>
                         <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">

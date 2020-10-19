@@ -104,7 +104,7 @@ public class Controller {
 
         if (e.getSource() == btnAjustes) {
             setActive(btnAjustes);
-            btnAjustes.toFront();
+            ajustesPane.toFront();
         }
     }
 
