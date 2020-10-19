@@ -1,29 +1,15 @@
-//Estilos de Botones
+.label {
+       -fx-font-family: "Nunito-Regular";
+       -fx-font-size: 20;
+}
 
+/* Estilos de Botones */
 .button{
-    -fx-background-color: #054A4D;
+    -fx-background-color: #1D3557;
 
 }
 
 .button:hover{
-    -fx-background-color: #085F63;
+    -fx-background-color: #14253d;
 }
 
-
-//Estilo de tablas
-
-.table-view .column-header{
-    -fx-background-color: #054A4D;
-}
-
-.table-view .column-header-background .label{
-    -fx-background-color: transparent;
-    -fx-text-fill: white;
-}
-
-
-//Estilos forms
-
-.tf{
-    -fx-background-radius:25;
-}

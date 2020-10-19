@@ -4,9 +4,12 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import utils.UConnection;
 
+import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
 
@@ -17,10 +20,13 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("../fxml/Home.fxml"));
         primaryStage.setTitle("Ware House");
-        primaryStage.setScene(new Scene(root));
-        primaryStage.setMinWidth(1200);
-        primaryStage.setMinHeight(680);
-        primaryStage.setMaximized(true);
+        primaryStage.setResizable(false);
+        primaryStage.initStyle(StageStyle.UNDECORATED);
+        Scene scene = new Scene(root);
+        primaryStage.setScene(scene);
+        primaryStage.setMinWidth(1125);
+        primaryStage.setMinHeight(700);
+        primaryStage.setMaximized(false);
         primaryStage.show();
     }
 
