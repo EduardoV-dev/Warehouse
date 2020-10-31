@@ -1,5 +1,6 @@
 use Warehouse;
 
+-- Crea las empresas
 create procedure insEmpresa (
 	@RIF varchar(20),
 	@nombre varchar(50),
@@ -11,7 +12,7 @@ create procedure insEmpresa (
 as
 	set nocount on;
 	begin transaction;
-	declare @idDepartamento tinyint = 0;
+	declare @idDepartamento char(3);
 	select @idDepartamento = (select idDepartamento from adm.Departamento where departamento = @departamento);
 	if (@idDepartamento != 0)
 	begin	
@@ -31,6 +32,8 @@ as
 	end
 go;
 
+-- Crea cuentas para las empresas usar 
+-- la aplicación
 create procedure insCuenta (
 	@usuario varchar(50),
 	@contrasena varchar(50),
@@ -54,6 +57,7 @@ as
 	end
 go;
 
+-- Crea personal de una empresa
 create procedure insPersonal (
 	@cedula varchar(20),
 	@nombres varchar(35),
@@ -67,26 +71,25 @@ as
 	set nocount on;
 	begin transaction;
 
-	declare @idDepartamento tinyint = 0;
+	declare @idDepartamento char(3);
 	select @idDepartamento = (select idDepartamento from adm.Departamento where departamento = @departamento);
-	if (@idDepartamento != 0)
-	begin
-		if not exists(select cedula from adm.Personal where cedula = @cedula)
-		begin
-			insert into adm.Personal (cedula, nombres, apellidos, correo, direccion, telefono, idDepartamento)
-				values (@cedula, @nombres, @apellidos, @correo, @direccion, @telefono, @idDepartamento);
 
-			print 'Personal agregado';
-			commit transaction;
-		end
-		else 
-		begin
-			print 'Personal existente';
-			rollback transaction;
-		end
+	if not exists(select cedula from adm.Personal where cedula = @cedula)
+	begin
+		insert into adm.Personal (cedula, nombres, apellidos, correo, direccion, telefono, idDepartamento)
+			values (@cedula, @nombres, @apellidos, @correo, @direccion, @telefono, @idDepartamento);
+
+		print 'Personal agregado';
+		commit transaction;
+	end
+	else 
+	begin
+		print 'Personal existente';
+		rollback transaction;
 	end
 go;
 
+-- Crea usuarios de la empresa
 create procedure insUsuario (
 	@usuario varchar(50),
 	@contrasena varchar(50),
@@ -100,32 +103,30 @@ as
 
 	declare @idRol tinyint = 0;
 	select @idRol = (select idRol from adm.Rol where rol = @rol);
-	if (@idRol != 0)
+	if not exists (select usuario from adm.Usuario where (usuario = @usuario and RIF = @RIF))
 	begin
-		if not exists (select usuario from adm.Usuario where usuario = @usuario)
+		if exists (select cedula from adm.Personal where cedula = @cedula)
 		begin
-			if exists (select cedula from adm.Personal where cedula = @cedula)
-			begin
-				insert into adm.Usuario (usuario, contrasena, idRol, cedula, RIF)
-					values (@usuario, @contrasena, @idRol, @cedula, @RIF);
+			insert into adm.Usuario (usuario, contrasena, idRol, cedula, RIF)
+				values (@usuario, @contrasena, @idRol, @cedula, @RIF);
 
-				print 'Usuario Creado';
-				commit transaction;
-			end
-			else 
-			begin
-				print 'No existe alguien dentro del personal con ese número de cedula';
-				rollback transaction;
-			end
+			print 'Usuario Creado';
+			commit transaction;
 		end
 		else 
 		begin
-			print 'Usuario en uso';
+			print 'No existe alguien dentro del personal con ese número de cedula';
 			rollback transaction;
 		end
 	end
+	else 
+	begin
+		print 'Usuario en uso';
+		rollback transaction;
+	end
 go;
 
+-- Inserta nuevos proveedores
 create procedure insProveedor (
 	@idProveedor varchar(10),
 	@nombres char(35),
@@ -138,7 +139,7 @@ as
 	set nocount on;
 	begin transaction;
 
-	if not exists (select idProveedor from org.Proveedor where idProveedor = @idProveedor)
+	if not exists (select idProveedor from org.Proveedor where (idProveedor = @idProveedor and RIF = @RIF))
 	begin
 		insert into org.Proveedor (idProveedor, nombres, apellidos, correo, telefono, RIF)
 			values (@idProveedor, @nombres, @apellidos, @correo, @telefono, @RIF);
@@ -153,6 +154,8 @@ as
 	end
 go;
 
+-- En caso de necesitar una nueva medida
+-- El usuario será capaz de crearla
 create procedure insMedida (
 	@medida varchar(60)
 )
@@ -173,6 +176,7 @@ as
 	end
 go;
 
+-- inserta un nuevo producto
 create procedure insProducto (
 	@idProducto varchar(5),
 	@nombre varchar(50),
@@ -180,39 +184,46 @@ create procedure insProducto (
 	@cantidad smallint, 
 	@medida varchar(60),
 	@estado char(20),
+	@proveedor char(70),
 	@RIF varchar(20)
 )
 as
 	set nocount on;
 	begin transaction;
 
-	declare @idMedida tinyint = 0, @idEstado tinyint = 0;
+	declare @idMedida tinyint, @idEstado tinyint, @idProveedor varchar(10), @idAdquisicion smallint;
 	select @idMedida = (select idMedida from org.Medida where medida = @medida);
 	select @idEstado = (select idEstado from org.Estado where estado = @estado);
+	select @idProveedor = (select idProveedor from org.Proveedor where ((nombres+' '+apellidos) = @proveedor and RIF = @RIF));
 
-	if not exists(select idProducto from org.Producto where idProducto = @idProducto)
+	if not exists(select idProducto from org.Producto where (idProducto = @idProducto and RIF = @RIF))
 	begin
 		insert into org.Producto (idProducto, nombre, marca, cantidad, idMedida, idEstado, RIF)
 			values (@idProducto, @nombre, @marca, @cantidad, @idMedida, @idEstado, @RIF);
+		
+		insert into org.OrigenProducto (idProducto, idProveedor) 
+			values (@idProducto, @idProveedor);
+
+		insert into iop.Adquisicion (cantidad, fechaEntrega, observaciones, RIF)
+			values (@cantidad, convert(char(10), getDate(), 103), 'Producto inicial', @RIF);
+
+		set @idAdquisicion = @@identity;
+
+		insert into iop.Entrada (idAdquisicion, idProducto, idProveedor, RIF)
+			values (@idAdquisicion, @idProducto, @idProveedor, @RIF);
 
 		print 'Producto creado e ingresado';
 		commit transaction;
 	end
 	else 
 	begin
-		declare @totalProducto smallint, @actualProducto smallint;
-		select @actualProducto = (select cantidad from org.Producto where idProducto = @idProducto);
-		set @totalProducto = @actualProducto + @cantidad;
-		
-		update org.Producto set cantidad = @actualProducto where idProducto = @idProducto;
-
-		print 'Producto anexado';
-		commit transaction;
+		rollback transaction;
 	end
 go;
 
+-- realiza una venta y extrae la cantidad de producto necesaria
 create procedure insSalida (
-	@idProducto varchar(5),
+	@producto varchar(50),
 	@cantidad smallint,
 	@observaciones varchar(200) = 'Sin observaciones',
 	@RIF varchar(20)
@@ -222,14 +233,18 @@ as
 	begin transaction;
 
 	declare @idVenta smallint = 0, @existenciasProducto smallint = 0, @restanteProducto smallint = 0;
-	if exists (select idProducto from org.Producto where idProducto = @idProducto)
+	declare @idProducto varchar(5);
+	select @idProducto = (select idProducto from org.Producto where (nombre = @producto and RIF = @RIF));
+
+	if (nullif(@idProducto, '') is not null)
 	begin
-		select @existenciasProducto = (select cantidad from org.Producto where idProducto = @idProducto);
+		select @existenciasProducto = (select cantidad from org.Producto where (idProducto = @idProducto and RIF = @RIF));
 		set @restanteProducto = @existenciasProducto - @cantidad;
 		if (@restanteProducto > 0)
 		begin
 			insert into iop.Venta (cantidad, fechaVenta, observaciones, RIF) 
 				values (@cantidad, convert(char(10), getDate(), 103), @observaciones, @RIF);
+
 			set @idVenta = @@identity;
 
 			update org.Producto set cantidad = @restanteProducto where (idProducto = @idProducto and RIF = @RIF);
@@ -252,9 +267,10 @@ as
 	end
 go;
 
+-- realiza entrada de inventario para un producto
 create procedure insEntrada (
-	@idProducto varchar(5),
-	@idProveedor varchar(10),
+	@producto varchar(50),
+	@proveedor char(70),
 	@cantidad smallint,
 	@observaciones varchar(200) = 'Sin observaciones',
 	@RIF varchar(20)
@@ -263,18 +279,24 @@ as
 	set nocount on;
 	begin transaction;
 
-	declare @idAdquisicion smallint = 0, @existenciasProducto smallint = 0, @nuevaCantidad smallint = 0;
-	if exists (select idProducto from org.Producto where idProducto = @idProducto)
+	declare @idAdquisicion smallint, @existenciasProducto smallint, @nuevaCantidad smallint;
+	declare @idProducto varchar(5), @idProveedor varchar(10);
+
+	select @idProveedor = (select idProveedor from org.Proveedor where ((nombres+' '+apellidos) = @proveedor and RIF = @RIF));
+	select @idProducto = (select idProducto from org.Producto where (nombre = @producto and RIF = @RIF));
+
+	if (nullif(@idProducto, '') is not null)
 	begin
-		select @existenciasProducto = (select cantidad from org.Producto where idProducto = @idProducto);
+		select @existenciasProducto = (select cantidad from org.Producto where (idProducto = @idProducto and RIF = @RIF));
 		set @nuevaCantidad = @existenciasProducto + @cantidad;
 
 		insert into iop.Adquisicion(cantidad, fechaEntrega, observaciones, RIF) 
-
 			values (@cantidad, convert(char(10), getDate(), 103), @observaciones, @RIF);
+
 		set @idAdquisicion = @@identity;
 
 		update org.Producto set cantidad = @nuevaCantidad where (idProducto = @idProducto and RIF = @RIF);
+
 		insert into iop.Entrada(idAdquisicion, idProducto, idProveedor, RIF) 
 			values(@idAdquisicion, @idProducto, @idProveedor, @RIF);
 

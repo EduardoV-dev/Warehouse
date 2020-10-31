@@ -108,6 +108,15 @@ create table org.Producto (
 	references adm.Empresa (RIF)
 );
 
+create table org.OrigenProducto (
+	idProducto varchar(5) constraint fk_OrigenProducto_idProducto foreign key 
+	references org.Producto (idProducto),
+	idProveedor varchar(10) constraint fk_OrigenProducto_idProveedor foreign key 
+	references org.Proveedor (idProveedor),
+	RIF varchar(20) constraint fk_OrigenProducto_RIF foreign key 
+	references adm.Empresa (RIF)
+);
+
 create table iop.Venta (
 	idVenta smallint constraint pk_Venta_idVenta primary key identity(1,1),
 	cantidad smallint not null constraint chk_Venta_cantidad check (cantidad >= 0),

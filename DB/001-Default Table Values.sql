@@ -19,6 +19,11 @@ insert into adm.Departamento values ('BOA', 'Boaco'),
 									('RIV', 'Rivas');
 
 insert into adm.Rol values ('Administrador'),
-						   ('Usuario');
+						   ('Moderador'),
+						   ('Empleado');
 
 insert into org.Medida values ('Unidades');
+
+insert into org.Estado values ('Nuevo'),
+							  ('Usado'),
+							  ('Restaurado');
