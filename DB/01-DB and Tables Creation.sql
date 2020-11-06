@@ -18,13 +18,13 @@ create database Warehouse on primary
 );
 
 use Warehouse;
--- /****** CREATING SCHEMAS *****/
+-- /****** Creando schemas *****/
 
 create schema adm;
 create schema org;
 create schema iop;
 
--- /****** CREATING WAREHOUSE TABLES *******/
+-- /****** Creando tablas de Warehouse *******/
 
 create table adm.Departamento (
 	idDepartamento char(3) constraint pk_Departamento_idDepartamento primary key,
@@ -41,24 +41,6 @@ create table adm.Empresa (
 	references adm.Departamento (idDepartamento)
 );
 
-create table adm.Cuenta (
-	usuario varchar(50) constraint pk_Cuenta_usuario primary key,
-	contrasena varchar(50) not null,
-	RIF varchar(20) constraint fk_Cuenta_RIF foreign key 
-	references adm.Empresa (RIF)
-);
-
-create table adm.Personal (
-	cedula varchar(20) constraint pk_Personal_cedula primary key,
-	nombres char(35) not null,
-	apellidos char(35) not null,
-	correo varchar(50) not null,
-	direccion varchar(100),
-	telefono varchar(20),
-	idDepartamento char(3) constraint fk_Personal_idDepartamento foreign key 
-	references adm.Departamento (idDepartamento)
-);
-
 create table adm.Rol (
 	idRol tinyint constraint pk_Rol_idRol primary key identity(1,1),
 	rol char(25) not null
@@ -69,8 +51,6 @@ create table adm.Usuario (
 	contrasena varchar(50) not null,
 	idRol tinyint constraint fk_Usuario_idRol foreign key 
 	references adm.Rol (idRol),
-	cedula varchar(20) constraint fk_Usuario_cedula foreign key 
-	references adm.Personal (cedula),
 	RIF varchar(20) constraint fk_Usuario_RIF foreign key 
 	references adm.Empresa (RIF)
 );
@@ -112,9 +92,7 @@ create table org.OrigenProducto (
 	idProducto varchar(5) constraint fk_OrigenProducto_idProducto foreign key 
 	references org.Producto (idProducto),
 	idProveedor varchar(10) constraint fk_OrigenProducto_idProveedor foreign key 
-	references org.Proveedor (idProveedor),
-	RIF varchar(20) constraint fk_OrigenProducto_RIF foreign key 
-	references adm.Empresa (RIF)
+	references org.Proveedor (idProveedor)
 );
 
 create table iop.Venta (
@@ -140,17 +118,11 @@ create table iop.Salida (
 	references iop.Venta (idVenta),
 	idProducto varchar(5) constraint fk_Salida_idProducto foreign key 
 	references org.Producto (idProducto),
-	RIF varchar(20) constraint fk_Salida_RIF foreign key 
-	references adm.Empresa (RIF)
 );
 
 create table iop.Entrada (
 	idAdquisicion smallint constraint fk_Entrada_idAquisicion foreign key 
 	references iop.Adquisicion (idAdquisicion),
 	idProducto varchar(5) constraint fk_Entrada_idProducto foreign key 
-	references org.Producto (idProducto),
-	idProveedor varchar(10) constraint fk_Entrada_idProveedor foreign key 
-	references org.Proveedor (idProveedor),
-	RIF varchar(20) constraint fk_Entrada_RIF foreign key 
-	references adm.Empresa (RIF)
+	references org.Producto (idProducto)
 );

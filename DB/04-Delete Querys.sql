@@ -9,45 +9,24 @@ as
 	set nocount on;
 	begin transaction;
 
-	delete from iop.Entrada where (idProducto = @idProducto) and (RIF = @RIF);
+	begin try
+		delete from iop.Entrada where idAdquisicion = (select idAdquisicion from viewEntrada 
+			where (idProducto = @idProducto) and (RIF = @RIF));
+		delete from iop.Adquisicion where idAdquisicion = (select idAdquisicion from viewEntrada 
+			where (idProducto = @idProducto) and (RIF = @RIF));
+		delete from org.OrigenProducto where idProducto = (select idProducto from viewOrigenProducto 
+			where (idProducto = @idProducto) and (RIF = @RIF));
+		delete from iop.Salida where idVenta = (select idVenta from viewSalida 
+			where (idProducto = @idProducto) and (RIF = @RIF));
+		delete from iop.Venta where idVenta = (select idVenta from viewSalida 
+			where (idProducto = @idProducto) and (RIF = @RIF));
+		delete from org.Producto where (idProducto = @idProducto) and (RIF = @RIF);
 
-	if (@@ROWCOUNT > 0)
-	begin
-		delete iop.Salida where (idProducto = @idProducto) and (RIF = @RIF);
-
-		if (@@ROWCOUNT > 0)
-		begin
-			delete org.Producto where (idProducto = @idProducto) and (RIF = @RIF);
-			
-			if (@@ROWCOUNT > 0)
-			begin
-				delete org.OrigenProducto where (idProducto = @idProducto) and RIF = @RIF;
-
-				if (@@ROWCOUNT > 0)
-				begin
-					delete org.Producto where (idProducto = @idProducto) and (RIF = @RIF);
-					commit transaction;
-				end
-				else
-				begin
-					rollback transaction;
-				end
-			end
-			else 
-			begin 
-				rollback transaction;
-			end
-		end
-		else
-		begin
-			rollback transaction;
-		end
-	end
-	else 
-	begin
-		print 'No se encontró el producto';
+		commit transaction;
+	end try
+	begin catch
 		rollback transaction;
-	end
+	end catch
 go;
 
 -- Elimina un proveedor por medio de su idProveedor y elimina todos los registros relacionados con el
@@ -59,27 +38,16 @@ as
 	set nocount on;
 	begin transaction;
 
-	delete from iop.Entrada where (idProveedor = @idProveedor) and (RIF = @RIF);
+	begin try
+		delete from org.OrigenProducto where idProveedor = (select idProveedor from viewOrigenProducto 
+			where (idProveedor = @idProveedor) and (RIF = @RIF));
+		delete from org.Proveedor where (idProveedor = @idProveedor) and (RIF = @RIF);
 
-	if (@@ROWCOUNT > 0)
-	begin
-		delete org.OrigenProducto where (idProveedor = @idProveedor) and (RIF = @RIF);
-
-		if (@@ROWCOUNT > 0)
-		begin
-			delete org.Proveedor where (idProveedor = @idProveedor) and (RIF = @RIF);
-			commit transaction;
-		end
-		else
-		begin
-			rollback transaction;
-		end
-	end
-	else 
-	begin
-		print 'No se encontró el producto';
+		commit transaction;
+	end try
+	begin catch
 		rollback transaction;
-	end
+	end catch
 go;
 
 -- Elimina un usuario de la empresa junto con la persona designada a esa cuenta
@@ -91,20 +59,13 @@ as
 	set nocount on;
 	begin transaction;
 
-	declare @cedula varchar(20);
-	delete from adm.Usuario where (usuario = @usuario) and (RIF = @RIF);
-
-	if (@@ROWCOUNT > 0)
-	begin
-		select @cedula = (select cedula from adm.Personal where (cedula = @cedula));
-		delete adm.Personal where (cedula = @cedula);
+	begin try
+		delete from adm.Usuario where (usuario = @usuario) and (RIF = @RIF);
 		commit transaction;
-	end
-	else 
-	begin
-		print 'No se encontró el producto';
+	end try
+	begin catch
 		rollback transaction;
-	end
+	end catch
 go;
 
 -- Elimina una unidad de medida y establece la unidad como medida alternativa

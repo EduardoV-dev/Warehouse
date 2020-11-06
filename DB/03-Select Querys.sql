@@ -68,12 +68,14 @@ create procedure selInfoProducto (
 as
 	if (@opc = 0)
 	begin
-		select idProducto, nombre, marca, cantidad, estado, medida, proveedor from viewDatosProducto where (nombre like '%'+@nombre+'%') and (RIF = @RIF);
+		select idProducto, nombre, marca, cantidad, estado, medida, proveedor from viewDatosProducto
+			where (nombre like '%'+@nombre+'%') and (RIF = @RIF);
 		return;
 	end
 	if (@opc = 1)
 	begin 
-		select idProducto, nombre, marca, cantidad, estado, medida, proveedor from viewDatosProducto where RIF = @RIF;
+		select idProducto, nombre, marca, cantidad, estado, medida, proveedor from viewDatosProducto
+			where RIF = @RIF;
 		return;
 	end
 go;
@@ -106,19 +108,35 @@ go;
 -- opcion 1 para mostrar todos los usuarios de una empresa
 create procedure selInfoUsuario (
 	@RIF varchar(20),
-	@nombre char(70) = 'Ninguno',
+	@usuario varchar(50) = 'Ninguno',
 	@opc tinyint = 1
 )
 as
 	if (@opc = 0)
 	begin
-		select usuario, cedula, nombres, apellidos, correo, direccion, departamento from viewDatosUsuario 
-			where ((nombres + ' ' + apellidos) like '%'+@nombre+'%') and (RIF = @RIF);
+		select usuario, rol from viewDatosUsuario where (usuario = @usuario) and (RIF = @RIF);
 		return;
 	end
 	if (@opc = 1)
 	begin
-		select usuario, cedula, nombres, apellidos, correo, direccion, departamento from viewDatosUsuario where RIF = @RIF;
+		select usuario, rol from viewDatosUsuario where RIF = @RIF;
+		return;
+	end
+go;
+
+-- Obtiene la información necesaria para login
+create procedure selInfoLogin (
+	@empresa varchar(50),
+	@usuario varchar(50),
+	@contrasena varchar(50)
+)
+as
+	declare @RIF varchar(20);
+	set @RIF = (select RIF from adm.Empresa where nombre = @empresa);
+	if (nullif(@RIF, '') is not null)
+	begin
+		select usuario, contrasena from viewLoginUsuario 
+			where ((usuario = @usuario and contrasena = @contrasena) and (RIF = @RIF));
 		return;
 	end
 go;
@@ -127,4 +145,9 @@ go;
 create procedure selUnidadesMedida 
 as
 	select * from org.Medida;
+go;
+
+create procedure selEstadoProducto 
+as
+	select * from org.Estado;
 go;
