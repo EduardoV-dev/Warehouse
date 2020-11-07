@@ -1,1 +1,5 @@
-desing
+out/**
+.idea/**
+*.iml
+*.docx
+desing/**
