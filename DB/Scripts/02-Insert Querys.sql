@@ -1,7 +1,7 @@
 use Warehouse;
 
 -- Crea las empresas y su primer usuario
-create procedure insEmpresaYAdmin (
+alter procedure insEmpresaYAdmin (
 	@RIF varchar(20),
 	@nombre varchar(50),
 	@correo varchar(50), 
@@ -13,11 +13,11 @@ create procedure insEmpresaYAdmin (
 )
 as
 	set nocount on;
-	begin transaction;
+	--begin transaction;
 	declare @idDepartamento char(3);
-	select @idDepartamento = (select idDepartamento from adm.Departamento where departamento = @departamento);
+	set @idDepartamento = (select idDepartamento from adm.Departamento where departamento = @departamento);
 
-	if not exists(select RIF from adm.Empresa where RIF = @RIF)
+	--if not exists(select RIF from adm.Empresa where RIF = @RIF)
 	begin
 		insert into adm.Empresa (RIF, nombre, correo, direccion, telefono, idDepartamento) 
 			values (@RIF, @nombre, @correo, @direccion, @telefono, @idDepartamento);
@@ -25,10 +25,10 @@ as
 		insert into adm.Usuario (usuario, contrasena, idRol, RIF) 
 			values (@usuario, @contrasena, 1, @RIF);
 
-		commit transaction;
+		--commit transaction;
 	end
-	else 
-		rollback transaction;
+	--else 
+		--rollback transaction;
 go;
 
 -- Crea usuarios de la empresa

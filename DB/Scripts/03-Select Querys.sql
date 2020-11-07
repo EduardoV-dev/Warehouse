@@ -125,7 +125,7 @@ as
 go;
 
 -- Obtiene la información necesaria para login
-create procedure selInfoLogin (
+alter procedure selInfoLogin (
 	@empresa varchar(50),
 	@usuario varchar(50),
 	@contrasena varchar(50)
@@ -135,11 +135,12 @@ as
 	set @RIF = (select RIF from adm.Empresa where nombre = @empresa);
 	if (nullif(@RIF, '') is not null)
 	begin
-		select usuario, contrasena from viewLoginUsuario 
+		select usuario, contrasena, RIF from viewLoginUsuario 
 			where ((usuario = @usuario and contrasena = @contrasena) and (RIF = @RIF));
-		return;
 	end
 go;
+
+exec selInfoLogin 'ABC', 'usuarioGen', '1234'
 
 -- Muestra las unidades de medidas registradas
 create procedure selUnidadesMedida 

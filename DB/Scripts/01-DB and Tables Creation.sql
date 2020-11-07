@@ -98,7 +98,7 @@ create table org.OrigenProducto (
 create table iop.Venta (
 	idVenta smallint constraint pk_Venta_idVenta primary key identity(1,1),
 	cantidad smallint not null constraint chk_Venta_cantidad check (cantidad >= 0),
-	fechaVenta smalldatetime not null,
+	fechaVenta char(10) not null,
 	observaciones varchar(200) default 'Sin observaciones',
 	RIF varchar(20) constraint fk_Venta_RIF foreign key 
 	references adm.Empresa (RIF)
@@ -107,7 +107,7 @@ create table iop.Venta (
 create table iop.Adquisicion (
 	idAdquisicion smallint constraint pk_Adquisicion_idAdquisicion primary key identity(1,1),
 	cantidad smallint not null constraint chk_Adquisicion_cantidad check (cantidad >= 0),
-	fechaEntrega smalldatetime not null,
+	fechaEntrega char(10) not null,
 	observaciones varchar(200) default 'Sin observaciones',
 	RIF varchar(20) constraint fk_Adquisicion_RIF foreign key 
 	references adm.Empresa (RIF)
