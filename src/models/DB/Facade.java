@@ -29,29 +29,37 @@ public class Facade {
         return LogInSignUp.ingresar(empresa, usuario);
     }
 
-    public static void main(String[] args) {
-        // Datos falsos de prueba
-        Empresa empresa1 = new Empresa("ABC", "EmpresaABC", "sample@sample.com", "Street", "88008800", "Managua");
-        Usuario usuario1 = new Usuario("usuarioGen", "1234");
-        String RIF = empresa1.getRIF();
-
-        // Ingresar empresa y usuario admin
-        /*try{
-            registrarse(empresa1, usuario1);
-            System.out.println("Exito");
-        }catch(SQLException e){
-            e.printStackTrace();
-            System.out.println("La empresa ya existe");
-        }*/
-
-        // Obtener informacion de un usuario de una empresa
-        try{
-            rs = ingresar(empresa1, usuario1);
-            System.out.println("Registro existente - Se puede logear");
-            while(rs.next()) System.out.println("Usuario: "+rs.getString(1)+"\nContraseña: "+rs.getString(2)+"\nRIF: "+rs.getString(3));
-        }catch(Exception e){
-            e.printStackTrace();
-            System.err.println("Registro inexistente - No se puede logear");
-        }
+    // Devuelve el total de ventas registradas en una empresa
+    // Devuelve -> int TotalVentas
+    public static ResultSet totalVentas(String RIF) throws SQLException {
+        return consultasSelect.totalVentas(RIF);
     }
+
+    // Devuelve el total de productos registrados en una empresa
+    // Devuelve -> int TotalProductos
+    public static ResultSet totalProductos(String RIF) throws SQLException {
+        return consultasSelect.totalProductos(RIF);
+    }
+
+    // Devuelve el total de usuarios registrados en una empresa
+    // Devuelve -> int TotalUsuarios
+    public static ResultSet totalUsuarios(String RIF) throws SQLException {
+        return consultasSelect.totalUsuarios(RIF);
+    }
+
+    // Devuelve el top 5 de los últimos productos vendidos en una empresa
+    // Devuelve -> String nombreProducto
+    public static ResultSet topÚltimosProductos(String RIF) throws SQLException {
+        return consultasSelect.topProductos(RIF, 0);
+    }
+
+    // Devuelve el top 5 de los productos más vendidos en una empresa
+    // Devuelve -> String nombreProducto, int cantidadTotalVendidaDelProducto
+    public static ResultSet topProductosMasVendidos(String RIF) throws SQLException {
+        return consultasSelect.topProductos(RIF, 1);
+    }
+
+    /*public static void main(String[] args) {
+
+    }*/
 }

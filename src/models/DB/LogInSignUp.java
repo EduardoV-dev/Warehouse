@@ -11,7 +11,6 @@ import java.sql.SQLException;
 public class LogInSignUp {
     private static Connection cn;
     private static CallableStatement cs;
-    private static ResultSet rs;
 
     // Método para registrar una nueva empresa (SignUp)
     public static boolean registrarse(Empresa empresa, Usuario usuario) throws SQLException {
@@ -34,7 +33,6 @@ public class LogInSignUp {
         cs.setString(1, empresa.getNombre());
         cs.setString(2, usuario.getUsuario());
         cs.setString(3, usuario.getContrasena());
-        rs = cs.executeQuery();
-        return rs;
+        return cs.executeQuery();
     }
 }
