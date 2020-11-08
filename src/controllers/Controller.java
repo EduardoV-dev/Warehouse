@@ -1,12 +1,11 @@
 package controllers;
 
-import com.sun.org.apache.bcel.internal.generic.I2F;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
+import javafx.scene.chart.LineChart;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -16,6 +15,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 public class Controller implements Initializable {
+    //Atributos para la funcionalidad de arrastrar la ventana
     private double xOffset = 0;
     private double yOffset = 0;
 
@@ -23,28 +23,22 @@ public class Controller implements Initializable {
     private Button btnAjustes;
 
     @FXML
-    private Button btnVenta;
-
-    @FXML
-    private Button btnProductos;
-
-    @FXML
-    private Button btnAnalisis;
-
-    @FXML
-    private Button btnInicio;
-
-    @FXML
-    private Button btnUsuarios;
-
-    @FXML
     private AnchorPane productosPane;
+
+    @FXML
+    private Button btnClose;
 
     @FXML
     private AnchorPane analisisPane;
 
     @FXML
+    private Button btnProductos;
+
+    @FXML
     private AnchorPane ajustesPane;
+
+    @FXML
+    private Button btnCerrarSesion;
 
     @FXML
     private AnchorPane usuariosPane;
@@ -53,15 +47,55 @@ public class Controller implements Initializable {
     private AnchorPane ventaPane;
 
     @FXML
-    private AnchorPane inicioPane;
+    private TableView<?> ultimosProductosVendidosTV;
 
     @FXML
     private AnchorPane northPane;
 
-    public void closeApp(ActionEvent e) {
-        System.exit(0);
+    @FXML
+    private Label ventasTotalesLabel;
+
+    @FXML
+    private LineChart<?, ?> actividadesVentaLineChart;
+
+    @FXML
+    private TableView<?> productosMasVendidosTV;
+
+    @FXML
+    private Button btnVenta;
+
+    @FXML
+    private Button btnAnalisis;
+
+    @FXML
+    private AnchorPane inicioPane;
+
+    @FXML
+    private Button btnInicio;
+
+    @FXML
+    private Label usuariosRegistradosLabel;
+
+    @FXML
+    private Label productosTotalesLabel;
+
+    @FXML
+    private Button btnUsuarios;
+
+
+    //Metodo que se ejecuta al cargar el scene
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        //Panel de Inicio
     }
 
+    //Metodo para actualizar los datos generales de la ventana de inicio
+    public void actualizarDatosGenerales() {
+        
+    }
+
+
+    //Funcionalidad de la navegación
     public void handleMenuButton(ActionEvent e) {
         if (e.getSource() == btnInicio) {
             setActive(btnInicio);
@@ -95,7 +129,6 @@ public class Controller implements Initializable {
         }
     }
 
-
     private void setActive(Button b) {
         ArrayList<Button> menuBotones = new ArrayList<>();
         menuBotones.add(btnInicio);
@@ -115,11 +148,7 @@ public class Controller implements Initializable {
         menuBotones.clear();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-
-    }
-
+    //Funcionalidad para arrastrar la ventana
     public void onMouseDragged(MouseEvent event) {
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
@@ -131,5 +160,9 @@ public class Controller implements Initializable {
         xOffset = event.getSceneX();
         yOffset = event.getSceneY();
     }
-}
 
+    //Metodo para cerrar la aplicación al presionar el boton
+    public void closeApp(ActionEvent e) {
+        System.exit(0);
+    }
+}

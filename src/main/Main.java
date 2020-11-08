@@ -32,29 +32,6 @@ public class Main extends Application {
             System.out.println("NO CONECTADO");
         }
 
-        /*
-        Parent root = FXMLLoader.load(getClass().getResource("../views/Home.fxml"));
-        primaryStage.setTitle("Ware House");
-        primaryStage.setResizable(false);
-        primaryStage.initStyle(StageStyle.UNDECORATED);
-        Scene scene = new Scene(root);
-        primaryStage.setScene(scene);
-        primaryStage.setMinWidth(1125);
-        primaryStage.setMinHeight(700);
-        primaryStage.setMaximized(false);
-        //we gonna drag the frame
-        root.setOnMousePressed(event -> {
-            x = event.getSceneX();
-            y = event.getSceneY();
-        });
-
-        root.setOnMouseDragged(event -> {
-            primaryStage.setX(event.getScreenX() - x);
-            primaryStage.setY(event.getScreenY() - y);
-        });
-        primaryStage.show();
-         */
-
         Parent root = FXMLLoader.load(getClass().getResource("../views/Login.fxml"));
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setMaximized(false);
@@ -63,8 +40,12 @@ public class Main extends Application {
         stage.setMaxHeight(600);
         stage.setTitle("Login WareHouse");
 
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+        
 
-        //grab your root here
+        //Funcionalidad para mover la ventana
         root.setOnMousePressed(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
@@ -80,12 +61,7 @@ public class Main extends Application {
                 stage.setY(event.getScreenY() - yOffset);
             }
         });
-
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
     }
-
 
     public static void main(String[] args) {
         launch(args);

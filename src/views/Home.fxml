@@ -761,7 +761,7 @@
                                         <Font name="Montserrat Light" size="19.0" />
                                     </font>
                                 </Label>
-                                <LineChart layoutX="96.0" layoutY="61.0" prefHeight="150.0" prefWidth="650.0" AnchorPane.leftAnchor="10.0">
+                                <LineChart fx:id="actividadesVentaLineChart" layoutX="96.0" layoutY="61.0" prefHeight="150.0" prefWidth="650.0" AnchorPane.leftAnchor="10.0">
                                     <xAxis>
                                         <CategoryAxis side="BOTTOM" />
                                     </xAxis>
@@ -783,7 +783,7 @@
                                 </ImageView>
                             </graphic>
                         </Label>
-                        <Label layoutX="169.0" layoutY="370.0" text="34" textFill="#485260" AnchorPane.leftAnchor="169.0" AnchorPane.topAnchor="370.0">
+                        <Label fx:id="ventasTotalesLabel" layoutX="169.0" layoutY="370.0" text="34" textFill="#485260" AnchorPane.leftAnchor="169.0" AnchorPane.topAnchor="370.0">
                             <font>
                                 <Font name="Montserrat Regular" size="30.0" />
                             </font>
@@ -800,7 +800,7 @@
                                 </ImageView>
                             </graphic>
                         </Label>
-                        <Label layoutX="389.0" layoutY="370.0" text="150" textFill="#485260" AnchorPane.leftAnchor="389.0" AnchorPane.topAnchor="370.0">
+                        <Label fx:id="productosTotalesLabel" layoutX="389.0" layoutY="370.0" text="150" textFill="#485260" AnchorPane.leftAnchor="389.0" AnchorPane.topAnchor="370.0">
                             <font>
                                 <Font name="Montserrat Regular" size="30.0" />
                             </font>
@@ -817,7 +817,7 @@
                                 </ImageView>
                             </graphic>
                         </Label>
-                        <Label layoutX="650.0" layoutY="370.0" text="5" textFill="#485260" AnchorPane.leftAnchor="650.0" AnchorPane.topAnchor="370.0">
+                        <Label fx:id="usuariosRegistradosLabel" layoutX="650.0" layoutY="370.0" text="5" textFill="#485260" AnchorPane.leftAnchor="650.0" AnchorPane.topAnchor="370.0">
                             <font>
                                 <Font name="Montserrat Regular" size="30.0" />
                             </font>
@@ -844,13 +844,13 @@
                                 </ImageView>
                             </graphic>
                         </Label>
-                        <TableView layoutX="85.0" layoutY="492.0" prefHeight="123.0" prefWidth="327.0" AnchorPane.leftAnchor="67.0">
+                        <TableView fx:id="ultimosProductosVendidosTV" layoutX="85.0" layoutY="492.0" prefHeight="123.0" prefWidth="327.0" AnchorPane.leftAnchor="67.0">
                             <columns>
                                 <TableColumn prefWidth="75.0" text="C1" />
                                 <TableColumn prefWidth="75.0" text="C2" />
                             </columns>
                         </TableView>
-                        <TableView layoutX="503.0" layoutY="492.0" prefHeight="123.0" prefWidth="327.0" AnchorPane.rightAnchor="95.0">
+                        <TableView fx:id="productosMasVendidosTV" layoutX="503.0" layoutY="492.0" prefHeight="123.0" prefWidth="327.0" AnchorPane.rightAnchor="95.0">
                             <columns>
                                 <TableColumn prefWidth="75.0" text="C1" />
                                 <TableColumn prefWidth="75.0" text="C2" />

@@ -64,7 +64,18 @@ public class RegisterController implements Initializable {
     @FXML
     private TextField usuarioNombreTF;
 
+    //Metodo que se ejecuta al cargar el scene
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        //cargar departamentos en un arraylist
+        ObservableList<String> departamentos;
+        departamentos = Facade.obtenerDepartamentos();
+        //System.out.println(departamentos);
+        empresaDepartamentoCB.setPromptText("Selecciona un departamento:");
+        empresaDepartamentoCB.setItems(departamentos);
+    }
 
+    //Metodos para las acciones de los botones cancelar y registrar
     public void onClickBtn(ActionEvent e) {
 
         if (e.getSource() == cancelarBtn) {
@@ -139,14 +150,5 @@ public class RegisterController implements Initializable {
         }
     }
 
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        //cargar departamentos en un arraylist
-        ObservableList<String> departamentos;
-        departamentos = Facade.obtenerDepartamentos();
-        //System.out.println(departamentos);
-        empresaDepartamentoCB.setPromptText("Selecciona un departamento:");
-        empresaDepartamentoCB.setItems(departamentos);
-    }
 }
+

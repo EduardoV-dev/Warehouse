@@ -31,8 +31,12 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class LoginController implements Initializable {
+    //Atributos para la funcionalidad de arrastrar la ventana
     private double xOffset = 0;
     private double yOffset = 0;
+
+    //Atributo para la funcionalidad del candado
+    boolean bloqueado;
 
     @FXML
     private TextField usuarioTF;
@@ -61,8 +65,40 @@ public class LoginController implements Initializable {
     @FXML
     private Button closeBTn;
 
-    boolean bloqueado;
+    //Metodo que se ejecuta al cargar el scene
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
 
+        //Cambiando el icono en caso de que la conexion falle
+        if (ConexionBD.conexion() == null) {
+            try {
+                System.out.println(System.getProperty("user.dir"));
+                resultadoConeccion.setImage(new Image(new FileInputStream("src/img/icons/error48r.png")));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        //Funcionalidad del texfield con el candado
+        try {
+            EmpresaNombre.crearArchivo(new File("bname.dat"));
+            if (EmpresaNombre.obtenerNombre() != "") {
+                empresaTF.setText(EmpresaNombre.obtenerNombre());
+                empresaTF.setEditable(false);
+                bloquear();
+
+            } else {
+                desbloquear();
+
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Metodo para cargar el panel de registro
     public void onClickRegistrarse(javafx.event.ActionEvent actionEvent) {
         if (ConexionBD.conexion() != null) {
             try {
@@ -115,6 +151,7 @@ public class LoginController implements Initializable {
         }
     }
 
+    //Metodo para ingresar al programa
     public void ingresarApp(ActionEvent event) throws IOException {
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
@@ -130,38 +167,7 @@ public class LoginController implements Initializable {
     }
 
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-
-        //Cambiando el icono en caso de que la conexion falle
-        if (ConexionBD.conexion() == null) {
-            try {
-                System.out.println(System.getProperty("user.dir"));
-                resultadoConeccion.setImage(new Image(new FileInputStream("src/img/icons/error48r.png")));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-
-        //Funcionalidad del texfield con el candado
-        try {
-            EmpresaNombre.crearArchivo(new File("bname.dat"));
-            if (EmpresaNombre.obtenerNombre() != "") {
-                empresaTF.setText(EmpresaNombre.obtenerNombre());
-                empresaTF.setEditable(false);
-                bloquear();
-
-            } else {
-                desbloquear();
-
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    //Metodos para la funcionalidad del candado
     public void toggleLock(ActionEvent actionEvent) {
         //System.out.println(bloqueado);
         if (bloqueado) {
@@ -202,7 +208,7 @@ public class LoginController implements Initializable {
         }
     }
 
-
+    //Metodo para cerrar la aplicación al presionar el boton
     public void onClickCerrar(ActionEvent event) {
         System.exit(0);
     }
