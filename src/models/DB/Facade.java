@@ -2,7 +2,6 @@ package models.DB;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import models.DB.*;
 import models.POJO.Empresa;
 import models.POJO.Usuario;
 import java.sql.ResultSet;
@@ -10,7 +9,6 @@ import java.sql.SQLException;
 
 public class Facade {
     private static ResultSet rs;
-    private static Connection con;
 
     /************************************************ NOTA *********************************************/
     // El uso de throws se debe a que se pueda controlar los errores relacionados con que
@@ -59,8 +57,26 @@ public class Facade {
         return consultasSelect.topProductos(RIF, 1);
     }
 
-    /*public static void main(String[] args) {
+    // Devuelve todos los departamentos existentes
+    // Devuelve -> ObservableArrayList departamentos
+    public static ObservableList<String> obtenerDepartamentos() throws SQLException {
+        ObservableList<String> departamentos = FXCollections.observableArrayList();
+        rs = consultasSelect.departamentos();
+        //creando y llenando la lista
+        while (rs.next()) {
+            departamentos.add(rs.getString(1).trim());
+        }
+        return departamentos;
+    }
 
+    /*public static void main(String[] args) {
+        try{
+            obtenerDepartamentos().forEach(item -> {
+                System.out.println(item);
+            });
+        }catch(Exception e){
+            e.printStackTrace();
+        }
     }*/
 
     /*
