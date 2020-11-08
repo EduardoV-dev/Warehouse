@@ -26,8 +26,8 @@ public class Facade {
     // Metodo usado para obtener la informacion de login necesaria para poder
     // Ingresar al sistema de una empresa - Este metodo devuelve el usuario y contraseña
     // filtrado por el numero RIF en un resultSet
-    public static ResultSet ingresar(Empresa empresa, Usuario usuario) throws SQLException {
-        return LogInSignUp.ingresar(empresa, usuario);
+    public static ResultSet ingresar(String nombreEmpresa, Usuario usuario) throws SQLException {
+        return LogInSignUp.ingresar(nombreEmpresa, usuario);
     }
 
     // Devuelve el total de ventas registradas en una empresa

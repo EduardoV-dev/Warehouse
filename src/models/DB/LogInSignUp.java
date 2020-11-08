@@ -27,10 +27,10 @@ public class LogInSignUp {
         return cs.execute();
     }
 
-    public static ResultSet ingresar(Empresa empresa, Usuario usuario) throws SQLException{
+    public static ResultSet ingresar(String nombreEmpresa, Usuario usuario) throws SQLException{
         cn = ConexionBD.conexion();
         cs = cn.prepareCall("{call selInfoLogin(?,?,?)}");
-        cs.setString(1, empresa.getNombre());
+        cs.setString(1, nombreEmpresa);
         cs.setString(2, usuario.getUsuario());
         cs.setString(3, usuario.getContrasena());
         return cs.executeQuery();
