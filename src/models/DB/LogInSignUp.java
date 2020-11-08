@@ -11,10 +11,7 @@ import java.sql.SQLException;
 public class LogInSignUp {
     private static Connection cn;
     private static CallableStatement cs;
-<<<<<<< HEAD
-=======
     private static ResultSet rs;
->>>>>>> f225b1f898ceb886d35318745ad4364916395291
 
     // Método para registrar una nueva empresa (SignUp)
     public static boolean registrarse(Empresa empresa, Usuario usuario) throws SQLException {
@@ -31,24 +28,13 @@ public class LogInSignUp {
         return cs.execute();
     }
 
-<<<<<<< HEAD
-    public static ResultSet ingresar(Empresa empresa, Usuario usuario) throws SQLException{
-        cn = ConexionBD.conexion();
-        cs = cn.prepareCall("{call selInfoLogin(?,?,?)}");
-        cs.setString(1, empresa.getNombre());
-        cs.setString(2, usuario.getUsuario());
-        cs.setString(3, usuario.getContrasena());
-        return cs.executeQuery();
-=======
     public static boolean ingresar(String nombreEmpresa, Usuario usuario) throws SQLException {
         cn = ConexionBD.conexion();
         cs = cn.prepareCall("{call selInfoLogin(?,?,?)}");
         cs.setString(1, nombreEmpresa);
         cs.setString(2, usuario.getUsuario());
         cs.setString(3, usuario.getContrasena());
-        rs = cs.executeQuery();
-        //System.out.println(rs.next());
-        return rs.next();
->>>>>>> f225b1f898ceb886d35318745ad4364916395291
+	rs = cs.executeQuery();
+        return cs.next();
     }
 }

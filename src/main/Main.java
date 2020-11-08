@@ -7,17 +7,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-<<<<<<< HEAD
-
-import java.sql.Connection;
-=======
 import javafx.stage.StageStyle;
 import models.DB.ConexionBD;
-
-
 import java.sql.Connection;
-
->>>>>>> f225b1f898ceb886d35318745ad4364916395291
 
 public class Main extends Application {
     //private double x, y;
