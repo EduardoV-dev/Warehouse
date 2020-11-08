@@ -145,6 +145,13 @@ as
 	end
 go;
 
+create procedure selVentasSiete (
+	@RIF varchar(20)
+)
+as
+	select top 7 fechaVenta, SUM(cantidad) as Ventas from iop.Venta where RIF = @RIF group by fechaVenta order by fechaVenta desc;
+go;
+
 -- Muestra las unidades de medidas registradas
 create procedure selUnidadesMedida 
 as
