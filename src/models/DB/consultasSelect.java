@@ -46,4 +46,12 @@ public class consultasSelect {
         return cs.executeQuery();
     }
 
+    // Obtiene las ventas realizadas en los últimos 7 días
+    public static ResultSet ventas7dias(String RIF) throws SQLException{
+        cn = ConexionBD.conexion();
+        cs = cn.prepareCall("{call selVentasSiete(?)}");
+        cs.setString(1, RIF);
+        return cs.executeQuery();
+    }
+
 }

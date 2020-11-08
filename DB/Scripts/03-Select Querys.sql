@@ -13,11 +13,7 @@ create procedure selTotalProductos (
 	@RIF varchar(20)
 )
 as
-<<<<<<< HEAD
 	select count(idProducto) as TotalProductos from org.Producto where RIF = @RIF;
-=======
-	select count(idProducto) from org.Producto where RIF = @RIF;
->>>>>>> f225b1f898ceb886d35318745ad4364916395291
 go;
 
 -- Obtener el número de usuarios registrados en una empresa
@@ -25,11 +21,7 @@ create procedure selTotalUsuarios (
 	@RIF varchar(20)
 )
 as
-<<<<<<< HEAD
 	select count(usuario) as TotalUsuarios from adm.Usuario where RIF = @RIF;
-=======
-	select count(usuario) from adm.Usuario where RIF = @RIF;
->>>>>>> f225b1f898ceb886d35318745ad4364916395291
 go;
 
 -- Si se le pasa el parametro 0, Obtiene el top 5 de los últimos productos vendidos
@@ -42,22 +34,14 @@ as
 	set nocount on;
 
 	declare @top5 table (nombre varchar(50), cantidadVendida smallint default 0);
-<<<<<<< HEAD
 	if (@opc = 0)
-=======
-	--if (@opc = 0)
->>>>>>> f225b1f898ceb886d35318745ad4364916395291
 	begin
 		insert into @top5 (nombre)
 			(select nombre from viewTopProductos where RIF = @RIF group by nombre);
 
 		select top 5 * from @top5 order by nombre desc;
 	end
-<<<<<<< HEAD
 	if (@opc = 1)
-=======
-	--if (@opc = 1)
->>>>>>> f225b1f898ceb886d35318745ad4364916395291
 	begin
 		insert into @top5 (nombre, cantidadVendida) 
 			(select nombre, sum(cantidad) from viewTopProductos where RIF = @RIF group by nombre);
@@ -161,6 +145,13 @@ as
 	end
 go;
 
+create procedure selVentasSiete (
+	@RIF varchar(20)
+)
+as
+	select top 7 fechaVenta, SUM(cantidad) as Ventas from iop.Venta where RIF = @RIF group by fechaVenta order by fechaVenta desc;
+go;
+
 -- Muestra las unidades de medidas registradas
 create procedure selUnidadesMedida 
 as
@@ -171,3 +162,22 @@ create procedure selEstadoProducto
 as
 	select * from org.Estado;
 go;
+
+-- Devuelve las ventas realizadas en los últimos 7 días
+create procedure selVentasSiete (
+	@RIF varchar(20)
+)
+as
+	select top 7 fechaVenta, SUM(cantidad) as Ventas from iop.Venta group by fechaVenta order by fechaVenta desc;
+go;
+
+declare @fecha char(10), @fecha1 char(10);
+declare @fecha2 char()
+set @fecha = '20/11/2020';
+set @fecha1 = '10/11/2020'
+select DATEDIFF(day, CONVERT(smalldatetime, @fecha1, 103), CONVERT(smalldatetime, @fecha, 103));
+select CONVERT(smalldatetime, @fecha, 103);
+
+select fechaVenta, SUM(cantidad) as Ventas from iop.Venta
+	where DATEDIFF(DAY, CONVERT(smalldatetime, fechaVenta, 103), ) group by fechaVenta
+

@@ -1,7 +1,7 @@
 use Warehouse;
 
 -- Crea las empresas y su primer usuario
-alter procedure insEmpresaYAdmin (
+create procedure insEmpresaYAdmin (
 	@RIF varchar(20),
 	@nombre varchar(50),
 	@correo varchar(50), 
