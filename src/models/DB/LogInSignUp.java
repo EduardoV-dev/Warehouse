@@ -34,7 +34,7 @@ public class LogInSignUp {
         cs.setString(1, nombreEmpresa);
         cs.setString(2, usuario.getUsuario());
         cs.setString(3, usuario.getContrasena());
-	rs = cs.executeQuery();
-        return cs.next();
+        rs = cs.executeQuery();
+        return rs.next();
     }
 }

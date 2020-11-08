@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.POJO.Empresa;
 import models.POJO.Usuario;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -21,6 +22,10 @@ public class Facade {
         // Devuelve true o false dependiendo de si el registro fue realizado
         // correctamente o no
         return LogInSignUp.registrarse(empresa, usuario);
+    }
+
+    public static boolean ingresar(String nombreEmpresa, Usuario usuario) throws SQLException {
+        return LogInSignUp.ingresar(nombreEmpresa, usuario);
     }
 
     // Metodo usado para obtener la informacion de login necesaria para poder
