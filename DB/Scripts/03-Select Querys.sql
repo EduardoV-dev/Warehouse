@@ -13,7 +13,11 @@ create procedure selTotalProductos (
 	@RIF varchar(20)
 )
 as
+<<<<<<< HEAD
 	select count(idProducto) as TotalProductos from org.Producto where RIF = @RIF;
+=======
+	select count(idProducto) from org.Producto where RIF = @RIF;
+>>>>>>> f225b1f898ceb886d35318745ad4364916395291
 go;
 
 -- Obtener el número de usuarios registrados en una empresa
@@ -21,7 +25,11 @@ create procedure selTotalUsuarios (
 	@RIF varchar(20)
 )
 as
+<<<<<<< HEAD
 	select count(usuario) as TotalUsuarios from adm.Usuario where RIF = @RIF;
+=======
+	select count(usuario) from adm.Usuario where RIF = @RIF;
+>>>>>>> f225b1f898ceb886d35318745ad4364916395291
 go;
 
 -- Si se le pasa el parametro 0, Obtiene el top 5 de los últimos productos vendidos
@@ -34,14 +42,22 @@ as
 	set nocount on;
 
 	declare @top5 table (nombre varchar(50), cantidadVendida smallint default 0);
+<<<<<<< HEAD
 	if (@opc = 0)
+=======
+	--if (@opc = 0)
+>>>>>>> f225b1f898ceb886d35318745ad4364916395291
 	begin
 		insert into @top5 (nombre)
 			(select nombre from viewTopProductos where RIF = @RIF group by nombre);
 
 		select top 5 * from @top5 order by nombre desc;
 	end
+<<<<<<< HEAD
 	if (@opc = 1)
+=======
+	--if (@opc = 1)
+>>>>>>> f225b1f898ceb886d35318745ad4364916395291
 	begin
 		insert into @top5 (nombre, cantidadVendida) 
 			(select nombre, sum(cantidad) from viewTopProductos where RIF = @RIF group by nombre);

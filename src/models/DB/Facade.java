@@ -1,13 +1,31 @@
 package models.DB;
+<<<<<<< HEAD
+=======
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+>>>>>>> f225b1f898ceb886d35318745ad4364916395291
 import models.DB.*;
 import models.POJO.Empresa;
 import models.POJO.Usuario;
 
+<<<<<<< HEAD
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Facade {
     public static ResultSet rs;
+=======
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Observable;
+
+public class Facade {
+    private static ResultSet rs;
+    private static Connection con;
+>>>>>>> f225b1f898ceb886d35318745ad4364916395291
 
     /************************************************ NOTA *********************************************/
     // El uso de throws se debe a que se pueda controlar los errores relacionados con que
@@ -25,6 +43,7 @@ public class Facade {
     // Metodo usado para obtener la informacion de login necesaria para poder
     // Ingresar al sistema de una empresa - Este metodo devuelve el usuario y contraseña
     // filtrado por el numero RIF en un resultSet
+<<<<<<< HEAD
     public static ResultSet ingresar(Empresa empresa, Usuario usuario) throws SQLException {
         return LogInSignUp.ingresar(empresa, usuario);
     }
@@ -62,4 +81,33 @@ public class Facade {
     /*public static void main(String[] args) {
 
     }*/
+=======
+    public static boolean ingresar(String nombreEmpresa, Usuario usuario) throws SQLException {
+        return LogInSignUp.ingresar(nombreEmpresa, usuario);
+    }
+
+    /*
+     *   Metodo para obtener los departamentos
+     *   retorna un ObservableList de Strings con el nombre de los departamentos
+     */
+    public static ObservableList<String> obtenerDepartamentos() {
+        ObservableList<String> lista = FXCollections.observableArrayList();
+        try {
+            con = ConexionBD.conexion();
+            Statement st = con.createStatement();
+            String sql = "SELECT departamento FROM adm.Departamento";
+            rs = st.executeQuery(sql);
+
+            //creando y llenando la lista
+            while (rs.next()) {
+                lista.add(rs.getString(1).trim());
+            }
+
+            con.close();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+        return lista;
+    }
+>>>>>>> f225b1f898ceb886d35318745ad4364916395291
 }
