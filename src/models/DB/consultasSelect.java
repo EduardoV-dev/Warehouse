@@ -40,8 +40,10 @@ public class consultasSelect {
         return cs.executeQuery();
     }
 
-
-
-
+    public static ResultSet departamentos() throws SQLException{
+        cn = ConexionBD.conexion();
+        cs = cn.prepareCall("{call selDepartamentos}");
+        return cs.executeQuery();
+    }
 
 }
