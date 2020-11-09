@@ -2,12 +2,12 @@ package models.POJO;
 
 public class Usuario {
     private String usuario, contrasena;
-    private int idRol;
+    private String rol;
 
-    public Usuario(String usuario, String contrasena, int idRol) {
+    public Usuario(String usuario, String contrasena, String rol) {
         this.usuario = usuario;
         this.contrasena = contrasena;
-        this.idRol = idRol;
+        this.rol = rol;
     }
 
     public Usuario(String usuario, String contrasena) {
@@ -34,11 +34,11 @@ public class Usuario {
         this.contrasena = contrasena;
     }
 
-    public int getIdRol() {
-        return idRol;
+    public String getRol() {
+        return rol;
     }
 
-    public void setIdRol(int idRol) {
-        this.idRol = idRol;
+    public void setRol(String rol) {
+        this.rol = rol;
     }
 }

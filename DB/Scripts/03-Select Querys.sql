@@ -1,5 +1,12 @@
 use Warehouse;
 
+create procedure selInfoEmpresa	(
+	@RIF varchar(20)
+)
+as
+	select * from viewInfoEmpresa where RIF = @RIF;
+go;
+
 -- Obtener el número de ventas que ha realizado una empresa
 create procedure selTotalVentas (
 	@RIF varchar(20)
@@ -33,29 +40,33 @@ create procedure selTopProductos (
 as
 	set nocount on;
 
-	declare @top5 table (nombre varchar(50), cantidadVendida smallint default 0);
+	declare @top5 table (Nombre varchar(50), Ventas smallint default 0);
 	if (@opc = 0)
 	begin
-		insert into @top5 (nombre)
+		insert into @top5 (Nombre)
 			(select nombre from viewTopProductos where RIF = @RIF group by nombre);
 
 		select top 5 * from @top5 order by nombre desc;
 	end
 	if (@opc = 1)
 	begin
-		insert into @top5 (nombre, cantidadVendida) 
+		insert into @top5 (Nombre, Ventas) 
 			(select nombre, sum(cantidad) from viewTopProductos where RIF = @RIF group by nombre);
 
-		select top 5 * from @top5 order by cantidadVendida desc;
+		select top 5 * from @top5 order by Ventas desc;
 	end;
 go;
 
 -- Obtener el historial completo de ventas de una empresa
+-- El orden va desde la venta mas reciente hasta la menos reciente
 create procedure selHistorialVentas (
 	@RIF varchar(20)
 )
 as
-	select * from viewHistorialVentas where RIF = @RIF;
+	select RIF, idProducto as IDProducto, nombre as Nombre,
+		cantidad as Cantidad, fechaVenta as Fecha
+		from viewHistorialVentas 
+		where RIF = @RIF order by convert(smalldatetime, fechaVenta, 103) desc;
 go;
 
 -- opcion 0 para buscar productos por su nombre
@@ -68,13 +79,15 @@ create procedure selInfoProducto (
 as
 	if (@opc = 0)
 	begin
-		select idProducto, nombre, marca, cantidad, estado, medida, proveedor from viewDatosProducto
+		select idProducto as IDProducto, nombre as Producto, marca as Marca, cantidad as Cantidad,
+			estado as Estado, medida as Medida, proveedor as Proveedor from viewDatosProducto
 			where (nombre like '%'+@nombre+'%') and (RIF = @RIF);
 		return;
 	end
 	if (@opc = 1)
 	begin 
-		select idProducto, nombre, marca, cantidad, estado, medida, proveedor from viewDatosProducto
+		select idProducto as IDProducto, nombre as Producto, marca as Marca, cantidad as Cantidad,
+			estado as Estado, medida as Medida, proveedor as Proveedor from viewDatosProducto
 			where RIF = @RIF;
 		return;
 	end
@@ -91,16 +104,20 @@ create procedure selInfoProveedor (
 as
 	if (@opc = 0)
 	begin
-		select idProveedor, nombres, apellidos, correo, telefono from org.Proveedor 
+		select idProveedor as IDProveedor, nombres as Nombres, apellidos as Apellidos,
+			correo as Correo, telefono as Telefono from org.Proveedor 
 			where ((nombres + ' ' + apellidos) like '%'+@nombre+'%') and (RIF = @RIF);
 	end
 	if (@opc = 1)
 	begin
-		select idProveedor, nombres, apellidos, correo, telefono from org.Proveedor where RIF = @RIF;
+		select idProveedor as IDProveedor, nombres as Nombres, apellidos as Apellidos,
+			correo as Correo, telefono as Telefono from org.Proveedor 
+			where RIF = @RIF;
 	end
 	if (@opc = 2)
 	begin
-		select (nombres + ' ' + apellidos) as nombre from org.Proveedor where RIF = @RIF;
+		select (nombres + ' ' + apellidos) as nombre from org.Proveedor
+			where RIF = @RIF;
 	end
 go;
 
@@ -114,16 +131,17 @@ create procedure selInfoUsuario (
 as
 	if (@opc = 0)
 	begin
-		select usuario, rol from viewDatosUsuario where (usuario = @usuario) and (RIF = @RIF);
-		return;
+		select usuario as Usuario, rol as Rol from viewDatosUsuario 
+			where (usuario = @usuario) and (RIF = @RIF);
 	end
 	if (@opc = 1)
 	begin
-		select usuario, rol from viewDatosUsuario where RIF = @RIF;
-		return;
+		select usuario as Usuario, rol as Rol from viewDatosUsuario 
+			where RIF = @RIF;
 	end
 go;
 
+-- Devuelve todos los departamentos existentes
 create procedure selDepartamentos 
 as
 	select departamento from adm.Departamento;
@@ -145,6 +163,7 @@ as
 	end
 go;
 
+-- Obtiene las ventas realizadas en los ultimos 7 dias
 create procedure selVentasSiete (
 	@RIF varchar(20)
 )
@@ -153,12 +172,12 @@ as
 go;
 
 -- Muestra las unidades de medidas registradas
-create procedure selUnidadesMedida 
+create procedure selMedidaProducto
 as
-	select * from org.Medida;
+	select medida from org.Medida;
 go;
 
 create procedure selEstadoProducto 
 as
-	select * from org.Estado;
+	select estado from org.Estado;
 go;

@@ -49,13 +49,13 @@ public class Facade {
     }
 
     // Devuelve el top 5 de los últimos productos vendidos en una empresa
-    // Devuelve -> String nombreProducto
+    // Devuelve -> String Nombre
     public static ResultSet topÚltimosProductos(String RIF) throws SQLException {
         return consultasSelect.topProductos(RIF, 0);
     }
 
     // Devuelve el top 5 de los productos más vendidos en una empresa
-    // Devuelve -> String nombreProducto, int cantidadTotalVendidaDelProducto
+    // Devuelve -> String Nombre, int Ventas
     public static ResultSet topProductosMasVendidos(String RIF) throws SQLException {
         return consultasSelect.topProductos(RIF, 1);
     }

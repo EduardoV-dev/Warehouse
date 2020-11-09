@@ -1,5 +1,13 @@
 use Warehouse;
 
+-- Vista para obtener la informacion de una empresa
+create view viewInfoEmpresa
+as 
+	select E.RIF, E.nombre, E.correo, E.direccion, E.telefono, D.departamento from adm.Empresa as E
+		inner join adm.Departamento as D
+		on E.idDepartamento = D.idDepartamento;
+go;
+
 -- Vista para obtener el top 5 de los últimos productos vendidos y productos más vendidos
 create view viewTopProductos 
 as
