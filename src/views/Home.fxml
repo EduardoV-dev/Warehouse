@@ -157,7 +157,7 @@
         </VBox>
         <AnchorPane fx:id="northPane" layoutX="220.0" layoutY="20.0" onMouseDragged="#onMouseDragged" onMousePressed="#onMousePressed" prefHeight="60.0" prefWidth="200.0" style="-fx-background-color: #F9FCFF;" AnchorPane.leftAnchor="200.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <Label layoutX="69.0" layoutY="11.0" text="Empresa XYZ. INC" textFill="#1d3557" AnchorPane.leftAnchor="53.0" AnchorPane.topAnchor="17.0">
+                <Label fx:id="tituloEmpresaLabel" layoutX="69.0" layoutY="11.0" text="Empresa XYZ. INC" textFill="#1d3557" AnchorPane.leftAnchor="53.0" AnchorPane.topAnchor="17.0">
                     <font>
                         <Font name="Montserrat Regular" size="28.0" />
                     </font>
@@ -174,15 +174,29 @@
                         </ImageView>
                     </graphic>
                 </Label>
-                <Button fx:id="btnClose" layoutX="860.0" layoutY="1.0" mnemonicParsing="false" onAction="#closeApp" prefHeight="37.0" prefWidth="17.0" style="-fx-background-color: transparent;" text="X" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                <Button fx:id="btnClose" layoutX="860.0" layoutY="1.0" mnemonicParsing="false" onAction="#closeApp" prefHeight="37.0" prefWidth="17.0" style="-fx-background-color: transparent;" stylesheets="@../css/styles.css" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                     <font>
                         <Font name="Montserrat SemiBold" size="20.0" />
                     </font>
+               <graphic>
+                  <ImageView fitHeight="22.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/icons/close.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
                 </Button>
-                <Button layoutX="849.0" mnemonicParsing="false" prefHeight="37.0" prefWidth="17.0" style="-fx-background-color: transparent;" text="-" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="0.0">
+                <Button fx:id="btnMinimize" layoutX="849.0" mnemonicParsing="false" onAction="#minimizeApp" prefHeight="37.0" prefWidth="17.0" style="-fx-background-color: transparent;" stylesheets="@../css/styles.css" AnchorPane.rightAnchor="30.0" AnchorPane.topAnchor="0.0">
                     <font>
                         <Font name="Montserrat SemiBold" size="20.0" />
                     </font>
+               <graphic>
+                  <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../img/icons/minimize.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
                 </Button>
             </children>
         </AnchorPane>

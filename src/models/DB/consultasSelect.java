@@ -1,5 +1,7 @@
 package models.DB;
 
+import models.POJO.Usuario;
+
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,6 +17,7 @@ public class consultasSelect {
         cs.setString(1, RIF);
         return cs.executeQuery();
     }
+
 
     public static ResultSet totalProductos(String RIF) throws SQLException {
         cn = ConexionBD.conexion();
@@ -40,14 +43,14 @@ public class consultasSelect {
         return cs.executeQuery();
     }
 
-    public static ResultSet departamentos() throws SQLException{
+    public static ResultSet departamentos() throws SQLException {
         cn = ConexionBD.conexion();
         cs = cn.prepareCall("{call selDepartamentos}");
         return cs.executeQuery();
     }
 
     // Obtiene las ventas realizadas en los últimos 7 días
-    public static ResultSet ventas7dias(String RIF) throws SQLException{
+    public static ResultSet ventas7dias(String RIF) throws SQLException {
         cn = ConexionBD.conexion();
         cs = cn.prepareCall("{call selVentasSiete(?)}");
         cs.setString(1, RIF);

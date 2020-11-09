@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
+import models.DB.CurrentLogin;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -82,16 +83,24 @@ public class Controller implements Initializable {
     @FXML
     private Button btnUsuarios;
 
+    @FXML
+    private Label tituloEmpresaLabel;
+
 
     //Metodo que se ejecuta al cargar el scene
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //Panel de Inicio
+
+        //ponemos el nombre en el panel superior
+        System.out.println(CurrentLogin.getCurrentEmpresa().getNombre());
+        tituloEmpresaLabel.setText(CurrentLogin.getCurrentEmpresa().getNombre());
+
     }
 
     //Metodo para actualizar los datos generales de la ventana de inicio
     public void actualizarDatosGenerales() {
-        
+
     }
 
 
@@ -140,7 +149,7 @@ public class Controller implements Initializable {
 
         for (Button button : menuBotones) {
             if (button == b) {
-                button.setStyle("-fx-background-color: rgba(0,0,0,.15)");
+                button.setStyle("-fx-background-color: rgba(0,0,0,.35)");
             } else {
                 button.setStyle("-fx-background-color: transparent");
             }
@@ -165,4 +174,13 @@ public class Controller implements Initializable {
     public void closeApp(ActionEvent e) {
         System.exit(0);
     }
+
+    public void minimizeApp(ActionEvent event) {
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        stage.setIconified(true);
+    }
+
+    //metodo para minimizar la aplicacion
+
 }

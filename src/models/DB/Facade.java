@@ -24,10 +24,6 @@ public class Facade {
         return LogInSignUp.registrarse(empresa, usuario);
     }
 
-    public static boolean ingresar(String nombreEmpresa, Usuario usuario) throws SQLException {
-        return LogInSignUp.ingresar(nombreEmpresa, usuario);
-    }
-
     // Metodo usado para obtener la informacion de login necesaria para poder
     // Ingresar al sistema de una empresa - Este metodo devuelve el usuario y contraseña
     // filtrado por el numero RIF en un resultSet
@@ -80,12 +76,12 @@ public class Facade {
     // Obtiene las ventas realizadas en los ultimos 7 dias
     // Devuelve una matriz de 7 filas y 2 columnas, el indice 0 de las columnas
     // devuelve la fecha, mientras que el indice 1 devuelve el total de ventas
-    public static String[][] ventas7dias(String RIF) throws SQLException{
+    public static String[][] ventas7dias(String RIF) throws SQLException {
         rs = consultasSelect.ventas7dias(RIF);
         String[][] ventas;
         ventas = new String[7][2];
-        for (int i = 0; i < 7; i++){
-            while(rs.next()){
+        for (int i = 0; i < 7; i++) {
+            while (rs.next()) {
                 ventas[i][0] = rs.getString(1);
                 ventas[i][1] = String.valueOf(rs.getInt(2));
                 break;
