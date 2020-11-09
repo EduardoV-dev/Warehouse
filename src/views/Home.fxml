@@ -162,7 +162,7 @@
                         <Font name="Montserrat Regular" size="28.0" />
                     </font>
                 </Label>
-                <Label graphicTextGap="7.0" layoutX="677.0" layoutY="27.0" prefHeight="26.0" text="Carlos Arcia" textFill="#1d3557" AnchorPane.leftAnchor="614.0" AnchorPane.rightAnchor="148.0" AnchorPane.topAnchor="27.0">
+                <Label fx:id="currentUserLabel" graphicTextGap="7.0" layoutX="677.0" layoutY="27.0" prefHeight="26.0" text="Carlos Arcia" textFill="#1d3557" AnchorPane.leftAnchor="614.0" AnchorPane.rightAnchor="148.0" AnchorPane.topAnchor="27.0">
                     <font>
                         <Font name="Montserrat Light" size="20.0" />
                     </font>
@@ -795,57 +795,6 @@
                                 </LineChart>
                             </children>
                         </AnchorPane>
-                        <Label graphicTextGap="7.0" layoutX="103.0" layoutY="333.0" text="Ventas totales" textFill="#485260" AnchorPane.leftAnchor="103.0" AnchorPane.topAnchor="333.0">
-                            <font>
-                                <Font name="Montserrat Regular" size="20.0" />
-                            </font>
-                            <graphic>
-                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../img/icons/pricetag48g.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </Label>
-                        <Label fx:id="ventasTotalesLabel" layoutX="169.0" layoutY="370.0" text="34" textFill="#485260" AnchorPane.leftAnchor="169.0" AnchorPane.topAnchor="370.0">
-                            <font>
-                                <Font name="Montserrat Regular" size="30.0" />
-                            </font>
-                        </Label>
-                        <Label graphicTextGap="7.0" layoutX="306.0" layoutY="333.0" text="Productos totales" textFill="#485260" AnchorPane.leftAnchor="306.0" AnchorPane.topAnchor="333.0">
-                            <font>
-                                <Font name="Montserrat Regular" size="20.0" />
-                            </font>
-                            <graphic>
-                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../img/icons/handcart48g.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </Label>
-                        <Label fx:id="productosTotalesLabel" layoutX="389.0" layoutY="370.0" text="150" textFill="#485260" AnchorPane.leftAnchor="389.0" AnchorPane.topAnchor="370.0">
-                            <font>
-                                <Font name="Montserrat Regular" size="30.0" />
-                            </font>
-                        </Label>
-                        <Label graphicTextGap="7.0" layoutX="543.0" layoutY="333.0" text="Usuarios registrados" textFill="#485260" AnchorPane.leftAnchor="543.0" AnchorPane.topAnchor="333.0">
-                            <font>
-                                <Font name="Montserrat Regular" size="20.0" />
-                            </font>
-                            <graphic>
-                                <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
-                                    <image>
-                                        <Image url="@../img/icons/user-register48g.png" />
-                                    </image>
-                                </ImageView>
-                            </graphic>
-                        </Label>
-                        <Label fx:id="usuariosRegistradosLabel" layoutX="650.0" layoutY="370.0" text="5" textFill="#485260" AnchorPane.leftAnchor="650.0" AnchorPane.topAnchor="370.0">
-                            <font>
-                                <Font name="Montserrat Regular" size="30.0" />
-                            </font>
-                        </Label>
                         <Label layoutX="280.0" layoutY="317.0" text="|" textFill="#485260" AnchorPane.topAnchor="317.0">
                             <font>
                                 <Font name="Montserrat Thin" size="80.0" />
@@ -868,18 +817,8 @@
                                 </ImageView>
                             </graphic>
                         </Label>
-                        <TableView fx:id="ultimosProductosVendidosTV" layoutX="85.0" layoutY="492.0" prefHeight="123.0" prefWidth="327.0" AnchorPane.leftAnchor="67.0">
-                            <columns>
-                                <TableColumn prefWidth="75.0" text="C1" />
-                                <TableColumn prefWidth="75.0" text="C2" />
-                            </columns>
-                        </TableView>
-                        <TableView fx:id="productosMasVendidosTV" layoutX="503.0" layoutY="492.0" prefHeight="123.0" prefWidth="327.0" AnchorPane.rightAnchor="95.0">
-                            <columns>
-                                <TableColumn prefWidth="75.0" text="C1" />
-                                <TableColumn prefWidth="75.0" text="C2" />
-                            </columns>
-                        </TableView>
+                        <TableView fx:id="ultimosProductosVendidosTV" layoutX="85.0" layoutY="492.0" prefHeight="123.0" prefWidth="327.0" AnchorPane.leftAnchor="67.0" />
+                        <TableView fx:id="productosMasVendidosTV" layoutX="503.0" layoutY="492.0" prefHeight="123.0" prefWidth="327.0" AnchorPane.rightAnchor="95.0" />
                         <Label layoutX="506.0" layoutY="467.0" text="Productos más vendidos" textFill="#485260" AnchorPane.leftAnchor="506.0" AnchorPane.topAnchor="460.0">
                             <font>
                                 <Font name="Montserrat Regular" size="20.0" />
@@ -892,6 +831,69 @@
                                 </ImageView>
                             </graphic>
                         </Label>
+                  <FlowPane alignment="CENTER" columnHalignment="CENTER" layoutX="77.0" layoutY="324.0" orientation="VERTICAL" prefHeight="99.0" prefWidth="205.0" AnchorPane.topAnchor="324.0">
+                     <children>
+                              <Label graphicTextGap="7.0" text="Ventas totales" textFill="#485260">
+                                  <font>
+                                      <Font name="Montserrat Regular" size="20.0" />
+                                  </font>
+                                  <graphic>
+                                      <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                          <image>
+                                              <Image url="@../img/icons/pricetag48g.png" />
+                                          </image>
+                                      </ImageView>
+                                  </graphic>
+                              </Label>
+                              <Label fx:id="ventasTotalesLabel" text="34" textFill="#485260">
+                                  <font>
+                                      <Font name="Montserrat Regular" size="30.0" />
+                                  </font>
+                              </Label>
+                     </children>
+                  </FlowPane>
+                  <FlowPane alignment="CENTER" columnHalignment="CENTER" layoutX="302.0" layoutY="322.0" orientation="VERTICAL" prefHeight="99.0" prefWidth="213.0" AnchorPane.topAnchor="324.0">
+                     <children>
+                              <Label graphicTextGap="7.0" text="Productos totales" textFill="#485260">
+                                  <font>
+                                      <Font name="Montserrat Regular" size="20.0" />
+                                  </font>
+                                  <graphic>
+                                      <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                          <image>
+                                              <Image url="@../img/icons/handcart48g.png" />
+                                          </image>
+                                      </ImageView>
+                                  </graphic>
+                              </Label>
+                              <Label fx:id="productosTotalesLabel" text="150" textFill="#485260">
+                                  <font>
+                                      <Font name="Montserrat Regular" size="30.0" />
+                                  </font>
+                              </Label>
+                     </children>
+                  </FlowPane>
+                  <FlowPane alignment="CENTER" columnHalignment="CENTER" layoutX="542.0" layoutY="323.0" orientation="VERTICAL" prefHeight="99.0" prefWidth="213.0" AnchorPane.topAnchor="324.0">
+                     <children>
+                              <Label graphicTextGap="7.0" text="Usuarios registrados" textFill="#485260">
+                                  <font>
+                                      <Font name="Montserrat Regular" size="20.0" />
+                                  </font>
+                                  <graphic>
+                                      <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                                          <image>
+                                              <Image url="@../img/icons/user-register48g.png" />
+                                          </image>
+                                      </ImageView>
+                                  </graphic>
+                              </Label>
+                              <Label fx:id="usuariosRegistradosLabel" text="5" textFill="#485260">
+                                  <font>
+                                      <Font name="Montserrat Regular" size="30.0" />
+                                  </font>
+                              </Label>
+                     </children>
+                  </FlowPane>
                     </children>
                 </AnchorPane>
             </children>

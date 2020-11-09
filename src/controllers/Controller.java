@@ -11,8 +11,11 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import models.DB.CurrentLogin;
 import models.DB.Facade;
+import models.POJO.Empresa;
+import utils.Fuller;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -21,42 +24,14 @@ public class Controller implements Initializable {
     private double xOffset = 0;
     private double yOffset = 0;
 
-
-    @FXML
-    private Button marcas_eliminarBtn;
-
-    @FXML
-    private TextField producto_stockTF;
-
-    @FXML
-    private TableView<?> usuarios_tablaResultado;
-
-    @FXML
-    private Button producto_agregarBtn;
-
-    @FXML
-    private Button usuarios_eliminarBtn;
-
     @FXML
     private TextField usuarios_confirmarPassTF;
-
-    @FXML
-    private TableView<?> medida_tablaLista;
 
     @FXML
     private AnchorPane usuariosPane;
 
     @FXML
-    private Button proveedores_modificarBtn;
-
-    @FXML
-    private TextField venta_stockRestanteLabel;
-
-    @FXML
     private Button btnMinimize;
-
-    @FXML
-    private TextField ajustes_nombreEmpresaTF;
 
     @FXML
     private Button venta_limpiarLabelBtn;
@@ -65,22 +40,13 @@ public class Controller implements Initializable {
     private Button proveedores_limpiarBtn;
 
     @FXML
-    private Label estadistica_analisisParrafo;
-
-    @FXML
     private ComboBox<?> ajustes_departamentoCB;
 
     @FXML
     private TableView<?> productosMasVendidosTV;
 
     @FXML
-    private Button btnAnalisis;
-
-    @FXML
     private TextField venta_descuentoLabel;
-
-    @FXML
-    private TextField ajustes_correoTF;
 
     @FXML
     private TextArea ajustes_direccionTA;
@@ -92,22 +58,10 @@ public class Controller implements Initializable {
     private Button proveedores_limpiarBtn1;
 
     @FXML
-    private TableView<?> proveedores_tablaHistorial;
-
-    @FXML
-    private Label usuariosRegistradosLabel;
-
-    @FXML
-    private TextField venta_productoLabel;
-
-    @FXML
     private Button btnUsuarios;
 
     @FXML
-    private TextField usuarios_nombreTF;
-
-    @FXML
-    private ComboBox<?> producto_MarcaCB;
+    private TableColumn<?, ?> ultimosProducto_Producto;
 
     @FXML
     private Button proveedores_eliminarBtn;
@@ -128,9 +82,6 @@ public class Controller implements Initializable {
     private Button marcas_agregarBtn;
 
     @FXML
-    private Button medida_eliminarBtn;
-
-    @FXML
     private Label ventasTotalesLabel;
 
     @FXML
@@ -140,22 +91,136 @@ public class Controller implements Initializable {
     private Button medida_agregarBtn;
 
     @FXML
-    private TableView<?> marcas_tablaLista;
-
-    @FXML
-    private TableView<?> venta_tablaHistorial;
-
-    @FXML
     private AnchorPane inicioPane;
 
     @FXML
     private TextField marcas_nombreTF;
 
     @FXML
-    private Label productosTotalesLabel;
+    private Button proveedores_agregarBtn1;
 
     @FXML
-    private Button proveedores_agregarBtn1;
+    private TextField usuarios_buscarTF;
+
+    @FXML
+    private TextField estados_nombreTF;
+
+    @FXML
+    private TableView<?> proveedores_tablaProveedores;
+
+    @FXML
+    private TextField venta_subTotalLabel;
+
+    @FXML
+    private TextField producto_nombreTF;
+
+    @FXML
+    private TableView<?> estadisticas_tablaMejores;
+
+    @FXML
+    private TextField venta_TotalLabel;
+
+    @FXML
+    private TextField productos_buscarProductoTF;
+
+    @FXML
+    private AnchorPane ventaPane;
+
+    @FXML
+    private DatePicker venta_fechaHistorialDatePicker;
+
+    @FXML
+    private AnchorPane northPane;
+
+    @FXML
+    private TextField proveedores_correoTF;
+
+    @FXML
+    private Button venta_reporteBtn;
+
+    @FXML
+    private Button btnVenta;
+
+    @FXML
+    private ComboBox<?> producto_proveedorCB;
+
+    @FXML
+    private Label currentUserLabel;
+
+    @FXML
+    private Button producto_eliminarBtn;
+
+    @FXML
+    private Button proveedores_agregarBtn;
+
+    @FXML
+    private TextField proveedores_nombreTF;
+
+    @FXML
+    private ComboBox<?> estadisticas_elementoCB;
+
+    @FXML
+    private Button marcas_eliminarBtn;
+
+    @FXML
+    private TextField producto_stockTF;
+
+    @FXML
+    private TableView<?> usuarios_tablaResultado;
+
+    @FXML
+    private Button producto_agregarBtn;
+
+    @FXML
+    private Button usuarios_eliminarBtn;
+
+    @FXML
+    private TableView<?> medida_tablaLista;
+
+    @FXML
+    private Button proveedores_modificarBtn;
+
+    @FXML
+    private TextField venta_stockRestanteLabel;
+
+    @FXML
+    private TextField ajustes_nombreEmpresaTF;
+
+    @FXML
+    private Label estadistica_analisisParrafo;
+
+    @FXML
+    private Button btnAnalisis;
+
+    @FXML
+    private TextField ajustes_correoTF;
+
+    @FXML
+    private TableView<?> proveedores_tablaHistorial;
+
+    @FXML
+    private Label usuariosRegistradosLabel;
+
+    @FXML
+    private TextField venta_productoLabel;
+
+    @FXML
+    private TextField usuarios_nombreTF;
+
+    @FXML
+    private ComboBox<?> producto_MarcaCB;
+
+    @FXML
+    private Button medida_eliminarBtn;
+
+    @FXML
+    private TableView<?> marcas_tablaLista;
+
+    @FXML
+    private TableView<?> venta_tablaHistorial;
+
+    @FXML
+    private Label productosTotalesLabel;
 
     @FXML
     private TextField usuarios_passTF;
@@ -171,9 +236,6 @@ public class Controller implements Initializable {
 
     @FXML
     private Button usuarios_modificarBtn;
-
-    @FXML
-    private TextField usuarios_buscarTF;
 
     @FXML
     private Button btnCerrarSesion;
@@ -194,34 +256,16 @@ public class Controller implements Initializable {
     private Label tituloEmpresaLabel;
 
     @FXML
-    private TextField estados_nombreTF;
-
-    @FXML
     private Button estados_agregarBtn;
-
-    @FXML
-    private TableView<?> proveedores_tablaProveedores;
 
     @FXML
     private LineChart<?, ?> actividadesVentaLineChart;
 
     @FXML
-    private TextField venta_subTotalLabel;
-
-    @FXML
-    private TextField producto_nombreTF;
-
-    @FXML
     private TableView<?> venta_tablaVentaDatos;
 
     @FXML
-    private TableView<?> estadisticas_tablaMejores;
-
-    @FXML
     private Button producto_modificarBtn;
-
-    @FXML
-    private TextField venta_TotalLabel;
 
     @FXML
     private TextArea venta_observacionesLabel;
@@ -236,10 +280,13 @@ public class Controller implements Initializable {
     private ComboBox<?> producto_unidadMedidaCB;
 
     @FXML
+    private TableColumn<?, ?> productosMasVendidos_Producto;
+
+    @FXML
     private Button btnClose;
 
     @FXML
-    private TextField productos_buscarProductoTF;
+    private TableColumn<?, ?> productosMasVendidos_TotalVentas;
 
     @FXML
     private Button btnProductos;
@@ -254,25 +301,10 @@ public class Controller implements Initializable {
     private Button venta_ventaRealizadaBtn;
 
     @FXML
-    private AnchorPane ventaPane;
-
-    @FXML
-    private DatePicker venta_fechaHistorialDatePicker;
-
-    @FXML
-    private AnchorPane northPane;
-
-    @FXML
-    private TextField proveedores_correoTF;
-
-    @FXML
-    private Button venta_reporteBtn;
+    private TableColumn<?, ?> ultimosProducto_FechayHora;
 
     @FXML
     private Button venta_agregarVentaBtn;
-
-    @FXML
-    private Button btnVenta;
 
     @FXML
     private TextField medida_nombreTF;
@@ -281,22 +313,7 @@ public class Controller implements Initializable {
     private Button estados_eliminarBtn;
 
     @FXML
-    private ComboBox<?> producto_proveedorCB;
-
-    @FXML
     private Button producto_limpiarTF;
-
-    @FXML
-    private Button producto_eliminarBtn;
-
-    @FXML
-    private Button proveedores_agregarBtn;
-
-    @FXML
-    private TextField proveedores_nombreTF;
-
-    @FXML
-    private ComboBox<?> estadisticas_elementoCB;
 
     //Metodo que se ejecuta al cargar el scene
     @Override
@@ -304,17 +321,35 @@ public class Controller implements Initializable {
         //ponemos el nombre en el panel superior
         System.out.println(CurrentLogin.getCurrentEmpresa().getNombre());
         tituloEmpresaLabel.setText(CurrentLogin.getCurrentEmpresa().getNombre());
-
+        currentUserLabel.setText(CurrentLogin.getCurrentUsuario().getUsuario());
         //Panel de Inicio
-        ventasTotalesLabel.setText();
-
+        actualizarDatosGenerales();
     }
 
     //Metodo para actualizar los datos generales de la ventana de inicio
     public void actualizarDatosGenerales() {
+        try {
+            //actualizar label de datos generales
+            ventasTotalesLabel.setText(Facade.totalVentas("V1252457895") + "");
+            productosTotalesLabel.setText(Facade.totalProductos("V1252457895") + "");
+            usuariosRegistradosLabel.setText(Facade.totalUsuarios("V1252457895") + "");
 
+            //actualizar tablas de datos
+            rellenarTablaUltimosProductos();
+
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
     }
 
+    public void rellenarTablaUltimosProductos() {
+        try {
+            Fuller.llenarTableView(ultimosProductosVendidosTV, Facade.topÚltimosProductos("V1252457895"));
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+            System.out.println("Error al rellenar tabla de ultimos productos");
+        }
+    }
 
     //Funcionalidad de la navegación
     public void handleMenuButton(ActionEvent e) {
