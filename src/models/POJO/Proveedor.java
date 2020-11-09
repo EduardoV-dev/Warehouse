@@ -1,15 +1,14 @@
 package models.POJO;
 
 public class Proveedor {
-    private String idProveedor, nombres, apellidos, correo, telefono, RIF;
+    private String idProveedor, nombres, apellidos, correo, telefono;
 
-    public Proveedor(String idProveedor, String nombres, String apellidos, String correo, String telefono, String RIF) {
+    public Proveedor(String idProveedor, String nombres, String apellidos, String correo, String telefono) {
         this.idProveedor = idProveedor;
         this.nombres = nombres;
         this.apellidos = apellidos;
         this.correo = correo;
         this.telefono = telefono;
-        this.RIF = RIF;
     }
 
     public Proveedor() {
@@ -53,13 +52,5 @@ public class Proveedor {
 
     public void setTelefono(String telefono) {
         this.telefono = telefono;
-    }
-
-    public String getRIF() {
-        return RIF;
-    }
-
-    public void setRIF(String RIF) {
-        this.RIF = RIF;
     }
 }

@@ -24,13 +24,15 @@ go;
 create procedure updActualizarProveedor (
 	@RIF varchar(20),
 	@idProveedor varchar(10),
+	@nombres char(35),
+	@apellidos char(35),
 	@correo varchar(50),
 	@telefono varchar(20)
 )
 as
 	set nocount on;
 
-	update org.Proveedor set correo = @correo, telefono = @telefono
+	update org.Proveedor set nombres = @nombres, apellidos = @apellidos, correo = @correo, telefono = @telefono
 		where (idProveedor = @idProveedor) and (RIF = @RIF);
 go;
 
@@ -66,5 +68,5 @@ as
 	set @idDepartamento = (select idDepartamento from adm.Departamento where departamento = @departamento);
 
 	update adm.Empresa set nombre = @nombre, correo = @correo, direccion = @direccion, telefono = @telefono,
-		idDepartamento = @departamento where RIF = @RIF;
+		idDepartamento = @idDepartamento where RIF = @RIF;
 go;

@@ -40,19 +40,19 @@ create procedure insUsuario (
 )
 as
 	set nocount on;
-	begin transaction;
+	--begin transaction;
 
 	declare @idRol tinyint = 0;
 	select @idRol = (select idRol from adm.Rol where rol = @rol);
-	if not exists (select usuario from adm.Usuario where (usuario = @usuario) and (RIF = @RIF))
+	--if not exists (select usuario from adm.Usuario where (usuario = @usuario) and (RIF = @RIF))
 	begin
 		insert into adm.Usuario (usuario, contrasena, idRol, RIF)
 			values (@usuario, @contrasena, @idRol, @RIF);
 
-		commit transaction;
+		--commit transaction;
 	end
-	else 
-		rollback transaction;
+	--else 
+		--rollback transaction;
 go;
 
 -- Inserta nuevos proveedores
@@ -66,17 +66,17 @@ create procedure insProveedor (
 )
 as 
 	set nocount on;
-	begin transaction;
+	--begin transaction;
 
-	if not exists (select idProveedor from org.Proveedor where (idProveedor = @idProveedor) and (RIF = @RIF))
+	--if not exists (select idProveedor from org.Proveedor where (idProveedor = @idProveedor) and (RIF = @RIF))
 	begin
 		insert into org.Proveedor (idProveedor, nombres, apellidos, correo, telefono, RIF)
 			values (@idProveedor, @nombres, @apellidos, @correo, @telefono, @RIF);
 
-		commit transaction;
+		--commit transaction;
 	end
-	else 
-		rollback transaction;
+	--else 
+		--rollback transaction;
 go;
 
 -- En caso de necesitar una nueva medida
@@ -86,16 +86,16 @@ create procedure insMedida (
 )
 as
 	set nocount on;
-	begin transaction;
+	--begin transaction;
 
-	if not exists (select idMedida from org.Medida where medida = @medida)
+	--if not exists (select idMedida from org.Medida where medida = @medida)
 	begin
 		insert into org.Medida values (@medida);
 
-		commit transaction;
+		--commit transaction;
 	end
-	else 
-		rollback transaction;
+	--else 
+		--rollback transaction;
 go;
 
 -- En caso de necesitar un nuevo estado
@@ -105,15 +105,15 @@ create procedure insEstado (
 )
 as
 	set nocount on;
-	if not exists (select idEstado from org.Estado where estado = @estado)
+	--if not exists (select idEstado from org.Estado where estado = @estado)
 	begin
 		insert into org.Estado (estado)
 			values (@estado);
 
-		commit transaction;
+		--commit transaction;
 	end
-	else 
-		rollback transaction;
+	--else 
+		--rollback transaction;
 go;
 
 -- inserta un nuevo producto
@@ -129,14 +129,14 @@ create procedure insProducto (
 )
 as
 	set nocount on;
-	begin transaction;
+	--begin transaction;
 
 	declare @idMedida tinyint, @idEstado tinyint, @idProveedor varchar(10), @idAdquisicion smallint;
-	select @idMedida = (select idMedida from org.Medida where medida = @medida);
-	select @idEstado = (select idEstado from org.Estado where estado = @estado);
-	select @idProveedor = (select idProveedor from org.Proveedor where (((nombres+' '+apellidos) = @proveedor) and (RIF = @RIF)));
+	set @idMedida = (select idMedida from org.Medida where medida = @medida);
+	set @idEstado = (select idEstado from org.Estado where estado = @estado);
+	set @idProveedor = (select idProveedor from org.Proveedor where (((nombres+' '+apellidos) = @proveedor) and (RIF = @RIF)));
 
-	if not exists(select idProducto from org.Producto where ((idProducto = @idProducto) and (RIF = @RIF)))
+	--if not exists(select idProducto from org.Producto where ((idProducto = @idProducto) and (RIF = @RIF)))
 	begin
 		insert into org.Producto (idProducto, nombre, marca, cantidad, idMedida, idEstado, RIF)
 			values (@idProducto, @nombre, @marca, @cantidad, @idMedida, @idEstado, @RIF);
@@ -152,10 +152,10 @@ as
 		insert into iop.Entrada (idAdquisicion, idProducto)
 			values (@idAdquisicion, @idProducto);
 
-		commit transaction;
+		--commit transaction;
 	end
-	else 
-		rollback transaction;
+	--else 
+		--rollback transaction;
 go;
 
 -- realiza una venta y extrae la cantidad de producto necesaria
@@ -167,16 +167,16 @@ create procedure insSalida (
 )
 as 
 	set nocount on;
-	begin transaction;
+	--begin transaction;
 
 	declare @idVenta smallint, @existenciasProducto smallint, @restanteProducto smallint;
 	declare @idProducto varchar(5);
 
-	select @idProducto = (select idProducto from org.Producto where ((nombre = @producto) and (RIF = @RIF)));
+	set @idProducto = (select idProducto from org.Producto where ((nombre = @producto) and (RIF = @RIF)));
 
 	if (nullif(@idProducto, '') is not null)
 	begin
-		select @existenciasProducto = (select cantidad from org.Producto where ((idProducto = @idProducto) and (RIF = @RIF)));
+		set @existenciasProducto = (select cantidad from org.Producto where ((idProducto = @idProducto) and (RIF = @RIF)));
 		set @restanteProducto = @existenciasProducto - @cantidad;
 		if (@restanteProducto > 0)
 		begin
@@ -190,13 +190,11 @@ as
 			insert into iop.Salida (idVenta, idProducto) 
 				values(@idVenta, @idProducto);
 
-			commit transaction;
+			--commit transaction;
 		end
-		else 
-			rollback transaction;
 	end
-	else
-		rollback transaction;
+	--else
+		--rollback transaction;
 go;
 
 -- realiza entrada de inventario para un producto
@@ -209,13 +207,13 @@ create procedure insEntrada (
 )
 as 
 	set nocount on;
-	begin transaction;
+	--begin transaction;
 
 	declare @idAdquisicion smallint, @existenciasProducto smallint, @nuevaCantidad smallint;
 	declare @idProducto varchar(5), @idProveedor varchar(10);
 
-	select @idProveedor = (select idProveedor from org.Proveedor where (((nombres+' '+apellidos) = @proveedor) and (RIF = @RIF)));
-	select @idProducto = (select idProducto from org.Producto where ((nombre = @producto) and (RIF = @RIF)));
+	set @idProveedor = (select idProveedor from org.Proveedor where (((nombres+' '+apellidos) = @proveedor) and (RIF = @RIF)));
+	set @idProducto = (select idProducto from org.Producto where ((nombre = @producto) and (RIF = @RIF)));
 
 	if (nullif(@idProducto, '') is not null)
 	begin
@@ -232,8 +230,8 @@ as
 		insert into iop.Entrada(idAdquisicion, idProducto) 
 			values(@idAdquisicion, @idProducto);
 
-		commit transaction;
+		--commit transaction;
 	end
-	else
-		rollback transaction;
+	--else
+		--rollback transaction;
 go;
