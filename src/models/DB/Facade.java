@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.POJO.Empresa;
 import models.POJO.Usuario;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -15,37 +16,54 @@ public class Facade {
     // un registro ya exista, de esta manera se puede personalizar la visualización de un error
     // más facilmente
 
-    // Metodo usado para registrar una nueva empresa y un nuevo usuario
-    // con el rol de administrador
+    /*
+     *   Metodo para registrar una empresa junto con su primer usuario
+     *   -Retorna un booleano
+     *    True en caso de que el registro sea exitoso
+     *    False en caso de que la empresa ya exista o haya un problema en la conexion
+     */
     public static boolean registrarse(Empresa empresa, Usuario usuario) throws SQLException {
-        // Devuelve true o false dependiendo de si el registro fue realizado
-        // correctamente o no
         return LogInSignUp.registrarse(empresa, usuario);
     }
 
-    // Metodo usado para obtener la informacion de login necesaria para poder
-    // Ingresar al sistema de una empresa - Este metodo devuelve el usuario y contraseña
-    // filtrado por el numero RIF en un resultSet
+    /*
+     *   Metodo para ingresarse en el sistema
+     *   -Retorna un booleano
+     *    True en caso de que las credenciales sean correctas
+     *    False en caso de que las credenciales sean incorrectas
+     */
     public static boolean ingresar(String nombreEmpresa, Usuario usuario) throws SQLException {
         return LogInSignUp.ingresar(nombreEmpresa, usuario);
     }
 
-    // Devuelve el total de ventas registradas en una empresa
-    // Devuelve -> int TotalVentas
-    public static ResultSet totalVentas(String RIF) throws SQLException {
-        return consultasSelect.totalVentas(RIF);
+    /*
+     *   Metodo para obtener el total de ventas de la empresa
+     *   Retorna la cantidad de ventas totales
+     */
+    public static int totalVentas(String RIF) throws SQLException {
+        rs = consultasSelect.totalVentas(RIF);
+        rs.next();
+        return rs.getInt(1);
     }
 
-    // Devuelve el total de productos registrados en una empresa
-    // Devuelve -> int TotalProductos
-    public static ResultSet totalProductos(String RIF) throws SQLException {
-        return consultasSelect.totalProductos(RIF);
+    /*
+     *   Metodo para obtener el total de productos de la empresa
+     *   Retorna la cantidad de productos
+     */
+    public static int totalProductos(String RIF) throws SQLException {
+        rs = consultasSelect.totalProductos(RIF);
+        rs.next();
+        return rs.getInt(1);
     }
 
-    // Devuelve el total de usuarios registrados en una empresa
-    // Devuelve -> int TotalUsuarios
-    public static ResultSet totalUsuarios(String RIF) throws SQLException {
-        return consultasSelect.totalUsuarios(RIF);
+    /*
+     *   Metodo para obtener el total de usuarios de la empresa
+     *   Retorna la cantidad de usuarios
+     */
+    public static int totalUsuarios(String RIF) throws SQLException {
+        rs = consultasSelect.totalUsuarios(RIF);
+        rs.next();
+        return rs.getInt(1);
     }
 
     // Devuelve el top 5 de los últimos productos vendidos en una empresa
@@ -75,12 +93,12 @@ public class Facade {
     // Obtiene las ventas realizadas en los ultimos 7 dias
     // Devuelve una matriz de 7 filas y 2 columnas, el indice 0 de las columnas
     // devuelve la fecha, mientras que el indice 1 devuelve el total de ventas
-    public static String[][] ventas7dias(String RIF) throws SQLException{
+    public static String[][] ventas7dias(String RIF) throws SQLException {
         rs = consultasSelect.ventas7dias(RIF);
         String[][] ventas;
         ventas = new String[7][2];
-        for (int i = 0; i < 7; i++){
-            while(rs.next()){
+        for (int i = 0; i < 7; i++) {
+            while (rs.next()) {
                 ventas[i][0] = rs.getString(1);
                 ventas[i][1] = String.valueOf(rs.getInt(2));
                 break;
@@ -89,37 +107,4 @@ public class Facade {
         return ventas;
     }
 
-    /*public static void main(String[] args) {
-        try{
-            obtenerDepartamentos().forEach(item -> {
-                System.out.println(item);
-            });
-        }catch(Exception e){
-            e.printStackTrace();
-        }
-    }*/
-
-    /*
-     *   Metodo para obtener los departamentos
-     *   retorna un ObservableList de Strings con el nombre de los departamentos
-     */
-    /*public static ObservableList<String> obtenerDepartamentos() {
-        ObservableList<String> lista = FXCollections.observableArrayList();
-        try {
-            con = ConexionBD.conexion();
-            Statement st = con.createStatement();
-            String sql = "SELECT departamento FROM adm.Departamento";
-            rs = st.executeQuery(sql);
-
-            //creando y llenando la lista
-            while (rs.next()) {
-                lista.add(rs.getString(1).trim());
-            }
-
-            con.close();
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
-        }
-        return lista;
-    }*/
 }

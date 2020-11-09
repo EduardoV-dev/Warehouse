@@ -69,10 +69,15 @@ public class RegisterController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         //cargar departamentos en un arraylist
         ObservableList<String> departamentos;
-        departamentos = Facade.obtenerDepartamentos();
-        //System.out.println(departamentos);
-        empresaDepartamentoCB.setPromptText("Selecciona un departamento:");
-        empresaDepartamentoCB.setItems(departamentos);
+        try {
+            departamentos = Facade.obtenerDepartamentos();
+            //System.out.println(departamentos);
+            empresaDepartamentoCB.setPromptText("Selecciona un departamento:");
+            empresaDepartamentoCB.setItems(departamentos);
+        } catch (SQLException throwables) {
+            System.out.println("Error al obtener departamentos");
+            throwables.printStackTrace();
+        }
     }
 
     //Metodos para las acciones de los botones cancelar y registrar

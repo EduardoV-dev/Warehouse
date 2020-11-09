@@ -19,6 +19,10 @@
 
 /* Estilos de Botones */
 
+.button{
+-fx-cursor: hand;
+}
+
 .button_primary{
     -fx-background-color: #1D3557;
     -fx-text-fill: #FFFFFF;

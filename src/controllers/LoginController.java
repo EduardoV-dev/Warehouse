@@ -17,7 +17,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import models.DB.ConexionBD;
+import models.DB.CurrentLogin;
 import models.DB.Facade;
+import models.POJO.Empresa;
 import models.POJO.Usuario;
 import utils.Validator;
 
@@ -135,6 +137,14 @@ public class LoginController implements Initializable {
             try {
                 Facade.ingresar(empresaTF.getText(), user);
                 JOptionPane.showMessageDialog(null, "Has ingresado con exito");
+
+                //Modificar el Login actual --TEMPORAL--
+                CurrentLogin.setCurrentUsuario(user);
+
+                Empresa empresa = new Empresa();
+                empresa.setNombre(empresaTF.getText());
+                CurrentLogin.setCurrentEmpresa(empresa);
+
                 try {
                     ingresarApp(event);
                 } catch (IOException e) {

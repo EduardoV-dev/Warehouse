@@ -1,5 +1,7 @@
 package models.DB;
 
+import models.POJO.Usuario;
+
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -15,6 +17,7 @@ public class consultasSelect {
         cs.setString(1, RIF);
         return cs.executeQuery();
     }
+
 
     public static ResultSet totalProductos(String RIF) throws SQLException {
         cn = ConexionBD.conexion();
