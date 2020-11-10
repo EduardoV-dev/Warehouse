@@ -12,8 +12,13 @@ import javafx.stage.Stage;
 import models.DB.CurrentLogin;
 import models.DB.Facade;
 import models.POJO.Empresa;
+import models.POJO.Producto;
+import models.POJO.Proveedor;
+import utils.Cleaner;
 import utils.Fuller;
+import utils.Validator;
 
+import javax.swing.*;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -319,35 +324,47 @@ public class Controller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         //ponemos el nombre en el panel superior
-        System.out.println(CurrentLogin.getCurrentEmpresa().getNombre());
         tituloEmpresaLabel.setText(CurrentLogin.getCurrentEmpresa().getNombre());
         currentUserLabel.setText(CurrentLogin.getCurrentUsuario().getUsuario());
         //Panel de Inicio
         actualizarDatosGenerales();
+
+        //actualizar tablas
+        actualizarTablasInicio();
+        actualizarTablasProducto();
     }
 
     //Metodo para actualizar los datos generales de la ventana de inicio
     public void actualizarDatosGenerales() {
         try {
             //actualizar label de datos generales
-            ventasTotalesLabel.setText(Facade.totalVentas("V1252457895") + "");
-            productosTotalesLabel.setText(Facade.totalProductos("V1252457895") + "");
-            usuariosRegistradosLabel.setText(Facade.totalUsuarios("V1252457895") + "");
+            ventasTotalesLabel.setText(Facade.totalVentas(CurrentLogin.getCurrentEmpresa().getRIF()) + "");
+            productosTotalesLabel.setText(Facade.totalProductos(CurrentLogin.getCurrentEmpresa().getRIF()) + "");
+            usuariosRegistradosLabel.setText(Facade.totalUsuarios(CurrentLogin.getCurrentEmpresa().getRIF()) + "");
 
-            //actualizar tablas de datos
-            rellenarTablaUltimosProductos();
 
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
 
-    public void rellenarTablaUltimosProductos() {
+    //Metodos para rellenar tablas Inicio
+    public void actualizarTablasInicio() {
         try {
-            Fuller.llenarTableView(ultimosProductosVendidosTV, Facade.topÚltimosProductos("V1252457895"));
+            //Fuller.llenarTableView(ultimosProductosVendidosTV, Facade.topÚltimosProductos(CurrentLogin.getCurrentEmpresa().getRIF()));
+            Fuller.llenarTableView(productosMasVendidosTV, Facade.topProductosMasVendidos(CurrentLogin.getCurrentEmpresa().getRIF()));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-            System.out.println("Error al rellenar tabla de ultimos productos");
+            System.out.println("Error al rellenar tabla de panel de Inicio");
+        }
+    }
+
+    public void actualizarTablasProducto() {
+        try {
+            Fuller.llenarTableView(productos_tablaResultadosBusqueda, Facade.obtenerProductos(CurrentLogin.getCurrentEmpresa().getRIF()));
+        } catch (SQLException throwables) {
+            System.out.println("Error al actualizar tablas de panel de producto");
+            throwables.printStackTrace();
         }
     }
 
@@ -422,12 +439,116 @@ public class Controller implements Initializable {
         System.exit(0);
     }
 
+    //metodo para minimizar la aplicacion
     public void minimizeApp(ActionEvent event) {
         Node node = (Node) event.getSource();
         Stage stage = (Stage) node.getScene().getWindow();
         stage.setIconified(true);
     }
 
-    //metodo para minimizar la aplicacion
+
+    //Eventos de boton del panel de productos
+    public void productosHandleButton(ActionEvent event) {
+        //Agregar producto
+        if (event.getSource() == producto_agregarBtn) {
+            TextField[] tfs = {producto_nombreTF, producto_stockTF};
+            ComboBox[] cbs = {producto_MarcaCB, producto_proveedorCB, producto_unidadMedidaCB};
+            if (Validator.validarTextFields(tfs) || Validator.validarComboBoxs(cbs)) {
+                //Crear producto
+                Producto p = new Producto();
+                p.setNombre(producto_nombreTF.getText());
+                p.setMarca(producto_MarcaCB.getValue().toString());
+                p.setMedida(producto_unidadMedidaCB.getValue().toString());
+                p.setCantidad(Integer.parseInt(producto_stockTF.getText()));
+
+                try {
+                    if (!Facade.agregarProducto(p, producto_proveedorCB.getValue().toString(), CurrentLogin.getCurrentEmpresa().getRIF())) {
+                        JOptionPane.showMessageDialog(null, "Ya existe un producto con ese nombre");
+                    } else {
+                        Cleaner.vaciarComboBox(cbs);
+                        Cleaner.vaciarTextFields(tfs);
+                    }
+                } catch (SQLException throwables) {
+                    System.out.println("Error al agregar producto");
+                    throwables.printStackTrace();
+                }
+            }
+
+        }
+
+        if (event.getSource() == producto_limpiarTF) {
+            //Limpiar formulario para agregar productos
+            TextField[] tfs = {producto_nombreTF, producto_stockTF};
+            ComboBox[] cbs = {producto_MarcaCB, producto_proveedorCB, producto_unidadMedidaCB};
+
+            Cleaner.vaciarComboBox(cbs);
+            Cleaner.vaciarTextFields(tfs);
+        }
+
+        //Agregar proveedor
+        if (event.getSource() == proveedores_agregarBtn) {
+            TextField[] tfs = {proveedores_nombreTF, proveedores_apellidoTF, proveedores_apellidoTF, proveedores_telefonoTF};
+            if (Validator.validarTextFields(tfs)) {
+                Proveedor p = new Proveedor();
+                p.setNombres(proveedores_nombreTF.getText());
+                p.setApellidos(proveedores_apellidoTF.getText());
+                p.setCorreo(proveedores_correoTF.getText());
+                p.setTelefono(proveedores_telefonoTF.getText());
+
+                try {
+                    if (!Facade.agregarProveedor(p, CurrentLogin.getCurrentEmpresa().getRIF())) {
+                        JOptionPane.showMessageDialog(null, "Ya existe un proveedor con ese nombre");
+                    } else {
+                        Cleaner.vaciarTextFields(tfs);
+                    }
+                } catch (SQLException throwables) {
+                    System.out.println("Error al ingresar proveedor");
+                    throwables.printStackTrace();
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Debes rellenar todos los campos");
+            }
+        }
+
+        //Limpiar formulario proveedores
+        if (event.getSource() == proveedores_limpiarBtn) {
+            TextField[] tfs = {proveedores_nombreTF, proveedores_apellidoTF, proveedores_apellidoTF, proveedores_telefonoTF};
+            Cleaner.vaciarTextFields(tfs);
+        }
+    }
+
+    //Eventos de botones del panel de ajustes
+    public void ajustesHandleButton(ActionEvent event) {
+        //agregar unidad de medida
+        if (event.getSource() == medida_agregarBtn) {
+            if (!medida_nombreTF.getText().isEmpty()) {
+                try {
+                    if (!Facade.agregarMedida(medida_nombreTF.getText())) {
+                        JOptionPane.showMessageDialog(null, "Ya existe medida con ese nombre");
+                    }
+                    medida_nombreTF.setText("");
+                } catch (SQLException throwables) {
+                    System.out.println("Error al agregar medida");
+                    throwables.printStackTrace();
+                }
+
+            }
+        }
+        //agregar estado de producto
+        if (event.getSource() == estados_agregarBtn) {
+            if (!estados_nombreTF.getText().isEmpty()) {
+                try {
+                    if (!Facade.agregarMedida(estados_nombreTF.getText())) {
+                        JOptionPane.showMessageDialog(null, "Ya existe estado con ese nombre");
+                    }
+                    estados_nombreTF.setText("");
+                } catch (SQLException throwables) {
+                    System.out.println("Error al agregar estado");
+                    throwables.printStackTrace();
+                }
+            }
+        }
+    }
+
 
 }

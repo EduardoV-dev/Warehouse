@@ -2,6 +2,7 @@ package models.DB;
 
 import models.POJO.Empresa;
 import models.POJO.Usuario;
+import org.omg.CORBA.Current;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
@@ -34,11 +35,18 @@ public class LogInSignUp {
         cs.setString(1, nombreEmpresa);
         cs.setString(2, usuario.getUsuario());
         cs.setString(3, usuario.getContrasena());
-
         rs = cs.executeQuery();
+        boolean existe = rs.next();
 
-        rs = cs.executeQuery();
+        Empresa e = new Empresa();
+        e.setNombre(nombreEmpresa);
+        e.setRIF(rs.getString(3));
+        CurrentLogin.setCurrentEmpresa(e);
 
-        return rs.next();
+        Usuario u = new Usuario();
+        u.setUsuario(usuario.getUsuario());
+        CurrentLogin.setCurrentUsuario(u);
+
+        return existe;
     }
 }

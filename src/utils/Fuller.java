@@ -23,14 +23,14 @@ public class Fuller {
 
     public static void llenarTableView(TableView tableview, ResultSet rs) throws SQLException {
         ObservableList<ObservableList> data = FXCollections.observableArrayList();
-
+        tableview.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
         for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
             //We are using non property style for making dynamic table
             final int j = i;
             TableColumn col = new TableColumn(rs.getMetaData().getColumnName(i + 1));
             col.setCellValueFactory((Callback<TableColumn.CellDataFeatures<ObservableList, String>, ObservableValue<String>>) param -> new SimpleStringProperty(param.getValue().get(j).toString()));
+            col.prefWidthProperty().bind(tableview.widthProperty().multiply(1 / rs.getMetaData().getColumnCount()));
             tableview.getColumns().addAll(col);
-            System.out.println("Column [" + i + "] ");
         }
 
         while (rs.next()) {
@@ -40,7 +40,6 @@ public class Fuller {
                 //Iterar columnas
                 row.add(rs.getString(i));
             }
-            System.out.println("Row [1] added " + row);
             data.add(row);
 
             //Añadiendo al tableview los datos

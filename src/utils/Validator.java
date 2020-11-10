@@ -11,6 +11,8 @@ public class Validator {
         for (TextField tf : tfs) {
             if (tf.getText().isEmpty()) {
                 tf.setStyle("-fx-background-color:#EFB3B8;-fx-background-radius:5px;");
+            } else {
+                tf.setStyle("-fx-background-color:#fff;-fx-background-radius:5px;");
             }
         }
         //realizando validacion para retornar el booleano
@@ -27,6 +29,8 @@ public class Validator {
         for (ComboBox cb : cbs) {
             if (cb.getValue() == null) {
                 cb.setStyle("-fx-background-color:#EFB3B8;-fx-background-radius:5px;");
+            } else {
+                cb.setStyle("-fx-background-color:#fff;-fx-background-radius:5px;");
             }
         }
         //realizando validacion para retornar el booleano
@@ -43,6 +47,8 @@ public class Validator {
         for (TextArea ta : tas) {
             if (ta.getText().isEmpty()) {
                 ta.setStyle("-fx-background-color:#EFB3B8;-fx-background-radius:5px;");
+            } else {
+                ta.setStyle("-fx-background-color:#fff;-fx-background-radius:5px;");
             }
         }
         //realizando validacion para retornar el booleano

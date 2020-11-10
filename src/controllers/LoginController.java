@@ -136,15 +136,6 @@ public class LoginController implements Initializable {
             //Intentar ingresar
             try {
                 Facade.ingresar(empresaTF.getText(), user);
-                JOptionPane.showMessageDialog(null, "Has ingresado con exito");
-
-                //Modificar el Login actual --TEMPORAL--
-                CurrentLogin.setCurrentUsuario(user);
-
-                Empresa empresa = new Empresa();
-                empresa.setNombre(empresaTF.getText());
-                CurrentLogin.setCurrentEmpresa(empresa);
-
                 try {
                     ingresarApp(event);
                 } catch (IOException e) {
