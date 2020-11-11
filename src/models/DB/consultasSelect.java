@@ -57,15 +57,20 @@ public class consultasSelect {
         return cs.executeQuery();
     }
 
-    // Obtiene el historial de ventas completo de una empresa, ordenado por la venta más reciente
+    // Opc = 0, Obtiene el historial de ventas completo de una empresa
+    // Opc = 1, Obtiene el historial de ventas en una fecha concreta
+    // Los resultados son ordenados por la venta más reciente
     // Hasta la venta menos reciente
+    // Formato de fecha: 01/01/2000
     // Devuelve -> String RIF, IDProducto, Producto
     //             int Cantidad
     //             String Fecha
-    public static ResultSet historialVentas(String RIF) throws SQLException {
+    public static ResultSet historialVentas(String RIF, String fecha, int opc) throws SQLException {
         cn = ConexionBD.conexion();
-        cs = cn.prepareCall("{call selHistorialVentas(?)}");
+        cs = cn.prepareCall("{call selHistorialVentas(?,?,?)}");
         cs.setString(1, RIF);
+        cs.setString(2, fecha);
+        cs.setInt(3, opc);
         return cs.executeQuery();
     }
 

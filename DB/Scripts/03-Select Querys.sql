@@ -57,16 +57,30 @@ as
 	end;
 go;
 
--- Obtener el historial completo de ventas de una empresa
+-- Opc = 0, Obtener el historial completo de ventas de una empresa
+-- Opc = 1, Obtener el historial de ventas con respecto a una fecha
 -- El orden va desde la venta mas reciente hasta la menos reciente
-create procedure selHistorialVentas (
-	@RIF varchar(20)
+alter procedure selHistorialVentas (
+	@RIF varchar(20),
+	@fecha char(10) = '01/01/2000',
+	@opc tinyint = 0
 )
 as
-	select RIF, idProducto as IDProducto, nombre as Nombre,
-		cantidad as Cantidad, fechaVenta as Fecha
-		from viewHistorialVentas 
-		where RIF = @RIF order by convert(smalldatetime, fechaVenta, 103) desc;
+	if (@opc = 0)
+	begin	
+		select RIF, idProducto as IDProducto, nombre as Nombre,
+			cantidad as Cantidad, fechaVenta as Fecha
+			from viewHistorialVentas where RIF = @RIF order by convert(smalldatetime, fechaVenta, 103) desc;
+		return;
+	end
+	if (@opc = 1)
+	begin
+		select RIF, idProducto as IDProducto, nombre as Nombre,
+			cantidad as Cantidad, fechaVenta as Fecha
+			from viewHistorialVentas where (RIF = @RIF) and (fechaVenta = @fecha) 
+			order by convert(smalldatetime, fechaVenta, 103) desc;
+		return;
+	end
 go;
 
 -- opcion 0 para buscar productos por su nombre
