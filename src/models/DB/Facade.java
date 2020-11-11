@@ -3,6 +3,8 @@ package models.DB;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.POJO.Empresa;
+import models.POJO.Producto;
+import models.POJO.Proveedor;
 import models.POJO.Usuario;
 
 import java.sql.ResultSet;
@@ -67,13 +69,12 @@ public class Facade {
     }
 
     // Devuelve el top 5 de los últimos productos vendidos en una empresa
-    // Devuelve -> String Nombre
     public static ResultSet topÚltimosProductos(String RIF) throws SQLException {
-        return consultasSelect.topProductos(RIF, 0);
+        //TODO
+        return null;
     }
 
     // Devuelve el top 5 de los productos más vendidos en una empresa
-    // Devuelve -> String Nombre, int Ventas
     public static ResultSet topProductosMasVendidos(String RIF) throws SQLException {
         return consultasSelect.topProductos(RIF, 1);
     }
@@ -107,4 +108,48 @@ public class Facade {
         return ventas;
     }
 
+    //METODOS CRUD PRODUCTOS
+
+    /*
+     *   Metodo para agregar productos
+     *   retonar booleando: false si ya existe producto con ese nombre, true si el producto se inserto correctamente
+     */
+    public static boolean agregarProducto(Producto p, String nombreProveedor, String RIF) throws SQLException {
+        return consultasInsert.agregarProducto(p, nombreProveedor, RIF);
+    }
+
+    /*
+     * Metodo para obtener los productos
+     * retonar resultset con todos los productos de la empresa
+     */
+    public static ResultSet obtenerProductos(String RIF) throws SQLException {
+        return consultasSelect.informacionProductos(1, RIF, "");
+    }
+
+    //METODOS CRUD PROVEEDOR
+    /*
+     *   Metodo para agregar proveedor
+     *   retonar booleando: false si ya existe proveedor con ese nombre, true si el producto se inserto correctamente
+     */
+    public static boolean agregarProveedor(Proveedor p, String RIF) throws SQLException {
+        return consultasInsert.agregarProveedor(p, RIF);
+    }
+
+    //METODOS CRUD MEDIDA
+    /*
+     *   Metodo para agregar medida
+     *   retonar booleando: false si ya existe medida con ese nombre, true si el producto se inserto correctamente
+     */
+    public static boolean agregarMedida(String medida) throws SQLException {
+        return consultasInsert.nuevaMedida(medida);
+    }
+
+    //METODOS CRUD ESTADO
+    /*
+     *   Metodo para agregar estado
+     *   retonar booleando: false si ya existe estado con ese nombre, true si el producto se inserto correctamente
+     */
+    public static boolean agregarEstado(String estado) throws SQLException {
+        return consultasInsert.nuevoEstado(estado);
+    }
 }

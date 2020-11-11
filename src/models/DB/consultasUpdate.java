@@ -49,6 +49,7 @@ public class consultasUpdate {
         cs.setString(1, usuario.getUsuario());
         cs.setString(2, usuario.getRol());
         cs.setString(3, RIF);
+        return cs.execute();
     }
 
     // Actualiza los siguientes datos de una empresa

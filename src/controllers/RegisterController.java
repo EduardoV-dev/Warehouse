@@ -129,7 +129,7 @@ public class RegisterController implements Initializable {
                 Usuario usuario = new Usuario();
                 usuario.setUsuario(usuarioNombreTF.getText());
                 usuario.setContrasena(passUsuarioTF.getText());
-                usuario.setIdRol(1); //Siempre moderador el primer usuario
+                usuario.setRol("Administrador"); //Siempre moderador el primer usuario
 
                 //ejecutando el procedimiento en la base de datos
                 try {
