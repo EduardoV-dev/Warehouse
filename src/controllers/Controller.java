@@ -282,7 +282,7 @@ public class Controller implements Initializable {
     private Button btnAjustes;
 
     @FXML
-    private ComboBox<?> producto_unidadMedidaCB;
+    private ComboBox<String> producto_unidadMedidaCB;
 
     @FXML
     private TableColumn<?, ?> productosMasVendidos_Producto;
@@ -320,18 +320,31 @@ public class Controller implements Initializable {
     @FXML
     private Button producto_limpiarTF;
 
+    String RIF;
+
     //Metodo que se ejecuta al cargar el scene
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        RIF = CurrentLogin.getCurrentEmpresa().getRIF();
+
         //ponemos el nombre en el panel superior
         tituloEmpresaLabel.setText(CurrentLogin.getCurrentEmpresa().getNombre());
         currentUserLabel.setText(CurrentLogin.getCurrentUsuario().getUsuario());
         //Panel de Inicio
         actualizarDatosGenerales();
 
+        //Panel de Ajustes
+        try {
+            Fuller.llenarComboBox(producto_unidadMedidaCB, Facade.obtenerMedidasList(RIF));
+        } catch (SQLException throwables) {
+            System.out.println("Error al obtener unidades de medida");
+            throwables.printStackTrace();
+        }
+
         //actualizar tablas
         actualizarTablasInicio();
         actualizarTablasProducto();
+        actualizarTablasAjustes();
     }
 
     //Metodo para actualizar los datos generales de la ventana de inicio
@@ -341,8 +354,6 @@ public class Controller implements Initializable {
             ventasTotalesLabel.setText(Facade.totalVentas(CurrentLogin.getCurrentEmpresa().getRIF()) + "");
             productosTotalesLabel.setText(Facade.totalProductos(CurrentLogin.getCurrentEmpresa().getRIF()) + "");
             usuariosRegistradosLabel.setText(Facade.totalUsuarios(CurrentLogin.getCurrentEmpresa().getRIF()) + "");
-
-
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
@@ -351,7 +362,7 @@ public class Controller implements Initializable {
     //Metodos para rellenar tablas Inicio
     public void actualizarTablasInicio() {
         try {
-            //Fuller.llenarTableView(ultimosProductosVendidosTV, Facade.topÚltimosProductos(CurrentLogin.getCurrentEmpresa().getRIF()));
+            Fuller.llenarTableView(ultimosProductosVendidosTV, Facade.topÚltimosProductos(CurrentLogin.getCurrentEmpresa().getRIF()));
             Fuller.llenarTableView(productosMasVendidosTV, Facade.topProductosMasVendidos(CurrentLogin.getCurrentEmpresa().getRIF()));
         } catch (SQLException throwables) {
             throwables.printStackTrace();
@@ -359,12 +370,144 @@ public class Controller implements Initializable {
         }
     }
 
+    //Metodos para rellenar tablas Productos
     public void actualizarTablasProducto() {
         try {
             Fuller.llenarTableView(productos_tablaResultadosBusqueda, Facade.obtenerProductos(CurrentLogin.getCurrentEmpresa().getRIF()));
+            Fuller.llenarTableView(proveedores_tablaProveedores, Facade.obtenerProveedores(CurrentLogin.getCurrentEmpresa().getRIF()));
         } catch (SQLException throwables) {
             System.out.println("Error al actualizar tablas de panel de producto");
             throwables.printStackTrace();
+        }
+    }
+
+    //Metodos para rellenar tablas Ajustes
+    public void actualizarTablasAjustes() {
+        try {
+            Fuller.llenarTableView(medida_tablaLista, Facade.obtenerMedidas(CurrentLogin.getCurrentEmpresa().getRIF()));
+            //TODO: RELLENAR TABLA ESTADOS
+            //TODO: RELLENAR TABLA MARCAS
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    //Eventos de boton del panel de productos
+    public void productosHandleButton(ActionEvent event) {
+        //Agregar producto
+        if (event.getSource() == producto_agregarBtn) {
+            TextField[] tfs = {producto_nombreTF, producto_stockTF};
+            ComboBox[] cbs = {producto_MarcaCB, producto_proveedorCB, producto_unidadMedidaCB};
+            if (Validator.validarTextFields(tfs) || Validator.validarComboBoxs(cbs)) {
+                //Crear producto
+                Producto p = new Producto();
+                p.setNombre(producto_nombreTF.getText());
+                p.setMarca(producto_MarcaCB.getValue().toString());
+                p.setMedida(producto_unidadMedidaCB.getValue().toString());
+                p.setCantidad(Integer.parseInt(producto_stockTF.getText()));
+
+                try {
+                    if (!Facade.agregarProducto(p, producto_proveedorCB.getValue().toString(), CurrentLogin.getCurrentEmpresa().getRIF())) {
+                        JOptionPane.showMessageDialog(null, "Ya existe un producto con ese nombre");
+                    } else {
+                        Cleaner.vaciarComboBox(cbs);
+                        Cleaner.vaciarTextFields(tfs);
+                    }
+                } catch (SQLException throwables) {
+                    System.out.println("Error al agregar producto");
+                    throwables.printStackTrace();
+                }
+            }
+
+        }
+
+        if (event.getSource() == producto_limpiarTF) {
+            //Limpiar formulario para agregar productos
+            TextField[] tfs = {producto_nombreTF, producto_stockTF};
+            ComboBox[] cbs = {producto_MarcaCB, producto_proveedorCB, producto_unidadMedidaCB};
+
+            Cleaner.vaciarComboBox(cbs);
+            Cleaner.vaciarTextFields(tfs);
+        }
+
+        //Agregar proveedor
+        if (event.getSource() == proveedores_agregarBtn) {
+            TextField[] tfs = {proveedores_nombreTF, proveedores_apellidoTF, proveedores_correoTF, proveedores_telefonoTF};
+            if (Validator.validarTextFields(tfs)) {
+                Proveedor p = new Proveedor();
+                p.setNombres(proveedores_nombreTF.getText());
+                p.setApellidos(proveedores_apellidoTF.getText());
+                p.setCorreo(proveedores_correoTF.getText());
+                p.setTelefono(proveedores_telefonoTF.getText());
+                p.setIdProveedor("PV42");
+                try {
+                    Facade.agregarProveedor(p, CurrentLogin.getCurrentEmpresa().getRIF());
+                    actualizarTablasProducto();
+                    Cleaner.vaciarTextFields(tfs);
+                } catch (SQLException throwables) {
+                    System.out.println("Error al ingresar proveedor");
+                    JOptionPane.showMessageDialog(null, "Ya existe un proveedor con ese nombre");
+                    throwables.printStackTrace();
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Debes rellenar todos los campos");
+            }
+        }
+
+        //eliminar proveedor
+        if (event.getSource() == proveedores_eliminarBtn) {
+            String id = proveedores_tablaProveedores.getSelectionModel().getSelectedItem().toString();
+            id = id.substring(1, 5);
+            int res = JOptionPane.showConfirmDialog(null, "Estas seguro que deseas eliminarl este proveedor?", "", JOptionPane.YES_NO_OPTION);
+            if (res == 0) {
+                //Si desea eliminar
+                try {
+                    Facade.eliminarProveedor(CurrentLogin.getCurrentEmpresa().getRIF(), id);
+                    actualizarTablasProducto();
+                } catch (SQLException throwables) {
+                    System.out.println("Error al eliminar proveedor");
+                    throwables.printStackTrace();
+                }
+            }
+
+        }
+
+        //Limpiar formulario proveedores
+        if (event.getSource() == proveedores_limpiarBtn) {
+            TextField[] tfs = {proveedores_nombreTF, proveedores_apellidoTF, proveedores_apellidoTF, proveedores_telefonoTF};
+            Cleaner.vaciarTextFields(tfs);
+        }
+    }
+
+    //Eventos de botones del panel de ajustes
+    public void ajustesHandleButton(ActionEvent event) {
+        //agregar unidad de medida
+        if (event.getSource() == medida_agregarBtn) {
+            if (!medida_nombreTF.getText().isEmpty()) {
+                try {
+                    Facade.agregarMedida(medida_nombreTF.getText());
+                    actualizarTablasAjustes();
+                    medida_nombreTF.setText("");
+                } catch (SQLException throwables) {
+                    JOptionPane.showMessageDialog(null, "Ya existe medida con ese nombre");
+                    System.out.println("Error al agregar medida");
+                    throwables.printStackTrace();
+                }
+
+            }
+        }
+        //agregar estado de producto
+        if (event.getSource() == estados_agregarBtn) {
+            if (!estados_nombreTF.getText().isEmpty()) {
+                try {
+                    Facade.agregarMedida(estados_nombreTF.getText());
+                    estados_nombreTF.setText("");
+                } catch (SQLException throwables) {
+                    System.out.println("Error al agregar estado");
+                    JOptionPane.showMessageDialog(null, "Ya existe estado con ese nombre");
+                    throwables.printStackTrace();
+                }
+            }
         }
     }
 
@@ -445,110 +588,5 @@ public class Controller implements Initializable {
         Stage stage = (Stage) node.getScene().getWindow();
         stage.setIconified(true);
     }
-
-
-    //Eventos de boton del panel de productos
-    public void productosHandleButton(ActionEvent event) {
-        //Agregar producto
-        if (event.getSource() == producto_agregarBtn) {
-            TextField[] tfs = {producto_nombreTF, producto_stockTF};
-            ComboBox[] cbs = {producto_MarcaCB, producto_proveedorCB, producto_unidadMedidaCB};
-            if (Validator.validarTextFields(tfs) || Validator.validarComboBoxs(cbs)) {
-                //Crear producto
-                Producto p = new Producto();
-                p.setNombre(producto_nombreTF.getText());
-                p.setMarca(producto_MarcaCB.getValue().toString());
-                p.setMedida(producto_unidadMedidaCB.getValue().toString());
-                p.setCantidad(Integer.parseInt(producto_stockTF.getText()));
-
-                try {
-                    if (!Facade.agregarProducto(p, producto_proveedorCB.getValue().toString(), CurrentLogin.getCurrentEmpresa().getRIF())) {
-                        JOptionPane.showMessageDialog(null, "Ya existe un producto con ese nombre");
-                    } else {
-                        Cleaner.vaciarComboBox(cbs);
-                        Cleaner.vaciarTextFields(tfs);
-                    }
-                } catch (SQLException throwables) {
-                    System.out.println("Error al agregar producto");
-                    throwables.printStackTrace();
-                }
-            }
-
-        }
-
-        if (event.getSource() == producto_limpiarTF) {
-            //Limpiar formulario para agregar productos
-            TextField[] tfs = {producto_nombreTF, producto_stockTF};
-            ComboBox[] cbs = {producto_MarcaCB, producto_proveedorCB, producto_unidadMedidaCB};
-
-            Cleaner.vaciarComboBox(cbs);
-            Cleaner.vaciarTextFields(tfs);
-        }
-
-        //Agregar proveedor
-        if (event.getSource() == proveedores_agregarBtn) {
-            TextField[] tfs = {proveedores_nombreTF, proveedores_apellidoTF, proveedores_apellidoTF, proveedores_telefonoTF};
-            if (Validator.validarTextFields(tfs)) {
-                Proveedor p = new Proveedor();
-                p.setNombres(proveedores_nombreTF.getText());
-                p.setApellidos(proveedores_apellidoTF.getText());
-                p.setCorreo(proveedores_correoTF.getText());
-                p.setTelefono(proveedores_telefonoTF.getText());
-
-                try {
-                    if (!Facade.agregarProveedor(p, CurrentLogin.getCurrentEmpresa().getRIF())) {
-                        JOptionPane.showMessageDialog(null, "Ya existe un proveedor con ese nombre");
-                    } else {
-                        Cleaner.vaciarTextFields(tfs);
-                    }
-                } catch (SQLException throwables) {
-                    System.out.println("Error al ingresar proveedor");
-                    throwables.printStackTrace();
-                }
-            } else {
-                JOptionPane.showMessageDialog(null, "Debes rellenar todos los campos");
-            }
-        }
-
-        //Limpiar formulario proveedores
-        if (event.getSource() == proveedores_limpiarBtn) {
-            TextField[] tfs = {proveedores_nombreTF, proveedores_apellidoTF, proveedores_apellidoTF, proveedores_telefonoTF};
-            Cleaner.vaciarTextFields(tfs);
-        }
-    }
-
-    //Eventos de botones del panel de ajustes
-    public void ajustesHandleButton(ActionEvent event) {
-        //agregar unidad de medida
-        if (event.getSource() == medida_agregarBtn) {
-            if (!medida_nombreTF.getText().isEmpty()) {
-                try {
-                    if (!Facade.agregarMedida(medida_nombreTF.getText())) {
-                        JOptionPane.showMessageDialog(null, "Ya existe medida con ese nombre");
-                    }
-                    medida_nombreTF.setText("");
-                } catch (SQLException throwables) {
-                    System.out.println("Error al agregar medida");
-                    throwables.printStackTrace();
-                }
-
-            }
-        }
-        //agregar estado de producto
-        if (event.getSource() == estados_agregarBtn) {
-            if (!estados_nombreTF.getText().isEmpty()) {
-                try {
-                    if (!Facade.agregarMedida(estados_nombreTF.getText())) {
-                        JOptionPane.showMessageDialog(null, "Ya existe estado con ese nombre");
-                    }
-                    estados_nombreTF.setText("");
-                } catch (SQLException throwables) {
-                    System.out.println("Error al agregar estado");
-                    throwables.printStackTrace();
-                }
-            }
-        }
-    }
-
 
 }

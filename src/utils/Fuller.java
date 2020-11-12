@@ -24,6 +24,10 @@ public class Fuller {
     public static void llenarTableView(TableView tableview, ResultSet rs) throws SQLException {
         ObservableList<ObservableList> data = FXCollections.observableArrayList();
         tableview.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+        //Quitar contenido de la tabla
+        tableview.getColumns().clear();
+
         for (int i = 0; i < rs.getMetaData().getColumnCount(); i++) {
             //We are using non property style for making dynamic table
             final int j = i;
