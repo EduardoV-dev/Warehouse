@@ -162,6 +162,8 @@ public class LoginController implements Initializable {
         stage.setScene(registroScene);
         stage.setMinWidth(1125);
         stage.setMinHeight(700);
+        stage.setMaxWidth(1125);
+        stage.setMaxHeight(700);
         //stage.initStyle(StageStyle.UNDECORATED);
         stage.setMaximized(false);
         stage.show();

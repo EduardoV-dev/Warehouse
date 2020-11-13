@@ -26,7 +26,7 @@ public class Facade {
     }
 
 
-    //Metodos Crud Usuarios
+    //Metodos CRUD Usuarios
 
     /*
      *   Metodo para agregar usuarios
@@ -34,7 +34,7 @@ public class Facade {
      *       RIF: String del RIF de la empresa
      *       usuario: Usuario que se va a crear en la base de datos
      */
-    public boolean agregarUsuario(String RIF, Usuario usuario) throws SQLException {
+    public static boolean agregarUsuario(String RIF, Usuario usuario) throws SQLException {
         return consultasInsert.crearUsuario(usuario, RIF);
     }
 
@@ -44,7 +44,7 @@ public class Facade {
      *       RIF: String con el RIF de la empresa
      *   @retorna: ResultSet con todos los usuarios de la empresa
      */
-    public ResultSet obtenerUsuarios(String RIF) throws SQLException {
+    public static ResultSet obtenerUsuarios(String RIF) throws SQLException {
         return consultasSelect.informacionUsuarios(1, RIF, "");
     }
 
@@ -54,7 +54,7 @@ public class Facade {
      *      RIF: String con el RIF de la empresa
      *      usuario: String que contenga la palabra de filtro
      */
-    public ResultSet filtrarUsuarios(String RIF, String usuario) throws SQLException {
+    public static ResultSet obtenerUsuariosList(String RIF, String usuario) throws SQLException {
         return consultasSelect.informacionUsuarios(0, RIF, usuario);
     }
 
@@ -66,7 +66,7 @@ public class Facade {
      *   @retorna:
      *       boleaan: true si se modificó, false si no
      */
-    public boolean modificarUsuario(String RIF, Usuario usuario) throws SQLException {
+    public static boolean modificarUsuario(String RIF, Usuario usuario) throws SQLException {
         return consultasUpdate.actualizarUsuario(usuario, RIF);
     }
 
@@ -76,7 +76,7 @@ public class Facade {
      *       RIF: String del RIF de la empresa
      *       id: String del id del usuario que se va a eliminar
      */
-    public boolean eliminarUsuario(String RIF, String id) throws SQLException {
+    public static boolean eliminarUsuario(String RIF, String id) throws SQLException {
         return consultasDelete.eliminarUsuario(RIF, id);
     }
 
@@ -147,6 +147,10 @@ public class Facade {
         return consultasSelect.informacionProveedores(1, RIF, "");
     }
 
+    public static ObservableList<String> obtenerProveedoresList(String RIF) throws SQLException {
+        return Converter.resultSetToObservableList(consultasSelect.informacionProveedores(1, RIF, ""), 2);
+    }
+
     /*
      *   Metodo para eliminar proveedor
      *   @argumentos:
@@ -188,7 +192,7 @@ public class Facade {
      *      ObservableList con los datos de las medidas
      */
     public static ObservableList<String> obtenerMedidasList(String RIF) throws SQLException {
-        return Converter.resultSetToObservableList(consultasSelect.estadosProducto(), 1);
+        return Converter.resultSetToObservableList(consultasSelect.medidasProducto(), 1);
     }
 
 
@@ -253,5 +257,24 @@ public class Facade {
             }
         }
         return ventas;
+    }
+
+    public static ObservableList<String> obtenerRolesList() throws SQLException {
+        //TODO
+        return null;
+    }
+
+    public static Empresa obtenerDatosEmpresa(String RIF) throws SQLException {
+        rs = consultasSelect.informacionEmpresa(RIF);
+        Empresa e = new Empresa();
+        rs.next();
+        e.setRIF(rs.getString(1));
+        e.setNombre(rs.getString(2));
+        e.setCorreo(rs.getString(3));
+        e.setDireccion(rs.getString(4));
+        e.setTelefono(rs.getString(5));
+        e.setDepartamento(rs.getString(6));
+
+        return e;
     }
 }

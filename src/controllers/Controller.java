@@ -2,8 +2,10 @@ package controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
@@ -14,11 +16,13 @@ import models.DB.Facade;
 import models.POJO.Empresa;
 import models.POJO.Producto;
 import models.POJO.Proveedor;
+import models.POJO.Usuario;
 import utils.Cleaner;
 import utils.Fuller;
 import utils.Validator;
 
 import javax.swing.*;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,9 +32,6 @@ public class Controller implements Initializable {
     //Atributos para la funcionalidad de arrastrar la ventana
     private double xOffset = 0;
     private double yOffset = 0;
-
-    @FXML
-    private TextField usuarios_confirmarPassTF;
 
     @FXML
     private AnchorPane usuariosPane;
@@ -45,7 +46,7 @@ public class Controller implements Initializable {
     private Button proveedores_limpiarBtn;
 
     @FXML
-    private ComboBox<?> ajustes_departamentoCB;
+    private ComboBox<String> ajustes_departamentoCB;
 
     @FXML
     private TableView<?> productosMasVendidosTV;
@@ -60,13 +61,13 @@ public class Controller implements Initializable {
     private Button btnInicio;
 
     @FXML
+    private TextField producto_agregarStockTF;
+
+    @FXML
     private Button proveedores_limpiarBtn1;
 
     @FXML
     private Button btnUsuarios;
-
-    @FXML
-    private TableColumn<?, ?> ultimosProducto_Producto;
 
     @FXML
     private Button proveedores_eliminarBtn;
@@ -108,6 +109,9 @@ public class Controller implements Initializable {
     private TextField usuarios_buscarTF;
 
     @FXML
+    private PasswordField usuarios_confirmarPass;
+
+    @FXML
     private TextField estados_nombreTF;
 
     @FXML
@@ -147,7 +151,7 @@ public class Controller implements Initializable {
     private Button btnVenta;
 
     @FXML
-    private ComboBox<?> producto_proveedorCB;
+    private ComboBox<String> producto_proveedorCB;
 
     @FXML
     private Label currentUserLabel;
@@ -159,25 +163,25 @@ public class Controller implements Initializable {
     private Button proveedores_agregarBtn;
 
     @FXML
-    private TextField proveedores_nombreTF;
+    private ComboBox<?> estadisticas_elementoCB;
 
     @FXML
-    private ComboBox<?> estadisticas_elementoCB;
+    private TextField proveedores_nombreTF;
 
     @FXML
     private Button marcas_eliminarBtn;
 
     @FXML
-    private TextField producto_stockTF;
-
-    @FXML
     private TableView<?> usuarios_tablaResultado;
 
     @FXML
-    private Button producto_agregarBtn;
+    private TextField producto_stockTF;
 
     @FXML
     private Button usuarios_eliminarBtn;
+
+    @FXML
+    private Button producto_agregarBtn;
 
     @FXML
     private TableView<?> medida_tablaLista;
@@ -213,7 +217,7 @@ public class Controller implements Initializable {
     private TextField usuarios_nombreTF;
 
     @FXML
-    private ComboBox<?> producto_MarcaCB;
+    private Button ajustes_guardarDatosEmpresaBtn;
 
     @FXML
     private Button medida_eliminarBtn;
@@ -225,10 +229,16 @@ public class Controller implements Initializable {
     private TableView<?> venta_tablaHistorial;
 
     @FXML
+    private Button producto_reporteProductosBtn;
+
+    @FXML
     private Label productosTotalesLabel;
 
     @FXML
-    private TextField usuarios_passTF;
+    private PasswordField usuarios_passTF;
+
+    @FXML
+    private PasswordField usuarios_confirmarPassTF;
 
     @FXML
     private TextField proveedores_apellidoTF;
@@ -246,6 +256,9 @@ public class Controller implements Initializable {
     private Button btnCerrarSesion;
 
     @FXML
+    private Button producto_agregarStockBtn;
+
+    @FXML
     private TextField ajustes_telefonoTF;
 
     @FXML
@@ -253,6 +266,9 @@ public class Controller implements Initializable {
 
     @FXML
     private Button usuarios_agregarBtn;
+
+    @FXML
+    private TextField producto_marcaTF;
 
     @FXML
     private TableView<?> productos_tablaResultadosBusqueda;
@@ -273,6 +289,9 @@ public class Controller implements Initializable {
     private Button producto_modificarBtn;
 
     @FXML
+    private Button producto_modificarBtn1;
+
+    @FXML
     private TextArea venta_observacionesLabel;
 
     @FXML
@@ -285,13 +304,10 @@ public class Controller implements Initializable {
     private ComboBox<String> producto_unidadMedidaCB;
 
     @FXML
-    private TableColumn<?, ?> productosMasVendidos_Producto;
+    private Button ajustes_editarDatosEmpresaBtn;
 
     @FXML
     private Button btnClose;
-
-    @FXML
-    private TableColumn<?, ?> productosMasVendidos_TotalVentas;
 
     @FXML
     private Button btnProductos;
@@ -306,9 +322,6 @@ public class Controller implements Initializable {
     private Button venta_ventaRealizadaBtn;
 
     @FXML
-    private TableColumn<?, ?> ultimosProducto_FechayHora;
-
-    @FXML
     private Button venta_agregarVentaBtn;
 
     @FXML
@@ -319,6 +332,7 @@ public class Controller implements Initializable {
 
     @FXML
     private Button producto_limpiarTF;
+
 
     String RIF;
 
@@ -333,19 +347,40 @@ public class Controller implements Initializable {
         //Panel de Inicio
         actualizarDatosGenerales();
 
-        //Panel de Ajustes
+        //Panel de Productos
         try {
+            Fuller.llenarComboBox(producto_proveedorCB, Facade.obtenerProveedoresList(RIF));
             Fuller.llenarComboBox(producto_unidadMedidaCB, Facade.obtenerMedidasList(RIF));
         } catch (SQLException throwables) {
-            System.out.println("Error al obtener unidades de medida");
+            System.out.println("Error al rellenar combobox en panel de Productos");
             throwables.printStackTrace();
         }
+
+        //Panel de Usuarios
+        //Fuller.llenarComboBox(usuarios_rolCB,Facade);
+
+        //Panel de Ajustes
+        try {
+            Empresa empresa = Facade.obtenerDatosEmpresa(RIF);
+            ajustes_nombreEmpresaTF.setText(empresa.getNombre());
+            ajustes_rifTF.setText(empresa.getRIF());
+            ajustes_correoTF.setText(empresa.getCorreo());
+            ajustes_telefonoTF.setText(empresa.getTelefono());
+            ajustes_departamentoCB.setValue(empresa.getDepartamento());
+
+        } catch (SQLException throwables) {
+            System.out.println("Error al obtener datos de la empresa");
+            throwables.printStackTrace();
+        }
+
 
         //actualizar tablas
         actualizarTablasInicio();
         actualizarTablasProducto();
+        actualizarTablasUsuarios();
         actualizarTablasAjustes();
     }
+
 
     //Metodo para actualizar los datos generales de la ventana de inicio
     public void actualizarDatosGenerales() {
@@ -373,10 +408,20 @@ public class Controller implements Initializable {
     //Metodos para rellenar tablas Productos
     public void actualizarTablasProducto() {
         try {
-            Fuller.llenarTableView(productos_tablaResultadosBusqueda, Facade.obtenerProductos(CurrentLogin.getCurrentEmpresa().getRIF()));
-            Fuller.llenarTableView(proveedores_tablaProveedores, Facade.obtenerProveedores(CurrentLogin.getCurrentEmpresa().getRIF()));
+            // TODO Fuller.llenarTableView(productos_tablaResultadosBusqueda, Facade.obtenerProductos(RIF));
+            Fuller.llenarTableView(proveedores_tablaProveedores, Facade.obtenerProveedores(RIF));
         } catch (SQLException throwables) {
             System.out.println("Error al actualizar tablas de panel de producto");
+            throwables.printStackTrace();
+        }
+    }
+
+    //Metodos para rellenar tablas Usuarios
+    public void actualizarTablasUsuarios() {
+        try {
+            Fuller.llenarTableView(usuarios_tablaResultado, Facade.obtenerUsuarios(RIF));
+        } catch (SQLException throwables) {
+            System.out.println("Error al rellenar tabla en el panel de Usuarios");
             throwables.printStackTrace();
         }
     }
@@ -396,25 +441,25 @@ public class Controller implements Initializable {
     public void productosHandleButton(ActionEvent event) {
         //Agregar producto
         if (event.getSource() == producto_agregarBtn) {
-            TextField[] tfs = {producto_nombreTF, producto_stockTF};
-            ComboBox[] cbs = {producto_MarcaCB, producto_proveedorCB, producto_unidadMedidaCB};
+            TextField[] tfs = {producto_nombreTF, producto_stockTF, producto_marcaTF};
+            ComboBox[] cbs = {producto_proveedorCB, producto_unidadMedidaCB};
             if (Validator.validarTextFields(tfs) || Validator.validarComboBoxs(cbs)) {
                 //Crear producto
                 Producto p = new Producto();
+                p.setIdProducto("P232");
                 p.setNombre(producto_nombreTF.getText());
-                p.setMarca(producto_MarcaCB.getValue().toString());
+                p.setMarca(producto_marcaTF.getText());
                 p.setMedida(producto_unidadMedidaCB.getValue().toString());
                 p.setCantidad(Integer.parseInt(producto_stockTF.getText()));
 
                 try {
-                    if (!Facade.agregarProducto(p, producto_proveedorCB.getValue().toString(), CurrentLogin.getCurrentEmpresa().getRIF())) {
-                        JOptionPane.showMessageDialog(null, "Ya existe un producto con ese nombre");
-                    } else {
-                        Cleaner.vaciarComboBox(cbs);
-                        Cleaner.vaciarTextFields(tfs);
-                    }
+                    Facade.agregarProducto(p, producto_proveedorCB.getValue().toString(), CurrentLogin.getCurrentEmpresa().getRIF());
+                    actualizarTablasProducto();
+                    Cleaner.vaciarComboBox(cbs);
+                    Cleaner.vaciarTextFields(tfs);
                 } catch (SQLException throwables) {
                     System.out.println("Error al agregar producto");
+                    JOptionPane.showMessageDialog(null, "Ya existe un producto con ese nombre");
                     throwables.printStackTrace();
                 }
             }
@@ -424,7 +469,7 @@ public class Controller implements Initializable {
         if (event.getSource() == producto_limpiarTF) {
             //Limpiar formulario para agregar productos
             TextField[] tfs = {producto_nombreTF, producto_stockTF};
-            ComboBox[] cbs = {producto_MarcaCB, producto_proveedorCB, producto_unidadMedidaCB};
+            ComboBox[] cbs = {producto_proveedorCB, producto_unidadMedidaCB};
 
             Cleaner.vaciarComboBox(cbs);
             Cleaner.vaciarTextFields(tfs);
@@ -479,6 +524,28 @@ public class Controller implements Initializable {
         }
     }
 
+    //Eventos de botones del panel de usuarios
+    public void usuariosHandleButton(ActionEvent event) {
+        if (event.getSource() == usuarios_agregarBtn) {
+            TextField[] tfs = {usuarios_nombreTF, usuarios_passTF, usuarios_confirmarPassTF};
+
+            if (Validator.validarTextFields(tfs) && usuarios_rolCB.getValue() != null) {
+                Usuario usuario = new Usuario();
+                usuario.setUsuario(usuarios_nombreTF.getText());
+                usuario.setContrasena(usuarios_passTF.getText());
+                usuario.setRol(usuarios_rolCB.getValue().toString());
+                try {
+                    Facade.agregarUsuario(RIF, usuario);
+                    actualizarTablasUsuarios();
+                    actualizarDatosGenerales();
+                } catch (SQLException throwables) {
+                    System.out.println("Ya existe un usuario con ese nombre");
+                    throwables.printStackTrace();
+                }
+            }
+        }
+    }
+
     //Eventos de botones del panel de ajustes
     public void ajustesHandleButton(ActionEvent event) {
         //agregar unidad de medida
@@ -509,6 +576,42 @@ public class Controller implements Initializable {
                 }
             }
         }
+
+        //Editar datos de la empresa
+        if (event.getSource() == ajustes_editarDatosEmpresaBtn) {
+            TextField[] tfs = {ajustes_nombreEmpresaTF, ajustes_correoTF, ajustes_telefonoTF, ajustes_rifTF};
+
+            //Permitir editar los campos
+            for (TextField tf : tfs) {
+                tf.setDisable(false);
+            }
+            ajustes_departamentoCB.setDisable(false);
+            ajustes_direccionTA.setDisable(false);
+
+            //Habilitar boton de guardado y desabilitar el de editar
+            ajustes_guardarDatosEmpresaBtn.setDisable(false);
+            ajustes_editarDatosEmpresaBtn.setDisable(true);
+
+        }
+    }
+
+
+    //Evento del boton para cerrarSesion
+    public void cerrarSesionHandleButton(ActionEvent event) throws IOException {
+        Node node = (Node) event.getSource();
+        Stage stage = (Stage) node.getScene().getWindow();
+        stage.close();
+
+        CurrentLogin.setCurrentUsuario(null);
+        CurrentLogin.setCurrentEmpresa(null);
+
+        Scene registroScene = new Scene(FXMLLoader.load(getClass().getResource("../views/Login.fxml")));
+        stage.setScene(registroScene);
+        stage.setMaxWidth(800);
+        stage.setMaxHeight(600);
+        stage.setMinWidth(800);
+        stage.setMinHeight(600);
+        stage.show();
     }
 
     //Funcionalidad de la navegación

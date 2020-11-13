@@ -14,10 +14,9 @@ import java.sql.SQLException;
 
 public class Fuller {
 
-    public static void llenarComboBox(ComboBox<String> combo, ObservableList<String> paises) {
-
+    public static void llenarComboBox(ComboBox<String> combo, ObservableList<String> lista) {
         if (null != combo) {
-            combo.setItems(paises);
+            combo.setItems(lista);
         }
     }
 

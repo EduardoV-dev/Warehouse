@@ -38,15 +38,8 @@ public class LogInSignUp {
         rs = cs.executeQuery();
         boolean existe = rs.next();
 
-        Empresa e = new Empresa();
-        e.setNombre(nombreEmpresa);
-        e.setRIF(rs.getString(3));
-        CurrentLogin.setCurrentEmpresa(e);
-
-        Usuario u = new Usuario();
-        u.setUsuario(usuario.getUsuario());
-        CurrentLogin.setCurrentUsuario(u);
-
+        CurrentLogin.setCurrentEmpresa(Facade.obtenerDatosEmpresa(rs.getString(3)));
+        CurrentLogin.setCurrentUsuario(usuario);
         return existe;
     }
 }
