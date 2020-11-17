@@ -1,6 +1,5 @@
 package models.DB;
 
-import models.POJO.Empresa;
 import models.POJO.Producto;
 import models.POJO.Proveedor;
 import models.POJO.Usuario;
@@ -15,53 +14,47 @@ public class consultasUpdate {
 
     // Actualiza los siguientes datos de un producto
     // nombre, marca, estado y medida
-    public static boolean actualizarProducto(Producto producto, String RIF) throws SQLException {
+    // Devuelve 1 en caso de que la actualizacion haya sido exitosa
+    // Devuelve result <= 0 en caso de error
+    public static int actualizarProducto(Producto producto) throws SQLException {
         cn = ConexionBD.conexion();
-        cs = cn.prepareCall("{call updActualizarProducto(?,?,?,?,?,?)}");
-        cs.setString(1, RIF);
-        cs.setString(2, producto.getIdProducto());
-        cs.setString(3, producto.getNombre());
-        cs.setString(4, producto.getMarca());
-        cs.setString(5, producto.getEstado());
-        cs.setString(6, producto.getMedida());
-        return cs.execute();
+        cs = cn.prepareCall("{call updActualizarProducto(?,?,?,?,?)}");
+        cs.setString(1, producto.getIdProducto());
+        cs.setString(2, producto.getNombre());
+        cs.setString(3, producto.getMarca());
+        cs.setString(4, producto.getEstado());
+        cs.setString(5, producto.getMedida());
+        return cs.executeUpdate();
     }
 
     // Actualiza los siguientes datos de un proveedor
     // nombres, apellidos, correo y telefono
-    public static boolean actualizarProveedor(Proveedor proveedor, String RIF) throws SQLException {
+    public static int actualizarProveedor(Proveedor proveedor) throws SQLException {
         cn = ConexionBD.conexion();
-        cs = cn.prepareCall("{call updActualizarProveedor(?,?,?,?,?,?)}");
-        cs.setString(1, RIF);
-        cs.setString(2, proveedor.getIdProveedor());
-        cs.setString(3, proveedor.getNombres());
-        cs.setString(4, proveedor.getApellidos());
-        cs.setString(5, proveedor.getCorreo());
-        cs.setString(6, proveedor.getTelefono());
-        return cs.execute();
+        cs = cn.prepareCall("{call updActualizarProveedor(?,?,?,?,?)}");
+        cs.setString(1, proveedor.getIdProveedor());
+        cs.setString(2, proveedor.getNombres());
+        cs.setString(3, proveedor.getApellidos());
+        cs.setString(4, proveedor.getCorreo());
+        cs.setString(5, proveedor.getTelefono());
+        return cs.executeUpdate();
     }
 
-    // Actualiza el siguiente dato de un usuario
-    // Su rol :v
-    public static boolean actualizarUsuario(Usuario usuario, String RIF) throws SQLException {
+    // Actualiza el rol de un usuario
+    public static int actualizarUsuario(Usuario usuario) throws SQLException {
         cn = ConexionBD.conexion();
-        cs = cn.prepareCall("{call updActualizarUsuario(?,?,?)}");
+        cs = cn.prepareCall("{call updActualizarUsuario(?,?)}");
         cs.setString(1, usuario.getUsuario());
         cs.setString(2, usuario.getRol());
-        cs.setString(3, RIF);
+        return cs.executeUpdate();
     }
 
-    // Actualiza los siguientes datos de una empresa
-    // nombre, correo, direccion, telefono y departamento
-    public static boolean actualizarProveedor(Empresa empresa) throws SQLException {
+    // Actualiza la contraseña de un usuario
+    public static int actualizarEmpresa(Usuario usuario) throws SQLException {
         cn = ConexionBD.conexion();
-        cs = cn.prepareCall("{call updActualizarProveedor(?,?,?,?,?,?)}");
-        cs.setString(1, empresa.getRIF());
-        cs.setString(2, empresa.getNombre());
-        cs.setString(3, empresa.getCorreo());
-        cs.setString(4, empresa.getDepartamento());
-        cs.setString(5, empresa.getTelefono());
-        cs.setString(6, empresa.getDepartamento());
-        return cs.execute();
+        cs = cn.prepareCall("{call updActualizarUsuario(?,?)}");
+        cs.setString(1, usuario.getUsuario());
+        cs.setString(2, usuario.getContrasena());
+        return cs.executeUpdate();
     }
 }

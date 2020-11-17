@@ -2,6 +2,7 @@ Nota: Cambiar la ruta de creación de la base de datos. No ejecutar los scripts 
 
 01-DB and Tables Creation.sql
 001-Default Table Values.sql
+005-Functions
 02-Insert Querys.sql
 003-Views.sql
 03-Select Querys.sql
