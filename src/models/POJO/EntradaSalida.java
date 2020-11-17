@@ -1,11 +1,11 @@
 package models.POJO;
 
 public class EntradaSalida {
-    private String nombreProducto, observaciones;
+    private String idProducto, observaciones;
     private int cantidadVendida;
 
-    public EntradaSalida(String nombreProducto, String observaciones, int cantidadVendida) {
-        this.nombreProducto = nombreProducto;
+    public EntradaSalida(String idProducto, String observaciones, int cantidadVendida) {
+        this.idProducto = idProducto;
         this.observaciones = observaciones;
         this.cantidadVendida = cantidadVendida;
     }
@@ -13,12 +13,12 @@ public class EntradaSalida {
     public EntradaSalida() {
     }
 
-    public String getNombreProducto() {
-        return nombreProducto;
+    public String getIdProducto() {
+        return idProducto;
     }
 
-    public void setNombreProducto(String nombreProducto) {
-        this.nombreProducto = nombreProducto;
+    public void setIdProducto(String idProducto) {
+        this.idProducto = idProducto;
     }
 
     public String getObservaciones() {
@@ -37,3 +37,4 @@ public class EntradaSalida {
         this.cantidadVendida = cantidadVendida;
     }
 }
+

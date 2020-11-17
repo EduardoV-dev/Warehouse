@@ -2,70 +2,100 @@ use Warehouse;
 
 -- Elimina un producto por medio de su idProducto y elimina todos los registros relacionados con el
 create procedure delProducto (
-	@RIF varchar(20),
 	@idProducto varchar(5)
 )
 as
-	set nocount on;
-	--begin transaction;
+	begin transaction;
 
-	--begin try
-		delete from iop.Entrada where idAdquisicion = (select idAdquisicion from viewEntrada 
-			where (idProducto = @idProducto) and (RIF = @RIF));
-		delete from iop.Adquisicion where idAdquisicion = (select idAdquisicion from viewEntrada 
-			where (idProducto = @idProducto) and (RIF = @RIF));
-		delete from org.OrigenProducto where idProducto = (select idProducto from viewOrigenProducto 
-			where (idProducto = @idProducto) and (RIF = @RIF));
-		delete from iop.Salida where idVenta = (select idVenta from viewSalida 
-			where (idProducto = @idProducto) and (RIF = @RIF));
-		delete from iop.Venta where idVenta = (select idVenta from viewSalida 
-			where (idProducto = @idProducto) and (RIF = @RIF));
-		delete from org.Producto where (idProducto = @idProducto) and (RIF = @RIF);
+	if exists (select idProducto from org.Producto where idProducto = @idProducto)
+	begin
+		delete a from dts.DatosSalida as a
+		join org.Salida as b 
+		on a.idSalida = b.idSalida where b.idProducto = @idProducto;
 
-		--commit transaction;
-	--end try
-	--begin catch
-		--rollback transaction;
-	--end catch
+		delete from org.Salida where idProducto = @idProducto
+
+		delete a from dts.DatosEntrada as a
+		join org.Entrada as b 
+		on a.idEntrada = b.idEntrada where b.idProducto = @idProducto;
+
+		delete from org.Entrada where idProducto = @idProducto;
+
+		delete from dts.DatosProducto where idProducto = @idProducto;
+
+		delete from org.Producto where idProducto = @idProducto;
+
+		print 'Producto y sus registros eliminados';
+		commit transaction;
+	end
+	else 
+	begin
+		print 'El producto no existe';
+		rollback transaction;
+	end
 go;
 
 -- Elimina un proveedor por medio de su idProveedor y elimina todos los registros relacionados con el
+
 create procedure delProveedor (
-	@RIF varchar(20),
 	@idProveedor varchar(10)
 )
 as
-	set nocount on;
-	--begin transaction;
+	begin transaction;
 
-	--begin try
-		delete from org.OrigenProducto where idProveedor = (select idProveedor from viewOrigenProducto 
-			where (idProveedor = @idProveedor) and (RIF = @RIF));
-		delete from org.Proveedor where (idProveedor = @idProveedor) and (RIF = @RIF);
+	if exists (select idProveedor from org.Proveedor where idProveedor = @idProveedor)
+	begin
+		delete a from dts.DatosEntrada as a
+			join org.Entrada as b
+			on a.idEntrada = b.idEntrada
+			where b.idProveedor = @idProveedor;
 
-		--commit transaction;
-	--end try
-	--begin catch
-		--rollback transaction;
-	--end catch
+		delete from org.Entrada where idProveedor = @idProveedor;
+
+		delete from dts.DatosProveedor where idProveedor = @idProveedor;
+
+		delete from org.Proveedor where idProveedor = @idProveedor;
+
+		print 'Proveedor eliminado';
+		commit transaction;
+	end
+	else 
+	begin
+		print 'No existe un proveedor con ese ID';
+		rollback transaction;
+	end
 go;
 
--- Elimina un usuario de la empresa junto con la persona designada a esa cuenta
+-- Elimina un usuario de la empresa y asigna sus ventas y adquisiciones al que posee un rol de administrador
 create procedure delUsuario (
-	@RIF varchar(20),
 	@usuario varchar(50)
 )
 as
-	set nocount on;
-	--begin transaction;
+	begin transaction;
+	
+	declare @admin varchar(50);
+	declare @existeUsuario tinyint = dbo.existeUsuario(@usuario);
+	declare @noEsAdmin varchar(50) = (select usuario from org.Usuario where usuario = @usuario);
+	if (@existeUsuario = 1 and @noEsAdmin != 'admin')
+	begin
+		set @admin = (select usuario from org.Usuario where idRol = 1);
 
-	--begin try
-		delete from adm.Usuario where (usuario = @usuario) and (RIF = @RIF);
-		--commit transaction;
-	--end try
-	--begin catch
-		--rollback transaction;
-	--end catch
+		update org.Entrada set usuario = @admin where usuario = @usuario;
+
+		update org.Salida set usuario = @admin where usuario = @usuario;
+
+		update org.Proveedor set usuario = @admin where usuario = @usuario;
+
+		delete from org.Usuario where usuario = @usuario;
+
+		print 'Usuario eliminado';
+		commit transaction;
+	end
+	else 
+	begin
+		print 'El usuario no existe o se intentó eliminar al administrador';
+		rollback transaction;
+	end
 go;
 
 -- Elimina una unidad de medida y establece la unidad como medida alternativa
@@ -74,17 +104,27 @@ create procedure delMedida (
 	@medida varchar(60)
 )
 as 
-	set nocount on;
 	begin transaction;
 
-	declare @idMedida tinyint;
+	declare @idMedida tinyint,
+			@noEsUnidades varchar(60);
+
 	set @idMedida = (select idMedida from org.Medida where medida = @medida);
-	update org.Producto set idMedida = 1 where idMedida = @idMedida;
-	
-	if (@@ROWCOUNT > 0) 
+	set @noEsUnidades = (select medida from org.Medida where idMedida = @idMedida);
+
+	if (nullif(@idMedida, '') is not null and @noEsUnidades != 'Unidades')
 	begin
+		update org.Producto set idMedida = 1 where idMedida = @idMedida;
+
 		delete from org.Medida where idMedida = @idMedida;
-		--commit transaction;
+
+		print 'Medida eliminada';
+		commit transaction;
+	end
+	else
+	begin
+		print 'La medida no existe o se trató de eliminar la medida de unidades';
+		rollback transaction;
 	end
 go;
 
@@ -94,16 +134,26 @@ create procedure delEstado (
 	@estado char(20)
 )
 as 
-	set nocount on;
-	--begin transaction;
+	begin transaction;
 
-	declare @idEstado tinyint;
+	declare @idEstado tinyint,
+			@noEsEstado varchar(20);
+
 	set @idEstado = (select idEstado from org.Estado where estado = @estado);
-	update org.Producto set idEstado = 1 where idEstado = @idEstado;
-	
-	if (@@ROWCOUNT > 0) 
+	set @noEsEstado = (select estado from org.Estado where idEstado = @idEstado);
+
+	if (nullif(@idEstado, '') is not null and @noEsEstado != 'Nuevo')
 	begin
+		update org.Producto set idEstado = 1 where idEstado = @idEstado;
+
 		delete from org.Estado where @idEstado = @idEstado;
-		--commit transaction;
+
+		print 'Estado eliminado';
+		commit transaction;
+	end
+	else
+	begin
+		print 'El estado no existe o se trató de eliminar el estado "Nuevo"';
+		rollback transaction;
 	end
 go;

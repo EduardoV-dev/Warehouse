@@ -1,97 +1,54 @@
 use Warehouse;
 
--- Vista para obtener la informacion de una empresa
-create view viewInfoEmpresa
-as 
-	select E.RIF, E.nombre, E.correo, E.direccion, E.telefono, D.departamento from adm.Empresa as E
-		inner join adm.Departamento as D
-		on E.idDepartamento = D.idDepartamento;
-go;
-
 -- Vista para obtener el top 5 de los últimos productos vendidos y productos más vendidos
+-- VISTA FUNCIONAL
 create view viewTopProductos 
 as
-	select E.RIF, P.nombre, V.cantidad from adm.Empresa as E
-		inner join iop.Venta as V
-		on E.RIF = V.RIF
-		inner join org.Producto P
-		on P.RIF = E.RIF
+	select S.idSalida, DP.nombre , DS.cantidad from org.Salida as S
+		inner join dts.DatosSalida as DS
+		on S.idSalida = DS.idSalida
+		inner join dts.DatosProducto as DP
+		on DP.idProducto = S.idProducto;
 go;
 
 -- Vista para obtener el historial completo de ventas de una empresa
+-- VISTA FUNCIONAL
 create view viewHistorialVentas
 as
-	select E.RIF, P.idProducto, P.nombre, V.cantidad, V.fechaVenta from adm.Empresa as E
-		inner join iop.Venta as V
-		on E.RIF = V.RIF
-		inner join org.Producto P
-		on P.RIF = E.RIF;
+	select DP.idProducto, DP.nombre, DS.cantidad, DS.fechaSalida, S.usuario from org.Salida as S
+		inner join dts.DatosSalida as DS
+		on S.idSalida = DS.idSalida
+		inner join dts.DatosProducto as DP
+		on DP.idProducto = S.idProducto;
 go;
 
 -- Vista para datos sobre un producto
+-- VISTA FUNCIONAL
 create view viewDatosProducto
 as
-	select Pd.idProducto, Em.RIF, Pd.nombre, Pd.marca, Pd.cantidad, E.estado, M.medida, (Pr.nombres + ' ' + Pr.apellidos) as proveedor from org.Producto as Pd
-		inner join adm.Empresa as Em
-		on Pd.RIF = Em.RIF
+	select Pd.idProducto, DP.nombre, DP.marca, DP.cantidad, E.estado, M.medida from org.Producto as Pd
+		inner join dts.DatosProducto as DP
+		on DP.idProducto = Pd.idProducto
 		inner join org.Estado as E
 		on Pd.idEstado = E.idEstado
 		inner join org.Medida as M
-		on Pd.idMedida = M.idMedida
-		inner join org.OrigenProducto as Op
-		on Pd.idProducto = OP.idProducto
-		inner join org.Proveedor as Pr
-		on Op.idProveedor = Pr.idProveedor;
+		on Pd.idMedida = M.idMedida;
+go;
+
+-- Vista para ver los datos de los proveedores
+-- VISTA FUNCIONAL
+create view viewDatosProveedor 
+as
+	select P.idProveedor, DP.nombres, DP.apellidos, DP.correo, DP.telefono, P.usuario from org.Proveedor as P
+		inner join dts.DatosProveedor as DP
+		on P.idProveedor = DP.idProveedor;
 go;
 
 -- Vista para datos sobre un usuario
+-- VISTA FUNCIONAL
 create view viewDatosUsuario 
 as
-	select E.RIF, U.usuario, R.rol from adm.Usuario as U
-		inner join adm.Empresa as E
-		on U.RIF = E.RIF
-		inner join adm.Rol as R
+	select U.usuario, R.rol from org.Usuario as U
+		inner join org.Rol as R
 		on U.idRol = R.idRol;
-go;
-
--- Vista para datos del login del usuario
-create view viewLoginUsuario
-as
-	select E.nombre, U.usuario, U.contrasena, E.RIF from adm.Usuario as U
-		inner join adm.Empresa as E
-		on U.RIF = E.RIF
-go;
-
--- Vista creada para eliminar los registros de entrada y adquisicion de un producto en una empresa
-create view viewEntrada
-as
-	select AD.idAdquisicion, EM.RIF, PR.idProducto from iop.Entrada as EN
-		inner join iop.Adquisicion as AD
-		on EN.idAdquisicion = AD.idAdquisicion
-		inner join adm.Empresa as EM
-		on EM.RIF = AD.RIF
-		inner join org.Producto as PR
-		on PR.RIF = EM.RIF;
-go;
-
--- Vista creada para eliminar los registros de origenproducto de una empresa
-create view viewOrigenProducto
-as
-	select EM.RIF, PR.idProducto from org.Producto as PR
-		inner join adm.Empresa as EM
-		on PR.RIF = EM.RIF
-		inner join org.OrigenProducto as OP
-		on OP.idProducto = PR.idProducto;
-go;
-
--- vista para eliminar los registros de salida y venta de un producto en una empresa
-create view viewSalida
-as
-	select SA.idVenta, EM.RIF, PR.idProducto from iop.Salida as SA
-		inner join iop.Venta as VE
-		on SA.idVenta = VE.idVenta
-		inner join adm.Empresa as EM
-		on EM.RIF = VE.RIF
-		inner join org.Producto as PR
-		on PR.RIF = EM.RIF;
 go;

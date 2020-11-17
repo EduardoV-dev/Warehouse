@@ -20,49 +20,36 @@ create database Warehouse on primary
 use Warehouse;
 -- /****** Creando schemas *****/
 
-create schema adm;
 create schema org;
-create schema iop;
+create schema dts;
 
 -- /****** Creando tablas de Warehouse *******/
 
-create table adm.Departamento (
-	idDepartamento char(3) constraint pk_Departamento_idDepartamento primary key,
-	departamento char(30) not null
-);
-
-create table adm.Empresa (
-	RIF varchar(20) constraint pk_Empresa_RIF primary key,
-	nombre varchar(50) not null, 
-	correo varchar(50) not null,
-	direccion varchar(100) not null,
-	telefono varchar(20) not null,
-	idDepartamento char(3) constraint fk_Empresa_idDepartamento foreign key 
-	references adm.Departamento (idDepartamento)
-);
-
-create table adm.Rol (
+create table org.Rol (
 	idRol tinyint constraint pk_Rol_idRol primary key identity(1,1),
 	rol char(25) not null
 );
 
-create table adm.Usuario (
+create table org.Usuario (
 	usuario varchar(50) constraint pk_Usuario_usuario primary key,
 	contrasena varchar(50) not null,
 	idRol tinyint constraint fk_Usuario_idRol foreign key 
-	references adm.Rol (idRol),
-	RIF varchar(20) constraint fk_Usuario_RIF foreign key 
-	references adm.Empresa (RIF)
+	references org.Rol (idRol)
 );
 
 create table org.Proveedor (
 	idProveedor varchar(10) constraint pk_Proveedor_idProveedor primary key,
+	usuario varchar(50) constraint fk_Proveedor_usuario foreign key 
+	references org.Usuario (usuario)
+);
+
+create table dts.DatosProveedor (
+	idProveedor varchar(10) constraint fk_DatosProveedor_idProveedor foreign key
+	references org.Proveedor (idProveedor),
 	nombres char(35) not null,
 	apellidos char(35) not null,
 	correo varchar(50) not null,
-	telefono varchar(20),
-	RIF varchar(20) constraint fk_Proveedor_RIF foreign key 
-	references adm.Empresa (RIF)
+	telefono varchar(20) default 'No especificado'
 );
 
 create table org.Medida (
@@ -72,57 +59,55 @@ create table org.Medida (
 
 create table org.Estado (
 	idEstado tinyint constraint pk_Estado_idEstado primary key identity(1,1),
-	estado char(20) not null
+	estado char(20) not null,
 );
 
 create table org.Producto (
 	idProducto varchar(5) constraint pk_Producto_idProducto primary key,
-	nombre varchar(50) not null,
-	marca varchar(40) not null,
-	cantidad smallint not null constraint chk_Producto_cantidad check (cantidad >= 0),
 	idMedida tinyint constraint fk_Producto_idMedida foreign key 
 	references org.Medida (idMedida),
 	idEstado tinyint constraint fk_Producto_idEstado foreign key 
-	references org.Estado (idEstado),
-	RIF varchar(20) constraint fk_Producto_RIF foreign key 
-	references adm.Empresa (RIF)
+	references org.Estado (idEstado)
 );
 
-create table org.OrigenProducto (
-	idProducto varchar(5) constraint fk_OrigenProducto_idProducto foreign key 
+create table dts.DatosProducto (
+	idProducto varchar(5) constraint fk_DatosProducto_idProducto foreign key 
 	references org.Producto (idProducto),
-	idProveedor varchar(10) constraint fk_OrigenProducto_idProveedor foreign key 
-	references org.Proveedor (idProveedor)
+	nombre varchar(50) not null,
+	marca varchar(40) not null,
+	cantidad smallint not null constraint chk_DatosProducto_cantidad check (cantidad > 0)
 );
 
-create table iop.Venta (
-	idVenta smallint constraint pk_Venta_idVenta primary key identity(1,1),
-	cantidad smallint not null constraint chk_Venta_cantidad check (cantidad >= 0),
-	fechaVenta char(10) not null,
-	observaciones varchar(200) default 'Sin observaciones',
-	RIF varchar(20) constraint fk_Venta_RIF foreign key 
-	references adm.Empresa (RIF)
-);
-
-create table iop.Adquisicion (
-	idAdquisicion smallint constraint pk_Adquisicion_idAdquisicion primary key identity(1,1),
-	cantidad smallint not null constraint chk_Adquisicion_cantidad check (cantidad >= 0),
-	fechaEntrega char(10) not null,
-	observaciones varchar(200) default 'Sin observaciones',
-	RIF varchar(20) constraint fk_Adquisicion_RIF foreign key 
-	references adm.Empresa (RIF)
-);
-
-create table iop.Salida (
-	idVenta smallint constraint fk_Salida_idVenta foreign key 
-	references iop.Venta (idVenta),
-	idProducto varchar(5) constraint fk_Salida_idProducto foreign key 
+create table org.Salida (
+	idSalida smallint constraint pk_Salida_idSalida primary key identity(1,1),
+	idProducto varchar(5) constraint fk_Salida_idProducto foreign key
 	references org.Producto (idProducto),
+	usuario varchar(50) constraint fk_Salida_usuario foreign key
+	references org.Usuario (usuario)
 );
 
-create table iop.Entrada (
-	idAdquisicion smallint constraint fk_Entrada_idAquisicion foreign key 
-	references iop.Adquisicion (idAdquisicion),
-	idProducto varchar(5) constraint fk_Entrada_idProducto foreign key 
-	references org.Producto (idProducto)
+create table dts.DatosSalida (
+	idSalida smallint constraint fk_DatosSalida_idSalida foreign key
+	references org.Salida (idSalida),
+	cantidad smallint not null constraint chk_DatosSalida_cantidad check (cantidad > 0),
+	fechaSalida char(10) not null,
+	observaciones varchar(100) default 'Sin observaciones',
+);
+
+create table org.Entrada (
+	idEntrada smallint constraint pk_Entrada_idEntrada primary key identity(1,1),
+	idProducto varchar(5) constraint fk_Entrada_idProducto foreign key
+	references org.Producto (idProducto),
+	idProveedor varchar(10) constraint fk_Entrada_idProveedor foreign key
+	references org.Proveedor (idProveedor),
+	usuario varchar(50) constraint fk_Entrada_usuario foreign key
+	references org.Usuario (usuario)
+);
+
+create table dts.DatosEntrada (
+	idEntrada smallint constraint fk_DatosEntrada_idEntrada foreign key 
+	references org.Entrada (idEntrada),
+	cantidad smallint not null constraint chk_Adquisicion_cantidad check (cantidad > 0),
+	fechaEntrada char(10) not null,
+	observacion varchar(100) default 'Sin observaciones'
 );
