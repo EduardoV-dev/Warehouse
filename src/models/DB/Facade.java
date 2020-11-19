@@ -2,6 +2,7 @@ package models.DB;
 
 
 import data.DatosEmpresa;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import models.POJO.*;
 import utils.Converter;
@@ -24,15 +25,11 @@ public class Facade {
 
     //Metodos para el login
     public static boolean ingresar(Usuario usuario) throws SQLException {
-        rs = consultasSelect.informacionUsuarios(1, usuario.getUsuario());
-        if (rs.next()) {
-            Usuario u = new Usuario();
-            u.setUsuario(rs.getString(1));
-            u.setRol(rs.getString(2));
-            CurrentLogin.setCurrentUsuario(u);
-            return true;
-        }
-        return false;
+        System.out.println(usuario.getUsuario());
+        rs = consultasSelect.ingresar(usuario);
+        boolean existe = rs.next();
+        CurrentLogin.setCurrentUsuario(new Usuario(rs.getString(1), usuario.getContrasena(), rs.getString(2)));
+        return existe;
     }
 
     //Metodos CRUD Usuarios
@@ -45,15 +42,13 @@ public class Facade {
         }
     }
 
-
-    public static ResultSet obtenerUsuarios(String RIF) throws SQLException {
+    public static ResultSet obtenerUsuarios() throws SQLException {
         return consultasSelect.informacionUsuarios(1, "");
     }
 
     public static ResultSet obtenerUsuariosFiltrados(String usuario) throws SQLException {
         return consultasSelect.informacionUsuarios(0, usuario);
     }
-
 
     public static boolean modificarUsuario(Usuario usuario) throws SQLException {
         if (consultasUpdate.actualizarUsuario(usuario) == 1) {
@@ -69,6 +64,13 @@ public class Facade {
         } else {
             return false;
         }
+    }
+
+    public static ObservableList<String> obtenerRoles() {
+        ObservableList<String> roles = FXCollections.observableArrayList();
+        roles.add("Moderador");
+        roles.add("Empleado");
+        return roles;
     }
 
 
@@ -235,11 +237,6 @@ public class Facade {
         return ventas;
     }
 
-
-    public static ObservableList<String> obtenerRolesList() throws SQLException {
-        //TODO
-        return null;
-    }
 
     public static Empresa obtenerDatosEmpresa() throws SQLException {
         return DatosEmpresa.obtenerDatosEmpresa();

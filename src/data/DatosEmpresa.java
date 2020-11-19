@@ -23,7 +23,6 @@ public class DatosEmpresa {
             stream.writeUTF(empresa.getCorreo());
             stream.writeUTF(empresa.getTelefono());
             stream.writeUTF(empresa.getRIF());
-            stream.writeUTF(empresa.getDepartamento());
             stream.writeUTF(empresa.getDireccion());
 
             stream.close();
@@ -36,11 +35,10 @@ public class DatosEmpresa {
         try {
             stream.seek(0);
             if (stream.readUTF().isEmpty() || stream.readUTF() == null) {
-                return new Empresa("", "", "", "", "", "");
+                return new Empresa("", "", "", "", "");
             } else {
                 stream.seek(0);
                 return new Empresa(
-                        stream.readUTF(),
                         stream.readUTF(),
                         stream.readUTF(),
                         stream.readUTF(),
@@ -49,7 +47,7 @@ public class DatosEmpresa {
                 );
             }
         } catch (IOException e) {
-            return new Empresa("", "", "", "", "", "");
+            return new Empresa("", "", "", "", "");
         }
     }
 

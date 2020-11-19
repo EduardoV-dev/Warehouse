@@ -18,7 +18,7 @@ public class consultasInsert {
     // Devolverá un numero menor o igual a 0 (result <= 0) en caso de error (Que ya exista un usuario con el mismo username)
     public static int crearUsuario(Usuario usuario) throws SQLException {
         cn = ConexionBD.conexion();
-        cs = cn.prepareCall("{call insUsuario(?,?,?,?)}");
+        cs = cn.prepareCall("{call insUsuario(?,?,?)}");
         cs.setString(1, usuario.getUsuario());
         cs.setString(2, usuario.getContrasena());
         cs.setString(3, usuario.getRol());

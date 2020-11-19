@@ -40,20 +40,16 @@ public class Controller implements Initializable {
     private AnchorPane usuariosPane;
 
     @FXML
-    private Button btnMinimize;
+    private TextField entrada_stockRestanteLabel;
 
     @FXML
-    private Button venta_limpiarLabelBtn;
+    private Button btnMinimize;
 
     @FXML
     private Button proveedores_limpiarBtn;
 
-
     @FXML
     private TableView<?> productosMasVendidosTV;
-
-    @FXML
-    private TextField venta_descuentoLabel;
 
     @FXML
     private TextArea ajustes_direccionTA;
@@ -68,7 +64,16 @@ public class Controller implements Initializable {
     private Button proveedores_limpiarBtn1;
 
     @FXML
+    private Label salida_unidadLabel;
+
+    @FXML
     private Button btnUsuarios;
+
+    @FXML
+    private TextField entrada_productoLabel;
+
+    @FXML
+    private TextField entrada_marcaLabel;
 
     @FXML
     private Button proveedores_eliminarBtn;
@@ -86,28 +91,34 @@ public class Controller implements Initializable {
     private TableView<?> ultimosProductosVendidosTV;
 
     @FXML
-    private Button marcas_agregarBtn;
+    private Label entrada_unidadLabel;
+
+    @FXML
+    private DatePicker transacciones_fechaHistorialDatePicker;
 
     @FXML
     private Label ventasTotalesLabel;
 
     @FXML
-    private TextField ventas_cantidadLabel;
+    private Button medida_agregarBtn;
 
     @FXML
-    private Button medida_agregarBtn;
+    private Button salida_agregarVentaBtn;
 
     @FXML
     private AnchorPane inicioPane;
 
     @FXML
-    private TextField marcas_nombreTF;
+    private Button entrada_reporteBtn;
 
     @FXML
     private Button proveedores_agregarBtn1;
 
     @FXML
     private TextField usuarios_buscarTF;
+
+    @FXML
+    private TextField salida_cantidadLabel;
 
     @FXML
     private PasswordField usuarios_confirmarPass;
@@ -119,16 +130,16 @@ public class Controller implements Initializable {
     private TableView<?> proveedores_tablaProveedores;
 
     @FXML
-    private TextField venta_subTotalLabel;
-
-    @FXML
     private TextField producto_nombreTF;
 
     @FXML
     private TableView<?> estadisticas_tablaMejores;
 
     @FXML
-    private TextField venta_TotalLabel;
+    private Button entrada_agregarVentaBtn;
+
+    @FXML
+    private TableView<?> entrada_tablaListaSalidas;
 
     @FXML
     private TextField productos_buscarProductoTF;
@@ -137,19 +148,22 @@ public class Controller implements Initializable {
     private AnchorPane ventaPane;
 
     @FXML
-    private DatePicker venta_fechaHistorialDatePicker;
-
-    @FXML
     private AnchorPane northPane;
 
     @FXML
     private TextField proveedores_correoTF;
 
     @FXML
+    private TextField salida_marcaLabel;
+
+    @FXML
     private Button venta_reporteBtn;
 
     @FXML
     private Button btnVenta;
+
+    @FXML
+    private TextField salida_stockRestanteLabel;
 
     @FXML
     private ComboBox<String> producto_proveedorCB;
@@ -170,28 +184,25 @@ public class Controller implements Initializable {
     private TextField proveedores_nombreTF;
 
     @FXML
-    private Button marcas_eliminarBtn;
-
-    @FXML
-    private TableView<?> usuarios_tablaResultado;
+    private ComboBox<String> producto_estadoCB;
 
     @FXML
     private TextField producto_stockTF;
 
     @FXML
-    private Button usuarios_eliminarBtn;
+    private TableView<?> usuarios_tablaResultado;
 
     @FXML
     private Button producto_agregarBtn;
+
+    @FXML
+    private Button usuarios_eliminarBtn;
 
     @FXML
     private TableView<?> medida_tablaLista;
 
     @FXML
     private Button proveedores_modificarBtn;
-
-    @FXML
-    private TextField venta_stockRestanteLabel;
 
     @FXML
     private TextField ajustes_nombreEmpresaTF;
@@ -212,22 +223,19 @@ public class Controller implements Initializable {
     private Label usuariosRegistradosLabel;
 
     @FXML
-    private TextField venta_productoLabel;
+    private TextField usuarios_nombreTF;
 
     @FXML
-    private TextField usuarios_nombreTF;
+    private TextArea salida_observacionesLabel;
+
+    @FXML
+    private TextField entrada_cantidadLabel;
 
     @FXML
     private Button ajustes_guardarDatosEmpresaBtn;
 
     @FXML
     private Button medida_eliminarBtn;
-
-    @FXML
-    private TableView<?> marcas_tablaLista;
-
-    @FXML
-    private TableView<?> venta_tablaHistorial;
 
     @FXML
     private Button producto_reporteProductosBtn;
@@ -237,9 +245,6 @@ public class Controller implements Initializable {
 
     @FXML
     private PasswordField usuarios_passTF;
-
-    @FXML
-    private PasswordField usuarios_confirmarPassTF;
 
     @FXML
     private TextField proveedores_apellidoTF;
@@ -263,13 +268,16 @@ public class Controller implements Initializable {
     private TextField ajustes_telefonoTF;
 
     @FXML
-    private ComboBox<?> usuarios_rolCB;
+    private TextField producto_marcaTF;
+
+    @FXML
+    private ComboBox<String> usuarios_rolCB;
 
     @FXML
     private Button usuarios_agregarBtn;
 
     @FXML
-    private TextField producto_marcaTF;
+    private Button salida_limpiarLabelBtn;
 
     @FXML
     private TableView<?> productos_tablaResultadosBusqueda;
@@ -284,7 +292,10 @@ public class Controller implements Initializable {
     private LineChart<?, ?> actividadesVentaLineChart;
 
     @FXML
-    private TableView<?> venta_tablaVentaDatos;
+    private Button entrada_limpiarLabelBtn;
+
+    @FXML
+    private TextArea entrada_observacionesLabel;
 
     @FXML
     private Button producto_modificarBtn;
@@ -293,19 +304,13 @@ public class Controller implements Initializable {
     private Button producto_modificarBtn1;
 
     @FXML
-    private TextArea venta_observacionesLabel;
-
-    @FXML
-    private TextField venta_marcaLabel;
+    private TextField salida_productoLabel;
 
     @FXML
     private Button btnAjustes;
 
     @FXML
     private ComboBox<String> producto_unidadMedidaCB;
-
-    @FXML
-    private ComboBox<String> producto_estadoCB;
 
     @FXML
     private Button ajustes_editarDatosEmpresaBtn;
@@ -317,19 +322,28 @@ public class Controller implements Initializable {
     private Button btnProductos;
 
     @FXML
+    private Button entrada_eliminarBtn;
+
+    @FXML
+    private Button salida_eliminarBtn;
+
+    @FXML
+    private Button salida_reporteBtn;
+
+    @FXML
     private TextField proveedores_telefonoTF;
 
     @FXML
     private AnchorPane ajustesPane;
 
     @FXML
-    private Button venta_ventaRealizadaBtn;
-
-    @FXML
-    private Button venta_agregarVentaBtn;
+    private TableView<?> transacciones_tablaHistorial;
 
     @FXML
     private TextField medida_nombreTF;
+
+    @FXML
+    private TableView<?> salida_tablaListaSalidas;
 
     @FXML
     private Button estados_eliminarBtn;
@@ -337,25 +351,15 @@ public class Controller implements Initializable {
     @FXML
     private Button producto_limpiarTF;
 
-
-    String RIF;
+    //Variables estaticas
+    String IDProveedor = "";
 
     //Metodo que se ejecuta al cargar el scene
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            DatosEmpresa.crearArchivo(new File("empresadata.dat"));
-            System.out.println(DatosEmpresa.obtenerDatosEmpresa());
-            //ponemos el nombre en el panel superior
-            if (DatosEmpresa.obtenerDatosEmpresa().getNombre() == null) {
-                tituloEmpresaLabel.setText("Nombre de empresa");
-            } else {
-                tituloEmpresaLabel.setText(DatosEmpresa.obtenerDatosEmpresa().getNombre());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
 
+        inicioPane.toFront();
+        establecerNombre();
         currentUserLabel.setText(CurrentLogin.getCurrentUsuario().getUsuario());
         actualizarComboBoxs();
 
@@ -376,12 +380,12 @@ public class Controller implements Initializable {
             ajustes_rifTF.setText(empresa.getRIF());
             ajustes_correoTF.setText(empresa.getCorreo());
             ajustes_telefonoTF.setText(empresa.getTelefono());
+            ajustes_direccionTA.setText(empresa.getDireccion());
 
         } catch (SQLException throwables) {
             System.out.println("Error al obtener datos de la empresa");
             throwables.printStackTrace();
         }
-
 
         //actualizar tablas
         actualizarTablasInicio();
@@ -403,6 +407,20 @@ public class Controller implements Initializable {
         });
     }
 
+    public void establecerNombre() {
+        try {
+            DatosEmpresa.crearArchivo(new File("empresadata.dat"));
+            System.out.println(DatosEmpresa.obtenerDatosEmpresa());
+            //ponemos el nombre en el panel superior
+            if (DatosEmpresa.obtenerDatosEmpresa().getNombre() == null) {
+                tituloEmpresaLabel.setText("Nombre de empresa");
+            } else {
+                tituloEmpresaLabel.setText(DatosEmpresa.obtenerDatosEmpresa().getNombre());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     //Metodo para actualizar los datos generales de la ventana de inicio
     public void actualizarDatosGenerales() {
@@ -422,7 +440,8 @@ public class Controller implements Initializable {
             //Productos
             Fuller.llenarComboBox(producto_proveedorCB, Facade.obtenerProveedoresList());
             Fuller.llenarComboBox(producto_estadoCB, Facade.obtenerEstadosList());
-
+            //Usuarios
+            Fuller.llenarComboBox(usuarios_rolCB, Facade.obtenerRoles());
             //Ajustes
             Fuller.llenarComboBox(producto_unidadMedidaCB, Facade.obtenerMedidasList());
 
@@ -457,7 +476,7 @@ public class Controller implements Initializable {
     //Metodos para rellenar tablas Usuarios
     public void actualizarTablasUsuarios() {
         try {
-            Fuller.llenarTableView(usuarios_tablaResultado, Facade.obtenerUsuarios(RIF));
+            Fuller.llenarTableView(usuarios_tablaResultado, Facade.obtenerUsuarios());
         } catch (SQLException throwables) {
             System.out.println("Error al rellenar tabla en el panel de Usuarios");
             throwables.printStackTrace();
@@ -477,6 +496,8 @@ public class Controller implements Initializable {
 
     //Eventos de boton del panel de productos
     public void productosHandleButton(ActionEvent event) {
+
+
         //Agregar producto
         if (event.getSource() == producto_agregarBtn) {
             TextField[] tfs = {producto_nombreTF, producto_stockTF, producto_marcaTF};
@@ -566,7 +587,6 @@ public class Controller implements Initializable {
         if (event.getSource() == proveedores_eliminarBtn) {
             String id = proveedores_tablaProveedores.getSelectionModel().getSelectedItem().toString();
             id = id.substring(1, 11);
-            System.out.println(id);
 
             //Si desea eliminar
             try {
@@ -586,8 +606,10 @@ public class Controller implements Initializable {
         //Modificar proveedor
         if (event.getSource() == proveedores_modificarBtn) {
             String nombreProveedor = proveedores_tablaProveedores.getSelectionModel().getSelectedItem().toString();
-            System.out.println(nombreProveedor);
             String nombreCompleto = "";
+            String id = proveedores_tablaProveedores.getSelectionModel().getSelectedItem().toString();
+            id = id.substring(1, 11);
+            IDProveedor = id;
             int comas = 0;
             for (int i = 11; i < nombreProveedor.length(); i++) {
 
@@ -614,6 +636,8 @@ public class Controller implements Initializable {
                 proveedores_agregarBtn1.setVisible(true);
                 proveedores_limpiarBtn.setVisible(false);
                 proveedores_limpiarBtn1.setVisible(true);
+
+
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -626,13 +650,16 @@ public class Controller implements Initializable {
 
             if (Validator.validarTextFields(tfs)) {
                 Proveedor p = new Proveedor();
+                System.out.println("id: " + IDProveedor);
+                p.setIdProveedor(IDProveedor);
                 p.setNombres(proveedores_nombreTF.getText());
                 p.setApellidos(proveedores_apellidoTF.getText());
                 p.setCorreo(proveedores_correoTF.getText());
                 p.setTelefono(proveedores_telefonoTF.getText());
 
                 try {
-                    Facade.actualizarProveedor(p);
+                    Facade.eliminarProveedor(IDProveedor);
+                    Facade.agregarProveedor(p, CurrentLogin.getCurrentUsuario().getUsuario());
                 } catch (SQLException throwables) {
                     throwables.printStackTrace();
                 } finally {
@@ -643,6 +670,7 @@ public class Controller implements Initializable {
 
                     Cleaner.vaciarTextFields(tfs);
                     actualizarTablasProducto();
+                    actualizarComboBoxs();
                 }
             }
 
@@ -658,15 +686,17 @@ public class Controller implements Initializable {
     //Eventos de botones del panel de usuarios
     public void usuariosHandleButton(ActionEvent event) {
         if (event.getSource() == usuarios_agregarBtn) {
-            TextField[] tfs = {usuarios_nombreTF, usuarios_passTF, usuarios_confirmarPassTF};
+            TextField[] tfs = {usuarios_nombreTF, usuarios_passTF, usuarios_confirmarPass};
 
             if (Validator.validarTextFields(tfs) && usuarios_rolCB.getValue() != null) {
                 Usuario usuario = new Usuario();
                 usuario.setUsuario(usuarios_nombreTF.getText());
                 usuario.setContrasena(usuarios_passTF.getText());
-                usuario.setRol(usuarios_rolCB.getValue().toString());
+                usuario.setRol(usuarios_rolCB.getValue());
                 try {
                     Facade.agregarUsuario(usuario);
+                    Cleaner.vaciarTextFields(tfs);
+                    usuarios_rolCB.setValue(null);
                     actualizarTablasUsuarios();
                     actualizarDatosGenerales();
                 } catch (SQLException throwables) {
@@ -725,11 +755,37 @@ public class Controller implements Initializable {
         }
 
         //Guardar datos empresa
-        if(event.getSource()==ajustes_guardarDatosEmpresaBtn){
+        if (event.getSource() == ajustes_guardarDatosEmpresaBtn) {
+            TextField[] tfs = {
+                    ajustes_nombreEmpresaTF,
+                    ajustes_correoTF,
+                    ajustes_telefonoTF,
+                    ajustes_rifTF,
+            };
+            TextArea[] tas = {ajustes_direccionTA};
+
+            if (Validator.validarTextFields(tfs) && Validator.validarTextAreas(tas)) {
+                Empresa e = new Empresa();
+                e.setNombre(ajustes_nombreEmpresaTF.getText());
+                e.setCorreo(ajustes_correoTF.getText());
+                e.setTelefono(ajustes_telefonoTF.getText());
+                e.setRIF(ajustes_rifTF.getText());
+                e.setDireccion(ajustes_direccionTA.getText());
+
+                DatosEmpresa.establecerEmpresa(e);
+                establecerNombre();
+
+                ajustes_guardarDatosEmpresaBtn.setDisable(true);
+                ajustes_editarDatosEmpresaBtn.setDisable(false);
+
+                for (TextField tf : tfs) {
+                    tf.setDisable(true);
+                }
+                ajustes_direccionTA.setDisable(true);
+            }
 
         }
     }
-
 
     //Evento del boton para cerrarSesion
     public void cerrarSesionHandleButton(ActionEvent event) throws IOException {

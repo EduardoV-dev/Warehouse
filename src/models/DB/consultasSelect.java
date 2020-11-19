@@ -9,11 +9,15 @@ public class consultasSelect {
     private static CallableStatement cs;
 
     // Devuelve -> String usuario, contraseña
-    public static ResultSet ingresar(Usuario usuario) throws SQLException{
+    public static ResultSet ingresar(Usuario usuario) throws SQLException {
         cn = ConexionBD.conexion();
         cs = cn.prepareCall("{call selInfoLogin(?,?)}");
         cs.setString(1, usuario.getUsuario());
         cs.setString(2, usuario.getContrasena());
+        ResultSet rs = cs.executeQuery();
+        if (rs.next()) {
+            CurrentLogin.setCurrentUsuario(usuario);
+        }
         return cs.executeQuery();
     }
 
@@ -113,8 +117,8 @@ public class consultasSelect {
 
     public static ResultSet nombresProveedores() throws SQLException {
         cn = ConexionBD.conexion();
-        Statement st=cn.createStatement();
-        ResultSet rs= st.executeQuery("select CONCAT(RTRIM(nombres), ' ', apellidos) as Nombre  from dts.DatosProveedor");
+        Statement st = cn.createStatement();
+        ResultSet rs = st.executeQuery("select CONCAT(RTRIM(nombres), ' ', apellidos) as Nombre  from dts.DatosProveedor");
         return rs;
     }
 

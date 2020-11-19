@@ -5,19 +5,17 @@ public class Empresa {
     private String correo;
     private String telefono;
     private String RIF;
-    private String departamento;
     private String direccion;
 
     public Empresa() {
 
     }
 
-    public Empresa(String nombre, String correo, String telefono, String RIF, String departamento, String direccion) {
+    public Empresa(String nombre, String correo, String telefono, String RIF,  String direccion) {
         this.nombre = nombre;
         this.correo = correo;
         this.telefono = telefono;
         this.RIF = RIF;
-        this.departamento = departamento;
         this.direccion = direccion;
     }
 
@@ -51,14 +49,6 @@ public class Empresa {
 
     public void setRIF(String RIF) {
         this.RIF = RIF;
-    }
-
-    public String getDepartamento() {
-        return departamento;
-    }
-
-    public void setDepartamento(String departamento) {
-        this.departamento = departamento;
     }
 
     public String getDireccion() {
