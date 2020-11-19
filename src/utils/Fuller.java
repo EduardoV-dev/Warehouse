@@ -41,7 +41,7 @@ public class Fuller {
             ObservableList<String> row = FXCollections.observableArrayList();
             for (int i = 1; i <= rs.getMetaData().getColumnCount(); i++) {
                 //Iterar columnas
-                row.add(rs.getString(i));
+                row.add(rs.getString(i).trim());
             }
             data.add(row);
 

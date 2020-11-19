@@ -1,5 +1,6 @@
 package controllers;
 
+import data.DatosEmpresa;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -12,16 +13,18 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import models.DB.CurrentLogin;
+import models.DB.Empresa;
 import models.DB.Facade;
-import models.POJO.Empresa;
 import models.POJO.Producto;
 import models.POJO.Proveedor;
 import models.POJO.Usuario;
 import utils.Cleaner;
+import utils.CodigosGenerador;
 import utils.Fuller;
 import utils.Validator;
 
 import javax.swing.*;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -45,8 +48,6 @@ public class Controller implements Initializable {
     @FXML
     private Button proveedores_limpiarBtn;
 
-    @FXML
-    private ComboBox<String> ajustes_departamentoCB;
 
     @FXML
     private TableView<?> productosMasVendidosTV;
@@ -304,6 +305,9 @@ public class Controller implements Initializable {
     private ComboBox<String> producto_unidadMedidaCB;
 
     @FXML
+    private ComboBox<String> producto_estadoCB;
+
+    @FXML
     private Button ajustes_editarDatosEmpresaBtn;
 
     @FXML
@@ -339,34 +343,39 @@ public class Controller implements Initializable {
     //Metodo que se ejecuta al cargar el scene
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        RIF = CurrentLogin.getCurrentEmpresa().getRIF();
+        try {
+            DatosEmpresa.crearArchivo(new File("empresadata.dat"));
+            System.out.println(DatosEmpresa.obtenerDatosEmpresa());
+            //ponemos el nombre en el panel superior
+            if (DatosEmpresa.obtenerDatosEmpresa().getNombre() == null) {
+                tituloEmpresaLabel.setText("Nombre de empresa");
+            } else {
+                tituloEmpresaLabel.setText(DatosEmpresa.obtenerDatosEmpresa().getNombre());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        //ponemos el nombre en el panel superior
-        tituloEmpresaLabel.setText(CurrentLogin.getCurrentEmpresa().getNombre());
         currentUserLabel.setText(CurrentLogin.getCurrentUsuario().getUsuario());
+        actualizarComboBoxs();
+
         //Panel de Inicio
         actualizarDatosGenerales();
 
         //Panel de Productos
-        try {
-            Fuller.llenarComboBox(producto_proveedorCB, Facade.obtenerProveedoresList(RIF));
-            Fuller.llenarComboBox(producto_unidadMedidaCB, Facade.obtenerMedidasList(RIF));
-        } catch (SQLException throwables) {
-            System.out.println("Error al rellenar combobox en panel de Productos");
-            throwables.printStackTrace();
-        }
+
 
         //Panel de Usuarios
+
         //Fuller.llenarComboBox(usuarios_rolCB,Facade);
 
         //Panel de Ajustes
         try {
-            Empresa empresa = Facade.obtenerDatosEmpresa(RIF);
+            Empresa empresa = Facade.obtenerDatosEmpresa();
             ajustes_nombreEmpresaTF.setText(empresa.getNombre());
             ajustes_rifTF.setText(empresa.getRIF());
             ajustes_correoTF.setText(empresa.getCorreo());
             ajustes_telefonoTF.setText(empresa.getTelefono());
-            ajustes_departamentoCB.setValue(empresa.getDepartamento());
 
         } catch (SQLException throwables) {
             System.out.println("Error al obtener datos de la empresa");
@@ -376,9 +385,22 @@ public class Controller implements Initializable {
 
         //actualizar tablas
         actualizarTablasInicio();
-        actualizarTablasProducto();
-        actualizarTablasUsuarios();
-        actualizarTablasAjustes();
+
+
+        //Metodo para busqueda productos
+        productos_buscarProductoTF.textProperty().addListener((obs, oldText, newText) -> {
+            String busqueda = newText;
+            try {
+                if (busqueda.isEmpty()) {
+                    Fuller.llenarTableView(productos_tablaResultadosBusqueda, Facade.obtenerProductos());
+
+                } else {
+                    Fuller.llenarTableView(productos_tablaResultadosBusqueda, Facade.filtrarProductos(busqueda));
+                }
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
     }
 
 
@@ -386,10 +408,26 @@ public class Controller implements Initializable {
     public void actualizarDatosGenerales() {
         try {
             //actualizar label de datos generales
-            ventasTotalesLabel.setText(Facade.totalVentas(CurrentLogin.getCurrentEmpresa().getRIF()) + "");
-            productosTotalesLabel.setText(Facade.totalProductos(CurrentLogin.getCurrentEmpresa().getRIF()) + "");
-            usuariosRegistradosLabel.setText(Facade.totalUsuarios(CurrentLogin.getCurrentEmpresa().getRIF()) + "");
+            ventasTotalesLabel.setText(Facade.totalVentas() + "");
+            productosTotalesLabel.setText(Facade.totalProductos() + "");
+            usuariosRegistradosLabel.setText(Facade.totalUsuarios() + "");
         } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    //Actualizar todos los combobox
+    public void actualizarComboBoxs() {
+        try {
+            //Productos
+            Fuller.llenarComboBox(producto_proveedorCB, Facade.obtenerProveedoresList());
+            Fuller.llenarComboBox(producto_estadoCB, Facade.obtenerEstadosList());
+
+            //Ajustes
+            Fuller.llenarComboBox(producto_unidadMedidaCB, Facade.obtenerMedidasList());
+
+        } catch (SQLException throwables) {
+            System.out.println("Error al tratar de llenar combobox");
             throwables.printStackTrace();
         }
     }
@@ -397,8 +435,8 @@ public class Controller implements Initializable {
     //Metodos para rellenar tablas Inicio
     public void actualizarTablasInicio() {
         try {
-            Fuller.llenarTableView(ultimosProductosVendidosTV, Facade.topÚltimosProductos(CurrentLogin.getCurrentEmpresa().getRIF()));
-            Fuller.llenarTableView(productosMasVendidosTV, Facade.topProductosMasVendidos(CurrentLogin.getCurrentEmpresa().getRIF()));
+            Fuller.llenarTableView(ultimosProductosVendidosTV, Facade.topÚltimosProductos());
+            Fuller.llenarTableView(productosMasVendidosTV, Facade.topProductosMasVendidos());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
             System.out.println("Error al rellenar tabla de panel de Inicio");
@@ -408,8 +446,8 @@ public class Controller implements Initializable {
     //Metodos para rellenar tablas Productos
     public void actualizarTablasProducto() {
         try {
-            // TODO Fuller.llenarTableView(productos_tablaResultadosBusqueda, Facade.obtenerProductos(RIF));
-            Fuller.llenarTableView(proveedores_tablaProveedores, Facade.obtenerProveedores(RIF));
+            Fuller.llenarTableView(proveedores_tablaProveedores, Facade.obtenerProveedores());
+            Fuller.llenarTableView(productos_tablaResultadosBusqueda, Facade.obtenerProductos());
         } catch (SQLException throwables) {
             System.out.println("Error al actualizar tablas de panel de producto");
             throwables.printStackTrace();
@@ -429,13 +467,13 @@ public class Controller implements Initializable {
     //Metodos para rellenar tablas Ajustes
     public void actualizarTablasAjustes() {
         try {
-            Fuller.llenarTableView(medida_tablaLista, Facade.obtenerMedidas(CurrentLogin.getCurrentEmpresa().getRIF()));
-            //TODO: RELLENAR TABLA ESTADOS
-            //TODO: RELLENAR TABLA MARCAS
+            Fuller.llenarTableView(medida_tablaLista, Facade.obtenerMedidas());
+            Fuller.llenarTableView(estados_tablaLista, Facade.obtenerEstados());
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
     }
+
 
     //Eventos de boton del panel de productos
     public void productosHandleButton(ActionEvent event) {
@@ -446,14 +484,16 @@ public class Controller implements Initializable {
             if (Validator.validarTextFields(tfs) || Validator.validarComboBoxs(cbs)) {
                 //Crear producto
                 Producto p = new Producto();
-                p.setIdProducto("P232");
+                p.setIdProducto(CodigosGenerador.getCodigo(0));
                 p.setNombre(producto_nombreTF.getText());
                 p.setMarca(producto_marcaTF.getText());
-                p.setMedida(producto_unidadMedidaCB.getValue().toString());
+                p.setMedida(producto_unidadMedidaCB.getValue());
                 p.setCantidad(Integer.parseInt(producto_stockTF.getText()));
+                p.setEstado(producto_estadoCB.getValue());
 
                 try {
-                    Facade.agregarProducto(p, producto_proveedorCB.getValue().toString(), CurrentLogin.getCurrentEmpresa().getRIF());
+                    System.out.println(CurrentLogin.getCurrentUsuario().getUsuario());
+                    Facade.agregarProducto(p, producto_proveedorCB.getValue(), CurrentLogin.getCurrentUsuario().getUsuario());
                     actualizarTablasProducto();
                     Cleaner.vaciarComboBox(cbs);
                     Cleaner.vaciarTextFields(tfs);
@@ -466,6 +506,7 @@ public class Controller implements Initializable {
 
         }
 
+        //Limpiar formulario de producto
         if (event.getSource() == producto_limpiarTF) {
             //Limpiar formulario para agregar productos
             TextField[] tfs = {producto_nombreTF, producto_stockTF};
@@ -473,6 +514,27 @@ public class Controller implements Initializable {
 
             Cleaner.vaciarComboBox(cbs);
             Cleaner.vaciarTextFields(tfs);
+        }
+
+        //Eliminar producto
+        if (event.getSource() == producto_eliminarBtn) {
+            String id = productos_tablaResultadosBusqueda.getSelectionModel().getSelectedItem().toString();
+            id = id.substring(1, 6);
+            System.out.println(id);
+
+            //Si desea eliminar
+            try {
+                Facade.eliminarProducto(id);
+                JOptionPane.showMessageDialog(null, "Producto eliminado con exito.");
+            } catch (SQLException throwables) {
+                System.out.println("Error al eliminar proveedor");
+                throwables.printStackTrace();
+            } finally {
+                productos_tablaResultadosBusqueda.getColumns().clear();
+                actualizarTablasProducto();
+                actualizarComboBoxs();
+                productos_buscarProductoTF.setText("");
+            }
         }
 
         //Agregar proveedor
@@ -484,10 +546,11 @@ public class Controller implements Initializable {
                 p.setApellidos(proveedores_apellidoTF.getText());
                 p.setCorreo(proveedores_correoTF.getText());
                 p.setTelefono(proveedores_telefonoTF.getText());
-                p.setIdProveedor("PV42");
+                p.setIdProveedor(CodigosGenerador.getCodigo(1));
                 try {
-                    Facade.agregarProveedor(p, CurrentLogin.getCurrentEmpresa().getRIF());
+                    Facade.agregarProveedor(p, CurrentLogin.getCurrentUsuario().getUsuario());
                     actualizarTablasProducto();
+                    actualizarComboBoxs();
                     Cleaner.vaciarTextFields(tfs);
                 } catch (SQLException throwables) {
                     System.out.println("Error al ingresar proveedor");
@@ -502,16 +565,84 @@ public class Controller implements Initializable {
         //eliminar proveedor
         if (event.getSource() == proveedores_eliminarBtn) {
             String id = proveedores_tablaProveedores.getSelectionModel().getSelectedItem().toString();
-            id = id.substring(1, 5);
-            int res = JOptionPane.showConfirmDialog(null, "Estas seguro que deseas eliminarl este proveedor?", "", JOptionPane.YES_NO_OPTION);
-            if (res == 0) {
-                //Si desea eliminar
+            id = id.substring(1, 11);
+            System.out.println(id);
+
+            //Si desea eliminar
+            try {
+                Facade.eliminarProveedor(id);
+                JOptionPane.showMessageDialog(null, "Proveedor eliminado con exito.");
+            } catch (SQLException throwables) {
+                System.out.println("Error al eliminar proveedor");
+                throwables.printStackTrace();
+            } finally {
+                proveedores_tablaProveedores.getColumns().clear();
+                actualizarTablasProducto();
+                actualizarComboBoxs();
+            }
+
+        }
+
+        //Modificar proveedor
+        if (event.getSource() == proveedores_modificarBtn) {
+            String nombreProveedor = proveedores_tablaProveedores.getSelectionModel().getSelectedItem().toString();
+            System.out.println(nombreProveedor);
+            String nombreCompleto = "";
+            int comas = 0;
+            for (int i = 11; i < nombreProveedor.length(); i++) {
+
+                if (nombreProveedor.charAt(i) == ',') {
+                    comas++;
+                } else {
+                    nombreCompleto += nombreProveedor.charAt(i);
+                }
+                if (comas == 3) {
+                    break;
+                }
+            }
+            nombreCompleto = nombreCompleto.trim();
+
+            try {
+                Proveedor proveedorAModificar = Facade.obtenerProveedor(nombreCompleto);
+
+                proveedores_nombreTF.setText(proveedorAModificar.getNombres());
+                proveedores_apellidoTF.setText(proveedorAModificar.getApellidos());
+                proveedores_correoTF.setText(proveedores_correoTF.getText());
+                proveedores_telefonoTF.setText(proveedores_telefonoTF.getText());
+
+                proveedores_agregarBtn.setVisible(false);
+                proveedores_agregarBtn1.setVisible(true);
+                proveedores_limpiarBtn.setVisible(false);
+                proveedores_limpiarBtn1.setVisible(true);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+
+        }
+
+        if (event.getSource() == proveedores_agregarBtn1) {
+            //TODO
+            TextField[] tfs = {proveedores_nombreTF, proveedores_apellidoTF, proveedores_correoTF, proveedores_telefonoTF};
+
+            if (Validator.validarTextFields(tfs)) {
+                Proveedor p = new Proveedor();
+                p.setNombres(proveedores_nombreTF.getText());
+                p.setApellidos(proveedores_apellidoTF.getText());
+                p.setCorreo(proveedores_correoTF.getText());
+                p.setTelefono(proveedores_telefonoTF.getText());
+
                 try {
-                    Facade.eliminarProveedor(CurrentLogin.getCurrentEmpresa().getRIF(), id);
-                    actualizarTablasProducto();
+                    Facade.actualizarProveedor(p);
                 } catch (SQLException throwables) {
-                    System.out.println("Error al eliminar proveedor");
                     throwables.printStackTrace();
+                } finally {
+                    proveedores_agregarBtn.setVisible(true);
+                    proveedores_agregarBtn1.setVisible(false);
+                    proveedores_limpiarBtn.setVisible(true);
+                    proveedores_limpiarBtn1.setVisible(false);
+
+                    Cleaner.vaciarTextFields(tfs);
+                    actualizarTablasProducto();
                 }
             }
 
@@ -535,7 +666,7 @@ public class Controller implements Initializable {
                 usuario.setContrasena(usuarios_passTF.getText());
                 usuario.setRol(usuarios_rolCB.getValue().toString());
                 try {
-                    Facade.agregarUsuario(RIF, usuario);
+                    Facade.agregarUsuario(usuario);
                     actualizarTablasUsuarios();
                     actualizarDatosGenerales();
                 } catch (SQLException throwables) {
@@ -585,12 +716,16 @@ public class Controller implements Initializable {
             for (TextField tf : tfs) {
                 tf.setDisable(false);
             }
-            ajustes_departamentoCB.setDisable(false);
             ajustes_direccionTA.setDisable(false);
 
             //Habilitar boton de guardado y desabilitar el de editar
             ajustes_guardarDatosEmpresaBtn.setDisable(false);
             ajustes_editarDatosEmpresaBtn.setDisable(true);
+
+        }
+
+        //Guardar datos empresa
+        if(event.getSource()==ajustes_guardarDatosEmpresaBtn){
 
         }
     }
@@ -603,7 +738,6 @@ public class Controller implements Initializable {
         stage.close();
 
         CurrentLogin.setCurrentUsuario(null);
-        CurrentLogin.setCurrentEmpresa(null);
 
         Scene registroScene = new Scene(FXMLLoader.load(getClass().getResource("../views/Login.fxml")));
         stage.setScene(registroScene);
@@ -628,12 +762,14 @@ public class Controller implements Initializable {
 
         if (e.getSource() == btnProductos) {
             setActive(btnProductos);
+            actualizarTablasProducto();
             productosPane.toFront();
         }
 
 
         if (e.getSource() == btnUsuarios) {
             setActive(btnUsuarios);
+            actualizarTablasUsuarios();
             usuariosPane.toFront();
         }
 
@@ -644,6 +780,7 @@ public class Controller implements Initializable {
 
         if (e.getSource() == btnAjustes) {
             setActive(btnAjustes);
+            actualizarTablasAjustes();
             ajustesPane.toFront();
         }
     }

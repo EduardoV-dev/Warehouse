@@ -585,10 +585,8 @@
                                                 <Label layoutX="126.0" layoutY="199.0" styleClass="form-label" stylesheets="@../css/styles.css" text="Telefono:" AnchorPane.leftAnchor="122.0" AnchorPane.topAnchor="196.0" />
                                                 <Label layoutX="516.0" layoutY="199.0" styleClass="form-label" stylesheets="@../css/styles.css" text="RIF:" AnchorPane.leftAnchor="468.0" AnchorPane.topAnchor="196.0" />
                                                 <TextField fx:id="ajustes_rifTF" disable="true" layoutX="488.0" layoutY="227.0" prefWidth="314.0" styleClass="form-tf" stylesheets="@../css/styles.css" AnchorPane.leftAnchor="468.0" AnchorPane.topAnchor="226.0" />
-                                                <Label layoutX="133.0" layoutY="266.0" styleClass="form-label" stylesheets="@../css/styles.css" text="Departamento:" AnchorPane.leftAnchor="122.0" AnchorPane.topAnchor="283.0" />
-                                                <ComboBox fx:id="ajustes_departamentoCB" disable="true" layoutX="149.0" layoutY="310.0" prefWidth="314.0" styleClass="checkbox" stylesheets="@../css/styles.css" AnchorPane.leftAnchor="122.0" AnchorPane.topAnchor="310.0" />
-                                                <Label layoutX="470.0" layoutY="283.0" styleClass="form-label" stylesheets="@../css/styles.css" text="Dirección:" AnchorPane.leftAnchor="468.0" />
-                                                <TextArea fx:id="ajustes_direccionTA" disable="true" layoutX="488.0" layoutY="326.0" prefHeight="79.0" prefWidth="314.0" styleClass="form-tf" stylesheets="@../css/styles.css" AnchorPane.leftAnchor="468.0" AnchorPane.rightAnchor="111.0" AnchorPane.topAnchor="310.0" />
+                                                <Label layoutX="470.0" layoutY="283.0" styleClass="form-label" stylesheets="@../css/styles.css" text="Dirección:" AnchorPane.leftAnchor="122.0" />
+                                                <TextArea fx:id="ajustes_direccionTA" disable="true" layoutX="488.0" layoutY="326.0" prefHeight="79.0" prefWidth="314.0" styleClass="form-tf" stylesheets="@../css/styles.css" AnchorPane.leftAnchor="122.0" AnchorPane.topAnchor="310.0" />
                                                 <Button fx:id="ajustes_guardarDatosEmpresaBtn" disable="true" graphicTextGap="7.0" layoutX="515.0" layoutY="412.0" mnemonicParsing="false" onAction="#ajustesHandleButton" styleClass="button_success" stylesheets="@../css/styles.css" text="Guardar" AnchorPane.rightAnchor="240.0" AnchorPane.topAnchor="410.0">
                                                     <graphic>
                                                         <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
@@ -617,7 +615,7 @@
                                             <children>
                                                 <ScrollPane layoutX="111.0" layoutY="165.0" prefHeight="560.0" prefWidth="893.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                     <content>
-                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="1257.0" prefWidth="893.0" style="-fx-background-color: #F9FCFF;">
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="953.0" prefWidth="893.0" style="-fx-background-color: #F9FCFF;">
                                                             <children>
                                                                 <AnchorPane layoutX="116.0" layoutY="79.0" prefHeight="393.0" prefWidth="814.0" style="-fx-background-color: #E9F4FF; -fx-background-radius: 10px;" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="28.0">
                                                                     <children>
@@ -683,38 +681,6 @@
                                                                         </Button>
                                                                     </children>
                                                                 </AnchorPane>
-                                                                <AnchorPane layoutX="36.0" layoutY="805.0" prefHeight="393.0" prefWidth="814.0" style="-fx-background-color: #E9F4FF; -fx-background-radius: 10px;" AnchorPane.leftAnchor="36.0" AnchorPane.topAnchor="844.0">
-                                                                    <children>
-                                                                        <Label styleClass="title" stylesheets="@../css/styles.css" text="Marcas" AnchorPane.leftAnchor="352.0" AnchorPane.topAnchor="20.0" />
-                                                                        <Label layoutX="2.0" layoutY="63.0" styleClass="subtitle" stylesheets="@../css/styles.css" text="Agregar marca:" AnchorPane.leftAnchor="18.0" AnchorPane.topAnchor="86.0" />
-                                                                        <Label layoutX="35.0" layoutY="133.0" styleClass="form-label" stylesheets="@../css/styles.css" text="Nombre:" AnchorPane.leftAnchor="18.0" AnchorPane.topAnchor="146.0" />
-                                                                        <Button fx:id="marcas_agregarBtn" graphicTextGap="7.0" layoutX="165.0" layoutY="241.0" mnemonicParsing="false" onAction="#ajustesHandleButton" styleClass="button_primary" stylesheets="@../css/styles.css" text="Agregar" AnchorPane.rightAnchor="482.0" AnchorPane.topAnchor="223.0">
-                                                                            <graphic>
-                                                                                <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                                                                    <image>
-                                                                                        <Image url="@../img/icons/plus50w.png" />
-                                                                                    </image>
-                                                                                </ImageView>
-                                                                            </graphic>
-                                                                        </Button>
-                                                                        <TextField fx:id="marcas_nombreTF" prefWidth="314.0" styleClass="form-tf" stylesheets="@../css/styles.css" AnchorPane.leftAnchor="18.0" AnchorPane.rightAnchor="482.0" AnchorPane.topAnchor="176.0" />
-                                                                        <TableView fx:id="marcas_tablaLista" layoutX="394.0" layoutY="107.0" prefHeight="228.0" prefWidth="425.0" AnchorPane.leftAnchor="371.0" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="86.0">
-                                                                            <columns>
-                                                                                <TableColumn prefWidth="75.0" text="C1" />
-                                                                                <TableColumn prefWidth="75.0" text="C2" />
-                                                                            </columns>
-                                                                        </TableView>
-                                                                        <Button fx:id="marcas_eliminarBtn" graphicTextGap="7.0" layoutX="619.0" layoutY="335.0" mnemonicParsing="false" onAction="#ajustesHandleButton" styleClass="button_danger" stylesheets="@../css/styles.css" text="Eliminar" AnchorPane.rightAnchor="18.0" AnchorPane.topAnchor="325.0">
-                                                                            <graphic>
-                                                                                <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                                                                                    <image>
-                                                                                        <Image url="@../img/icons/delete24w.png" />
-                                                                                    </image>
-                                                                                </ImageView>
-                                                                            </graphic>
-                                                                        </Button>
-                                                                    </children>
-                                                                </AnchorPane>
                                                             </children>
                                                         </AnchorPane>
                                                     </content>
@@ -755,7 +721,7 @@
                                                         </ImageView>
                                                     </graphic>
                                                 </Button>
-                                                <Button fx:id="producto_eliminarBtn" graphicTextGap="7.0" layoutX="716.0" layoutY="87.0" mnemonicParsing="false" styleClass="button_danger" stylesheets="@../css/styles.css" text="Eliminar" AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="87.0">
+                                                <Button fx:id="producto_eliminarBtn" graphicTextGap="7.0" layoutX="716.0" layoutY="87.0" mnemonicParsing="false" onAction="#productosHandleButton" styleClass="button_danger" stylesheets="@../css/styles.css" text="Eliminar" AnchorPane.rightAnchor="39.0" AnchorPane.topAnchor="87.0">
                                                     <graphic>
                                                         <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                                             <image>
@@ -829,6 +795,8 @@
                                                     </graphic>
                                                 </Button>
                                     <TextField fx:id="producto_marcaTF" layoutX="84.0" layoutY="145.0" prefHeight="30.0" prefWidth="327.0" styleClass="form-tf" stylesheets="@../css/styles.css" AnchorPane.leftAnchor="445.0" AnchorPane.topAnchor="135.0" />
+                                    <Label contentDisplay="RIGHT" graphicTextGap="7.0" layoutX="686.0" layoutY="305.0" styleClass="form-label" stylesheets="@../css/styles.css" text="Estado:" AnchorPane.leftAnchor="445.0" AnchorPane.topAnchor="303.0" />
+                                    <ComboBox fx:id="producto_estadoCB" layoutX="410.0" layoutY="342.0" prefHeight="30.0" prefWidth="327.0" promptText="Selecciona un estado" styleClass="checkbox" stylesheets="@../css/styles.css" AnchorPane.leftAnchor="445.0" AnchorPane.topAnchor="337.0" />
                                             </children>
                                         </AnchorPane>
                                     </content>
@@ -866,7 +834,7 @@
                                                                 </ImageView>
                                                             </graphic>
                                                         </Button>
-                                          <Button fx:id="proveedores_agregarBtn1" graphicTextGap="7.0" layoutX="639.0" layoutY="168.0" mnemonicParsing="false" styleClass="button_primary" stylesheets="@../css/styles.css" text="Modificar" visible="false" AnchorPane.rightAnchor="108.0" AnchorPane.topAnchor="153.0">
+                                          <Button fx:id="proveedores_agregarBtn1" graphicTextGap="7.0" layoutX="639.0" layoutY="168.0" mnemonicParsing="false" onAction="#productosHandleButton" styleClass="button_primary" stylesheets="@../css/styles.css" text="Modificar" visible="false" AnchorPane.rightAnchor="108.0" AnchorPane.topAnchor="153.0">
                                              <graphic>
                                                 <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                                    <image>
@@ -875,7 +843,7 @@
                                                 </ImageView>
                                              </graphic>
                                           </Button>
-                                          <Button fx:id="proveedores_limpiarBtn1" graphicTextGap="7.0" layoutX="423.0" layoutY="163.0" mnemonicParsing="false" styleClass="button_secondary" stylesheets="@../css/styles.css" text="Cancelar" visible="false" AnchorPane.rightAnchor="258.0" AnchorPane.topAnchor="153.0" />
+                                          <Button fx:id="proveedores_limpiarBtn1" graphicTextGap="7.0" layoutX="423.0" layoutY="163.0" mnemonicParsing="false" onAction="#productosHandleButton" styleClass="button_secondary" stylesheets="@../css/styles.css" text="Cancelar" visible="false" AnchorPane.rightAnchor="258.0" AnchorPane.topAnchor="153.0" />
                                                     </children>
                                                 </AnchorPane>
                                                 <Label graphicTextGap="7.0" layoutX="103.0" layoutY="286.0" prefHeight="38.0" prefWidth="447.0" styleClass="title" stylesheets="@../css/styles.css" text="Lista de proveedores" AnchorPane.leftAnchor="47.0" AnchorPane.topAnchor="258.0" />
@@ -889,7 +857,7 @@
                                                         </ImageView>
                                                     </graphic>
                                                 </Button>
-                                                <Button fx:id="proveedores_modificarBtn" graphicTextGap="7.0" layoutX="527.0" layoutY="509.0" mnemonicParsing="false" styleClass="button_success" stylesheets="@../css/styles.css" text="Modificar" AnchorPane.rightAnchor="190.0" AnchorPane.topAnchor="507.0">
+                                                <Button fx:id="proveedores_modificarBtn" graphicTextGap="7.0" layoutX="527.0" layoutY="509.0" mnemonicParsing="false" onAction="#productosHandleButton" styleClass="button_success" stylesheets="@../css/styles.css" text="Modificar" AnchorPane.rightAnchor="190.0" AnchorPane.topAnchor="507.0">
                                                     <graphic>
                                                         <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
                                                             <image>

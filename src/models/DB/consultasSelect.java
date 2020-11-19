@@ -2,10 +2,7 @@ package models.DB;
 
 import models.POJO.Usuario;
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 public class consultasSelect {
     private static Connection cn;
@@ -113,6 +110,14 @@ public class consultasSelect {
         cs.setInt(2, opc);
         return cs.executeQuery();
     }
+
+    public static ResultSet nombresProveedores() throws SQLException {
+        cn = ConexionBD.conexion();
+        Statement st=cn.createStatement();
+        ResultSet rs= st.executeQuery("select CONCAT(RTRIM(nombres), ' ', apellidos) as Nombre  from dts.DatosProveedor");
+        return rs;
+    }
+
 
     // Devuelve el nombre completo de los proveedores de una empresa
     // Usar para llenar comboBox

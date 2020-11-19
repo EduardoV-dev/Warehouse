@@ -25,21 +25,11 @@
                 </ImageView>
             </graphic>
         </Label>
-        <Label contentDisplay="RIGHT" layoutX="482.0" layoutY="104.0" styleClass="form-label" stylesheets="@../css/styles.css" text="Empresa:" AnchorPane.leftAnchor="492.0" AnchorPane.topAnchor="89.0" />
-        <TextField fx:id="empresaTF" layoutX="517.0" layoutY="116.0" prefHeight="25.0" prefWidth="239.0" styleClass="form-tf" stylesheets="@../css/styles.css" AnchorPane.leftAnchor="492.0" AnchorPane.topAnchor="119.0" />
-        <TextField fx:id="usuarioTF" layoutX="510.0" layoutY="186.0" prefHeight="25.0" prefWidth="239.0" styleClass="form-tf" stylesheets="@../css/styles.css" AnchorPane.leftAnchor="492.0" AnchorPane.topAnchor="190.0" />
-        <Label contentDisplay="RIGHT" layoutX="498.0" layoutY="159.0" styleClass="form-label" stylesheets="@../css/styles.css" text="Usuario:" AnchorPane.leftAnchor="492.0" AnchorPane.topAnchor="159.0" />
-        <Label contentDisplay="RIGHT" layoutX="503.0" layoutY="237.0" styleClass="form-label" stylesheets="@../css/styles.css" text="Contraseña:" AnchorPane.leftAnchor="492.0" AnchorPane.topAnchor="229.0" />
-        <Button fx:id="ingresarBtn" layoutX="503.0" layoutY="304.0" mnemonicParsing="false" onAction="#onClickIngresar" styleClass="button_secondary" stylesheets="@../css/styles.css" text="Ingresar" AnchorPane.leftAnchor="492.0" />
-        <Button fx:id="lockBtn" layoutX="717.0" layoutY="122.0" mnemonicParsing="false" onAction="#toggleLock" style="-fx-background-color: transparent;" AnchorPane.leftAnchor="735.0" AnchorPane.topAnchor="119.0">
-            <graphic>
-                <ImageView fx:id="lockImg" fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">
-                    <image>
-                        <Image url="@../img/icons/lock24g.png" />
-                    </image>
-                </ImageView>
-            </graphic>
-        </Button>
+        <TextField fx:id="usuarioTF" layoutX="510.0" layoutY="186.0" prefHeight="25.0" prefWidth="239.0" styleClass="form-tf" stylesheets="@../css/styles.css" AnchorPane.leftAnchor="492.0" AnchorPane.topAnchor="150.0" />
+        <Label contentDisplay="RIGHT" layoutX="498.0" layoutY="159.0" styleClass="form-label" stylesheets="@../css/styles.css" text="Usuario:" AnchorPane.leftAnchor="492.0" AnchorPane.topAnchor="120.0" />
+        <Label contentDisplay="RIGHT" layoutX="503.0" layoutY="237.0" styleClass="form-label" stylesheets="@../css/styles.css" text="Contraseña:" AnchorPane.leftAnchor="492.0" AnchorPane.topAnchor="200.0" />
+        <Button fx:id="ingresarBtn" layoutX="503.0" layoutY="304.0" mnemonicParsing="false" onAction="#onClickIngresar" styleClass="button_secondary" stylesheets="@../css/styles.css" text="Ingresar" AnchorPane.leftAnchor="492.0" AnchorPane.topAnchor="300.0" />
+        <Button fx:id="lockBtn" layoutX="717.0" layoutY="122.0" mnemonicParsing="false" style="-fx-background-color: transparent;" AnchorPane.leftAnchor="735.0" AnchorPane.topAnchor="119.0" />
         <ImageView fitHeight="24.0" fitWidth="24.0" layoutX="685.0" layoutY="309.0" pickOnBounds="true" preserveRatio="true" AnchorPane.rightAnchor="69.0" AnchorPane.topAnchor="309.0">
             <image>
                 <Image url="@../img/icons/DBConfig.png" />
@@ -50,7 +40,7 @@
                 <Image url="@../img/icons/check48gr.png" />
             </image>
         </ImageView>
-        <Button fx:id="registrarBtn" layoutX="503.0" layoutY="357.0" mnemonicParsing="false" onAction="#onClickRegistrarse" style="-fx-background-color: transparent;" styleClass="button_text" stylesheets="@../css/styles.css" text="¿Primera vez? Registra tu empresa" textFill="#485260" underline="true" AnchorPane.leftAnchor="492.0">
+        <Button fx:id="registrarBtn" layoutX="503.0" layoutY="357.0" mnemonicParsing="false" onAction="#onClickRegistrarse" style="-fx-background-color: transparent;" styleClass="button_text" stylesheets="@../css/styles.css" text="¿Primera vez? Checa tus credenciales!" textFill="#485260" underline="true" AnchorPane.leftAnchor="492.0">
             <font>
                 <Font name="Montserrat Regular" size="12.0" />
             </font>
@@ -58,7 +48,7 @@
             <Insets left="0.1" />
          </padding>
         </Button>
-      <PasswordField fx:id="passwordTF" layoutX="491.0" layoutY="259.0" prefHeight="31.0" prefWidth="239.0" styleClass="form-tf" stylesheets="@../css/styles.css" AnchorPane.leftAnchor="492.0" />
+      <PasswordField fx:id="passwordTF" layoutX="491.0" layoutY="259.0" prefHeight="31.0" prefWidth="239.0" styleClass="form-tf" stylesheets="@../css/styles.css" AnchorPane.leftAnchor="492.0" AnchorPane.topAnchor="230.0" />
       <Button fx:id="closeBTn" layoutX="743.0" layoutY="14.0" maxHeight="-Infinity" maxWidth="-Infinity" mnemonicParsing="false" onAction="#onClickCerrar" prefHeight="15.0" prefWidth="12.0" style="-fx-background-color: transparent;" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <graphic>
             <ImageView fitHeight="24.0" fitWidth="24.0" pickOnBounds="true" preserveRatio="true">

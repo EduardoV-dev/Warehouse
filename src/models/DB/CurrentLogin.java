@@ -1,19 +1,13 @@
 package models.DB;
 
-import models.POJO.Empresa;
+
+import data.DatosEmpresa;
 import models.POJO.Usuario;
 
 public class CurrentLogin {
-    private static Empresa currentEmpresa;
+
     private static Usuario currentUsuario;
 
-    public static Empresa getCurrentEmpresa() {
-        return currentEmpresa;
-    }
-
-    public static void setCurrentEmpresa(Empresa currentEmpresa) {
-        CurrentLogin.currentEmpresa = currentEmpresa;
-    }
 
     public static Usuario getCurrentUsuario() {
         return currentUsuario;
@@ -21,5 +15,13 @@ public class CurrentLogin {
 
     public static void setCurrentUsuario(Usuario currentUsuario) {
         CurrentLogin.currentUsuario = currentUsuario;
+    }
+
+    public static Empresa getCurrentEmpresa() {
+        return DatosEmpresa.obtenerDatosEmpresa();
+    }
+
+    public static void setEmpresa(Empresa empresa) {
+        DatosEmpresa.establecerEmpresa(empresa);
     }
 }

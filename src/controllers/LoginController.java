@@ -1,6 +1,5 @@
 package controllers;
 
-import data.EmpresaNombre;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,7 +18,6 @@ import javafx.stage.StageStyle;
 import models.DB.ConexionBD;
 import models.DB.CurrentLogin;
 import models.DB.Facade;
-import models.POJO.Empresa;
 import models.POJO.Usuario;
 import utils.Validator;
 
@@ -37,8 +35,6 @@ public class LoginController implements Initializable {
     private double xOffset = 0;
     private double yOffset = 0;
 
-    //Atributo para la funcionalidad del candado
-    boolean bloqueado;
 
     @FXML
     private TextField usuarioTF;
@@ -80,52 +76,18 @@ public class LoginController implements Initializable {
                 e.printStackTrace();
             }
         }
-
-        //Funcionalidad del texfield con el candado
-        try {
-            EmpresaNombre.crearArchivo(new File("bname.dat"));
-            if (EmpresaNombre.obtenerNombre() != "") {
-                empresaTF.setText(EmpresaNombre.obtenerNombre());
-                empresaTF.setEditable(false);
-                bloquear();
-
-            } else {
-                desbloquear();
-
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     //Metodo para cargar el panel de registro
     public void onClickRegistrarse(javafx.event.ActionEvent actionEvent) {
-        if (ConexionBD.conexion() != null) {
-            try {
-                Node node = (Node) actionEvent.getSource();
-                Stage stage = (Stage) node.getScene().getWindow();
-                stage.close();
-
-                Scene registroScene = new Scene(FXMLLoader.load(getClass().getResource("../views/Register.fxml")));
-                stage.setScene(registroScene);
-                stage.setMinWidth(850);
-                stage.setMinHeight(518);
-                stage.setMaxWidth(850);
-                stage.setMaxHeight(518);
-                stage.show();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+        JOptionPane.showMessageDialog(null, "Usuario: admin | Contraseña:12345678");
     }
 
     //Metodo para ingresar al sistema al dar click en ingresar
     public void onClickIngresar(ActionEvent event) {
 
         //Metiendo los textfields en un array para validarlos
-        TextField[] tfs = {usuarioTF, passwordTF, empresaTF};
+        TextField[] tfs = {usuarioTF, passwordTF};
 
         if (Validator.validarTextFields(tfs)) {
             //Instanciando usuario para pasarlo por parametro al Facade
@@ -135,7 +97,7 @@ public class LoginController implements Initializable {
 
             //Intentar ingresar
             try {
-                Facade.ingresar(empresaTF.getText(), user);
+                Facade.ingresar(user);
                 try {
                     ingresarApp(event);
                 } catch (IOException e) {
@@ -169,47 +131,6 @@ public class LoginController implements Initializable {
         stage.show();
     }
 
-
-    //Metodos para la funcionalidad del candado
-    public void toggleLock(ActionEvent actionEvent) {
-        //System.out.println(bloqueado);
-        if (bloqueado) {
-            desbloquear();
-        } else {
-            bloquear();
-        }
-    }
-
-    public void bloquear() {
-        try {
-            EmpresaNombre.crearArchivo(new File("bname.dat"));
-            EmpresaNombre.establecerNombre(empresaTF.getText().trim(), true);
-
-            lockImg.setImage(new Image(new FileInputStream("src/img/icons/lock24g.png")));
-            empresaTF.setEditable(false);
-            empresaTF.setStyle("-fx-background-color:#ddd; -fx-background-radius: 5px;");
-            bloqueado = true;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void desbloquear() {
-        try {
-            EmpresaNombre.crearArchivo(new File("bname.dat"));
-            EmpresaNombre.establecerNombre(empresaTF.getText().trim(), false);
-            lockImg.setImage(new Image(new FileInputStream("src/img/icons/unlock24g.png")));
-            empresaTF.setEditable(true);
-            empresaTF.setStyle("-fx-background-color:#FFF; -fx-background-radius: 5px;");
-            bloqueado = false;
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     //Metodo para cerrar la aplicación al presionar el boton
     public void onClickCerrar(ActionEvent event) {
