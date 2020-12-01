@@ -1,4 +1,6 @@
-.idea/
-desing/
-out/
+out/**
+.idea/**
 *.iml
+*.docx
+*.dia~
+testing.sql

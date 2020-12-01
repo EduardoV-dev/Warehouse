@@ -1,0 +1,12 @@
+Nota: Cambiar la ruta de creación de la base de datos. No ejecutar los scripts 004 y 002 por ahora...
+
+01-DB and Tables Creation.sql
+001-Default Table Values.sql
+005-Functions
+02-Insert Querys.sql
+003-Views.sql
+03-Select Querys.sql
+04-Delete Querys.sql
+004-Other Procedures.sql
+002-Triggers.sql
+05-Update Querys.sql
